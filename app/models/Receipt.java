@@ -9,25 +9,25 @@ import java.util.*;
 @Entity
 public class Receipt extends Model
 {
-	
+
 	public String title;
 	public Date date;
 	public int totalAmount;
-	
+
 	// TODO(peksa): need sub-pots, and ways to separate amounts to users
-	
+
 	@ManyToOne
 	public User owner;
-	
+
 	@Lob
 	public String description;
-	
-	@OneToMany(mappedBy="receipt", cascade=CascadeType.ALL)
+
+	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Comment> comments;
-	
-	@ManyToMany(cascade=CascadeType.PERSIST)
+
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	public Set<User> members;
-	
+
 	public Receipt(String title, int totalAmount, User owner, String description)
 	{
 		this.title = title;
@@ -38,5 +38,5 @@ public class Receipt extends Model
 		this.comments = new ArrayList<Comment>();
 		this.members = new TreeSet<User>();
 	}
-	
+
 }
