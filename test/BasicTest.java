@@ -30,8 +30,7 @@ public class BasicTest extends UnitTest
 		User bob = new User("bob@bob.com", "bob", "secret", "Bobby").save();
 		// User ann = new User("ann@ann.com", "ann", "verysecret", "Anne");
 
-		new Receipt("Hotel-bar 23/4", 432, bob,
-				"Can't remember, but found receipt").save();
+		new Receipt("Hotel-bar 23/4", 432, bob, "Can't remember, but found receipt").save();
 
 		// Get bob's receipts
 		List<Receipt> receipts = Receipt.find("byOwner", bob).fetch();
@@ -42,8 +41,7 @@ public class BasicTest extends UnitTest
 		assertNotNull(firstReceipt);
 		assertEquals(bob, firstReceipt.owner);
 		assertEquals("Hotel-bar 23/4", firstReceipt.title);
-		assertEquals("Can't remember, but found receipt",
-				firstReceipt.description);
+		assertEquals("Can't remember, but found receipt", firstReceipt.description);
 		assertNotNull(firstReceipt.date);
 
 	}

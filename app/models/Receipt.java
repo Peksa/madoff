@@ -16,15 +16,18 @@ public class Receipt extends Model
 
 	// TODO(peksa): need sub-pots, and ways to separate amounts to users
 
+	// Owning side
 	@ManyToOne
 	public User owner;
 
 	@Lob
 	public String description;
 
+	// Inverse side
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Comment> comments;
 
+	// Owning side
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	public Set<User> members;
 

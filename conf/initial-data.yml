@@ -1,0 +1,97 @@
+
+User(bob):
+    email:          bob@gmail.com
+    username:       bob
+    password:       secret
+    fullname:       Bob
+    accountnumber:  1234-123
+   
+User(ann):
+    email:          ann@ann.com
+    username:       ann
+    password:       secret2
+    fullname:       Anne
+    accountnumber:  4312-12
+   
+User(fred):
+    email:          fred@fred.com
+    username:       fred
+    password:       secret2
+    fullname:       Fredrik
+    accountnumber:  123534-12
+    
+Receipt(firstBobReceipt):
+    title:          Dinner at hotel, 23/4
+    date:           2011-04-23
+    totalAmount:    600
+    owner:          bob
+    description:    >
+                    Out drinking and eating at hotel
+                    I think Anne drank a bla
+                    
+                    / Bob
+    members:        
+                    - ann
+                    - fred
+                    
+Receipt(secondBobReceipt):
+    title:          Just a test
+    date:           2009-04-23
+    totalAmount:    2312
+    owner:          bob
+    description:    Testing testing, bob paid for this.
+    members:
+                    - ann
+    
+Receipt(firstAnnReceipt):
+    title:          Testing testing here.
+    date:           2021-04-23
+    totalAmount:    502
+    owner:          ann
+    description:    Test 123 Test, Ann paid.        
+    members:        
+                    - bob
+                    - fred
+    
+Receipt(firstFredReceipt):
+    title:          New Year's
+    date:           2004-12-31
+    totalAmount:    1337
+    owner:          fred
+    description:    Test test, fred paid here.    
+    members:        
+                    - bob
+                    - ann
+    
+Comment(c1):
+    poster:         ann
+    date:           2011-04-24
+    receipt:        firstBobReceipt
+    content:        I didn't drink a bla!
+    
+   
+Comment(c2):
+    poster:         bob
+    date:           2011-04-25
+    receipt:        firstBobReceipt
+    content:        Yes you did!
+    
+Comment(c3):
+    poster:         fred
+    date:           2021-04-24
+    receipt:        firstAnnReceipt
+    content:        Cool, I'm in the future...
+    
+Comment(c4):
+    poster:         bob
+    date:           2009-05-23
+    receipt:        secondBobReceipt
+    content:        I'm bob!    
+    
+Comment(c5):
+    poster:         ann
+    date:           2005-01-01
+    receipt:        firstFredReceipt
+    content:        Happy new year!
+    
+

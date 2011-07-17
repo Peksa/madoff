@@ -16,11 +16,10 @@ public class User extends Model implements Comparable<User>
     public String fullname;
     public String accountNumber;
     
+    // Inverse side
     @OneToMany(mappedBy="owner", cascade=CascadeType.PERSIST)
     public List<Receipt> receipts;
     
-    // TODO(peksa): List<Comment> comments?
-
     public User(String email, String username, String password, String fullname)
     {
     	this.email = email;
