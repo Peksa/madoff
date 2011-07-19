@@ -9,11 +9,14 @@ import java.util.*;
 @Entity
 public class PaidAmount extends Model
 {
-	@ManyToOne
-    public User user;
-    public int amount;
     @ManyToOne
     public Receipt receipt;
+    
+	@ManyToOne
+    public User user;
+	
+    public int amount;
+
     
     public PaidAmount(Receipt receipt, User user, int amount)
     {

@@ -11,10 +11,12 @@ public class IndebtAmount extends Model
 {
 	@ManyToOne
     public User user;
-    public int amount;
-    
+	
     @ManyToOne
     public Subpot subpot;
+    
+    public int amount;
+    
     
     public IndebtAmount(Subpot subpot, User user, int amount)
     {
@@ -22,4 +24,6 @@ public class IndebtAmount extends Model
     	this.user = user;
     	this.amount = amount;
     }
+    
+    
 }

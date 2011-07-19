@@ -27,4 +27,9 @@ public class Payment extends Model
 		this.amount = amount;
 		this.paid = new Date();
 	}
+	
+	public String toString()
+	{
+		return payer + " -> " + receiver + ", amount: " + amount;
+	}
 }

@@ -15,13 +15,17 @@ public class Receipt extends Model
 	
 	public int tip;
 	
-	// Inverse side
-	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
-	public List<PaidAmount> paid;
-
 	// Owning side
 	@ManyToOne
 	public User owner;
+	
+	// Owning side
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	public Set<User> members;
+	
+	// Inverse side
+	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
+	public List<PaidAmount> paid;
 
 	@Lob
 	public String description;
@@ -30,9 +34,10 @@ public class Receipt extends Model
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Comment> comments;
 
-	// Owning side
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	public Set<User> members;
+	
+	// Inverse side
+	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
+	public List<Subpot> subpots;
 
 	public Receipt(String title, int totalAmount, User owner, String description)
 	{
@@ -43,6 +48,15 @@ public class Receipt extends Model
 		this.comments = new ArrayList<Comment>();
 		this.members = new TreeSet<User>();
 		this.paid = new ArrayList<PaidAmount>();
+		this.subpots = new ArrayList<Subpot>();
+	}
+	
+	public String toString()
+	{
+		int amount = 0;
+		for (Subpot pot : subpots)
+			amount += pot.getTotal();
+		return "Receipt by " + owner + " for " + amount + " SEK";
 	}
 
 }

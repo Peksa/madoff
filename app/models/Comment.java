@@ -12,16 +12,16 @@ public class Comment extends Model
 {
 	// Owning side
 	@ManyToOne
+	public Receipt receipt;
+	
+	// Owning side
+	@ManyToOne
 	public User poster;
 
 	public Date date;
 
 	@Lob
 	public String content;
-
-	// Owning side
-	@ManyToOne
-	public Receipt receipt;
 
 	public Comment(Receipt receipt, User poster, String content)
 	{
@@ -31,4 +31,8 @@ public class Comment extends Model
 		this.date = new Date();
 	}
 
+	public String toString()
+	{
+		return poster + ": " + content;
+	}
 }

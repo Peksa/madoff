@@ -4,26 +4,27 @@ User(bob):
     username:       bob
     password:       secret
     fullname:       Bob
-    accountnumber:  1234-123
+    accountNumber:  1234-123
    
 User(ann):
     email:          ann@ann.com
     username:       ann
     password:       secret2
     fullname:       Anne
-    accountnumber:  4312-12
+    accountNumber:  4312-12
    
 User(fred):
     email:          fred@fred.com
     username:       fred
     password:       secret2
     fullname:       Fredrik
-    accountnumber:  123534-12
+    accountNumber:  123534-12
     
 Receipt(firstBobReceipt):
     title:          Dinner at hotel, 23/4
     created:        2011-04-23
     owner:          bob
+    tip:            20
     description:    >
                     Out drinking and eating at hotel
                     I think Anne drank a bla
@@ -37,6 +38,7 @@ Receipt(secondBobReceipt):
     title:          Just a test
     created:        2009-04-23
     owner:          bob
+    tip:            20
     description:    Testing testing, bob paid for this.
     members:
                     - ann
@@ -45,6 +47,7 @@ Receipt(firstAnnReceipt):
     title:          Testing testing here.
     created:        2021-04-23
     owner:          ann
+    tip:            120
     description:    Test 123 Test, Ann paid.        
     members:        
                     - bob
@@ -52,8 +55,9 @@ Receipt(firstAnnReceipt):
     
 Receipt(firstFredReceipt):
     title:          New Year's
-    date:           2004-12-31
+    created:        2004-12-31
     owner:          fred
+    tip:            50
     description:    Test test, fred paid here.    
     members:        
                     - bob

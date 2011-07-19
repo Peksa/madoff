@@ -34,5 +34,9 @@ public class User extends Model implements Comparable<User>
 	{
 		return username.compareTo(other.username);
 	}
-
+	
+	public String toString()
+	{
+		return username;
+	}
 }
