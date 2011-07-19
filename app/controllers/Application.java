@@ -14,5 +14,4 @@ public class Application extends Controller
     	// HERP DERP!
         render();
     }
-
 }

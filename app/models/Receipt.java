@@ -9,12 +9,15 @@ import java.util.*;
 @Entity
 public class Receipt extends Model
 {
-
 	public String title;
-	public Date date;
-	public int totalAmount;
-
-	// TODO(peksa): need sub-pots, and ways to separate amounts to users
+	public Date created;
+	public Date cleared;
+	
+	public int tip;
+	
+	// Inverse side
+	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
+	public List<PaidAmount> paid;
 
 	// Owning side
 	@ManyToOne
@@ -34,12 +37,12 @@ public class Receipt extends Model
 	public Receipt(String title, int totalAmount, User owner, String description)
 	{
 		this.title = title;
-		this.totalAmount = totalAmount;
 		this.owner = owner;
 		this.description = description;
-		this.date = new Date();
+		this.created = new Date();
 		this.comments = new ArrayList<Comment>();
 		this.members = new TreeSet<User>();
+		this.paid = new ArrayList<PaidAmount>();
 	}
 
 }

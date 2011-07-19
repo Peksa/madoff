@@ -22,8 +22,7 @@ User(fred):
     
 Receipt(firstBobReceipt):
     title:          Dinner at hotel, 23/4
-    date:           2011-04-23
-    totalAmount:    600
+    created:        2011-04-23
     owner:          bob
     description:    >
                     Out drinking and eating at hotel
@@ -36,8 +35,7 @@ Receipt(firstBobReceipt):
                     
 Receipt(secondBobReceipt):
     title:          Just a test
-    date:           2009-04-23
-    totalAmount:    2312
+    created:        2009-04-23
     owner:          bob
     description:    Testing testing, bob paid for this.
     members:
@@ -45,8 +43,7 @@ Receipt(secondBobReceipt):
     
 Receipt(firstAnnReceipt):
     title:          Testing testing here.
-    date:           2021-04-23
-    totalAmount:    502
+    created:        2021-04-23
     owner:          ann
     description:    Test 123 Test, Ann paid.        
     members:        
@@ -56,7 +53,6 @@ Receipt(firstAnnReceipt):
 Receipt(firstFredReceipt):
     title:          New Year's
     date:           2004-12-31
-    totalAmount:    1337
     owner:          fred
     description:    Test test, fred paid here.    
     members:        

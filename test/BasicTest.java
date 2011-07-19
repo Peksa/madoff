@@ -42,7 +42,7 @@ public class BasicTest extends UnitTest
 		assertEquals(bob, firstReceipt.owner);
 		assertEquals("Hotel-bar 23/4", firstReceipt.title);
 		assertEquals("Can't remember, but found receipt", firstReceipt.description);
-		assertNotNull(firstReceipt.date);
+		assertNotNull(firstReceipt.created);
 
 	}
 
