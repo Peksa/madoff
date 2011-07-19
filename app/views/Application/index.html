@@ -1,7 +1,18 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-
-Hello world!
-
-#{welcome /}
+#{if receipts.size()}
+    <div class="receipts">
+        <h3>Receipts</h3>
+    
+        #{list items:receipts, as:'receipt'}
+            #{displayReceipt receipt:receipt, as:'teaser' /}
+        #{/list}
+    </div>
+#{/if}
+ 
+#{else}
+    <div class="empty">
+        There is currently nothing to see here.
+	</div>
+#{/else}

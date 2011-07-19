@@ -20,6 +20,7 @@ User(fred):
     fullname:       Fredrik
     accountNumber:  123534-12
     
+ 
 Receipt(firstBobReceipt):
     title:          Dinner at hotel, 23/4
     created:        2011-04-23
@@ -33,6 +34,7 @@ Receipt(firstBobReceipt):
     members:        
                     - ann
                     - fred
+                    - bob
                     
 Receipt(secondBobReceipt):
     title:          Just a test
@@ -42,6 +44,7 @@ Receipt(secondBobReceipt):
     description:    Testing testing, bob paid for this.
     members:
                     - ann
+                    - bob
     
 Receipt(firstAnnReceipt):
     title:          Testing testing here.
@@ -52,6 +55,7 @@ Receipt(firstAnnReceipt):
     members:        
                     - bob
                     - fred
+                    - ann
     
 Receipt(firstFredReceipt):
     title:          New Year's
@@ -62,7 +66,32 @@ Receipt(firstFredReceipt):
     members:        
                     - bob
                     - ann
-    
+                    - fred
+                   
+Subpot(s1):
+    receipt:        firstFredReceipt
+    description:    Champagne
+    restAmount:     126
+IndebtAmount(i1):
+    subpot:         s1
+    user:           bob
+    amount:         100
+
+ 
+Subpot(s2):
+    receipt:        firstFredReceipt
+    description:    Beers
+    restAmount:     50
+IndebtAmount(i2):
+    subpot:         s2
+    user:           bob
+    amount:         76
+
+Subpot(s3):
+    receipt:        firstFredReceipt
+    description:    Rest
+    restAmount:     200
+  
 Comment(c1):
     poster:         ann
     date:           2011-04-24
@@ -94,4 +123,6 @@ Comment(c5):
     receipt:        firstFredReceipt
     content:        Happy new year!
     
+    
+   
 

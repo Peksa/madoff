@@ -51,12 +51,20 @@ public class Receipt extends Model
 		this.subpots = new ArrayList<Subpot>();
 	}
 	
-	public String toString()
+	public int getTotal()
 	{
 		int amount = 0;
 		for (Subpot pot : subpots)
+		{
 			amount += pot.getTotal();
-		return "Receipt by " + owner + " for " + amount + " SEK";
+			amount += (members.size() - pot.cases.size()) * pot.restAmount;
+		}
+		return amount;
+	}
+	
+	public String toString()
+	{
+		return "Receipt by " + owner + " for " + getTotal() + " SEK";
 	}
 
 }

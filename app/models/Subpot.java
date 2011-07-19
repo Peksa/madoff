@@ -16,13 +16,15 @@ public class Subpot extends Model
     
     public int restAmount;
     
+    public String description;
+    
     @OneToMany(mappedBy = "subpot", cascade = CascadeType.ALL)
-    public List<IndebtAmount> rounds;
+    public List<IndebtAmount> cases;
     
     public Subpot(int restAmount)
     {
     	this.restAmount = restAmount;
-    	this.rounds = new ArrayList<IndebtAmount>();
+    	this.cases = new ArrayList<IndebtAmount>();
     }
     
     /**
@@ -31,8 +33,8 @@ public class Subpot extends Model
      */
     public int getTotal()
     {
-    	int amount = restAmount;
-    	for (IndebtAmount round : rounds)
+    	int amount = 0;
+    	for (IndebtAmount round : cases)
     		amount += round.amount;
     	return amount;
     }
