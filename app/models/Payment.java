@@ -11,15 +11,15 @@ public class Payment extends Model
 {
 	@ManyToOne
 	User payer;
-	
+
 	@ManyToOne
 	User receiver;
-	
+
 	Date paid;
 	Date accepted;
-	
+
 	int amount;
-	
+
 	public Payment(User payer, User receiver, int amount)
 	{
 		this.payer = payer;
@@ -27,7 +27,7 @@ public class Payment extends Model
 		this.amount = amount;
 		this.paid = new Date();
 	}
-	
+
 	public String toString()
 	{
 		return payer + " -> " + receiver + ", amount: " + amount;

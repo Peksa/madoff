@@ -1,6 +1,5 @@
 package models;
 
-
 import java.util.Date;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ public class Comment extends Model
 	// Owning side
 	@ManyToOne
 	public Receipt receipt;
-	
+
 	// Owning side
 	@ManyToOne
 	public User poster;

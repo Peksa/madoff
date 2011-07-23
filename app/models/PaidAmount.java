@@ -9,19 +9,18 @@ import java.util.*;
 @Entity
 public class PaidAmount extends Model
 {
-    @ManyToOne
-    public Receipt receipt;
-    
 	@ManyToOne
-    public User user;
-	
-    public int amount;
+	public Receipt receipt;
 
-    
-    public PaidAmount(Receipt receipt, User user, int amount)
-    {
-    	this.receipt = receipt;
-    	this.user = user;
-    	this.amount = amount;
-    }
+	@ManyToOne
+	public User user;
+
+	public int amount;
+
+	public PaidAmount(Receipt receipt, User user, int amount)
+	{
+		this.receipt = receipt;
+		this.user = user;
+		this.amount = amount;
+	}
 }

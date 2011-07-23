@@ -12,17 +12,17 @@ public class Receipt extends Model
 	public String title;
 	public Date created;
 	public Date cleared;
-	
+
 	public int tip;
-	
+
 	// Owning side
 	@ManyToOne
 	public User owner;
-	
+
 	// Owning side
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	public Set<User> members;
-	
+
 	// Inverse side
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<PaidAmount> paid;
@@ -34,7 +34,6 @@ public class Receipt extends Model
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Comment> comments;
 
-	
 	// Inverse side
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Subpot> subpots;
@@ -50,7 +49,7 @@ public class Receipt extends Model
 		this.paid = new ArrayList<PaidAmount>();
 		this.subpots = new ArrayList<Subpot>();
 	}
-	
+
 	public int getTotal()
 	{
 		int amount = 0;
@@ -61,7 +60,7 @@ public class Receipt extends Model
 		}
 		return amount;
 	}
-	
+
 	public String toString()
 	{
 		return "Receipt by " + owner + " for " + getTotal() + " SEK";
