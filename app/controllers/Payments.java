@@ -8,6 +8,7 @@ import play.mvc.*;
  * 
  * @author Peksa
  */
+@With(Secure.class) // Require login for contoller access
 public class Payments extends CRUD
 {
 }

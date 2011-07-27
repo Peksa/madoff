@@ -4,6 +4,9 @@
 
 *       /admin                                  module:crud
 
+# Import Secure routes
+*       /                                       module:secure
+
 # Home page
 GET     /                                       Application.index
 GET		/receipts/{id}							Application.receipt

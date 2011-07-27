@@ -7,6 +7,7 @@ import java.util.*;
 
 import models.*;
 
+@With(Secure.class) // Require login for contoller access
 public class Application extends Controller
 {
 	/**
