@@ -23,15 +23,15 @@
 	        member${_receipt.members.size().pluralize()}
 		</h3>
 	    #{list items:_receipt.members, as:'member'}
-                <span class="member">
+                <li class="member">
                     ${member.fullname}
-                </span>
+                </li>
 	    #{/list}
 	</div>
 	
 	<div class="rounds">
 		<h3>Receipt</h3>
-		<table border="1">
+		<table class="receipt" cellspacing="0">
 			<tr>
 				<th>Item</th><th>Special cases</th>
 			</tr>
@@ -58,16 +58,16 @@
 	    </h3>
 	    
 	    #{list items:_receipt.comments, as:'comment'}
-	        <div class="comment">
-	            <div class="comment-metadata">
-	                <span class="comment-poster">by ${comment.poster.fullname},</span>
-	                <span class="comment-date">
-	                    ${comment.date.format('yyyy-MM-dd')}
-	                </span>
-	            </div>
+	        <div class="comment round gradient">
+	        	<div class="comment-metadata">
+	        		<span class="comment-poster">${comment.poster.fullname}</span> says...
+	       		</div>
 	            <div class="comment-content">
 	                ${comment.content.escape().nl2br()}
 	            </div>
+	             <span class="comment-date">
+	             	${comment.date.format('yyyy-MM-dd')}
+	             </span>
 	        </div>
 	    #{/list}
 	</div>

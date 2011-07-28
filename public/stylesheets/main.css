@@ -1,0 +1,106 @@
+body
+{
+	background-image: url('/public/images/bg.jpg');
+	background-repeat: repeat-x;
+	background-color: #95D7E7;
+	color: #333333;
+	font-family: Trebuchet MS, Tahoma, Verdana, Arial;
+	font-size: 10pt;
+}
+
+A:link, A:visited, A:active
+{
+	color: #128FBE;
+	text-decoration: none;
+}
+
+A:hover
+{
+	text-decoration: underline;
+}
+
+div#content
+{
+	width: 960px;
+	margin: 0 auto;
+	margin-top: 20px;
+	padding: 10px;
+	padding-top: 2px;
+	
+	background-color: #1a82f7;
+	background-image: -webkit-gradient(
+	    linear,
+	    left top,
+	    left bottom,
+	    color-stop(0, rgb(252,252,252)),
+	    color-stop(0.32, rgb(247,247,247))
+	);
+	background-image: -moz-linear-gradient(
+	    center top,
+	    rgb(252,252,252) 0%,
+	    rgb(247,247,247) 32%
+	)
+}
+
+div.round
+{
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-moz-box-shadow: 0px 4px 7px #666;
+	-webkit-box-shadow: 0px 4px 7px #666;
+	box-shadow: 0px 4px 7px #666;
+}
+
+div.gradient
+{
+   background-color: #1a82f7;
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#F9F9F9));
+   background-image: -webkit-linear-gradient(top, #FFFFFF, #F9F9F9);
+   background-image:    -moz-linear-gradient(top, #FFFFFF, #F9F9F9);
+   background-image:     -ms-linear-gradient(top, #FFFFFF, #F9F9F9);
+   background-image:      -o-linear-gradient(top, #FFFFFF, #F9F9F9);
+}
+
+div.comment
+{
+	position: relative;
+	padding: 8px;
+	padding-top: 17px;
+	margin: 15px;
+	width: 500px;
+	-moz-box-shadow: 0px 3px 5px #CCC;
+	-webkit-box-shadow: 0px 4px 7px #CCC;
+	box-shadow: 0px 2px 3px #CCC;
+	z-index: 1;
+}
+
+div.comment-metadata
+{
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background-color: #128FBE;
+	position: absolute;
+	top: -7px;
+	left: 15px;
+	padding: 0 5px 0 5px;
+	color: white;
+	z-index: 2;
+}
+
+span.comment-poster
+{
+	font-weight: bold;
+}
+
+table.receipt
+{
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	
+}
+table.receipt td, th
+{
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+	padding: 3px;
+}
