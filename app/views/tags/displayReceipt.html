@@ -2,7 +2,7 @@
 
 <div class="receipt ${_as == 'teaser' ? 'teaser' : ''}">
 	<h2 class="receipt title">
-		<a href="@{Application.receipt(_receipt.id)}">${_receipt.title}</a>
+		<a href="@{Receipts.show(_receipt.id)}">${_receipt.title}</a>
 	</h2>
 	<div class="details">
 		<span class="receipt-owner">by ${_receipt.owner.fullname}</span>,
@@ -58,15 +58,15 @@
 	    </h3>
 	    
 	    #{list items:_receipt.comments, as:'comment'}
-	        <div class="comment round gradient">
-	        	<div class="comment-metadata">
+	        <div class="comment round gradient${_receipt.owner == comment.poster ? ' own' : ''}">
+	        	<div class="comment-metadata${_receipt.owner == comment.poster ? '-own' : ''}">
 	        		<span class="comment-poster">${comment.poster.fullname}</span> says...
 	       		</div>
 	            <div class="comment-content">
 	                ${comment.content.escape().nl2br()}
 	            </div>
 	             <span class="comment-date">
-	             	${comment.date.format('yyyy-MM-dd')}
+	             	Posted at ${comment.date.format('yyyy-MM-dd')} from web
 	             </span>
 	        </div>
 	    #{/list}

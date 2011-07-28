@@ -18,16 +18,4 @@ public class Application extends Controller
 		List<Receipt> receipts = Receipt.find("order by created asc").fetch();
 		render(receipts);
 	}
-
-	/**
-	 * Show a receipt
-	 * 
-	 * @param id of receipt
-	 */
-	public static void receipt(Long id)
-	{
-		Receipt receipt = Receipt.findById(id);
-		User connectedUser = Security.connectedUser();
-		render(receipt, connectedUser);
-	}
 }

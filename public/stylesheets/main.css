@@ -6,6 +6,9 @@ body
 	color: #333333;
 	font-family: Trebuchet MS, Tahoma, Verdana, Arial;
 	font-size: 10pt;
+		
+	min-height: 100%;
+	overflow-y: scroll;
 }
 
 A:link, A:visited, A:active
@@ -39,7 +42,8 @@ div#content
 	    center top,
 	    rgb(252,252,252) 0%,
 	    rgb(247,247,247) 32%
-	)
+	);
+	height: 100%;
 }
 
 div.round
@@ -74,6 +78,11 @@ div.comment
 	z-index: 1;
 }
 
+div.own
+{
+	//margin-left: 50px;
+}
+
 div.comment-metadata
 {
 	border-radius: 5px;
@@ -85,6 +94,26 @@ div.comment-metadata
 	padding: 0 5px 0 5px;
 	color: white;
 	z-index: 2;
+}
+
+div.comment-metadata-own
+{
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background-color: #95ad10;
+	position: absolute;
+	top: -7px;
+	left: 420px;
+	padding: 0 5px 0 5px;
+	color: white;
+	z-index: 2;
+}
+
+span.comment-date
+{
+	font-size: 8pt;
+	color: grey;
+	font-family: Arial;
 }
 
 span.comment-poster

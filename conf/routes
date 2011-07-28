@@ -11,7 +11,7 @@ GET     /admin/?                                Admin.index
 
 # Home page
 GET     /                                       Application.index
-GET		/receipts/{id}							Application.receipt
+GET		/receipts/{id}							Receipts.show
 
 
 
