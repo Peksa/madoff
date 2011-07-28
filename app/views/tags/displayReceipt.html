@@ -51,7 +51,7 @@
 		<span class="total">Total: ${_receipt.total} SEK</span>
 	</div>
 		
-	<div class="comments">
+	<div id="comments" class="comments">
 	    <h3>
 	        ${_receipt.comments.size() ?: 'no'} 
 	        comment${_receipt.comments.size().pluralize()}
@@ -71,4 +71,27 @@
 	        </div>
 	    #{/list}
 	</div>
+	<h3>Add new comment</h3>
+	<form action="">
+		<input type="text" id="comment-value" class="newComment"/>
+	    <input type="submit" id="postComment" value="Post" onsubmit="return false;"/>
+    </form>
 #{/if}
+
+<script type="text/javascript" charset="utf-8">
+$('#postComment').click(function() {
+	$.post('@{Comments.post()}', {id: ${_receipt.id}, content: $('#comment-value').val()}, function(comment) {
+		$('<div class="comment round gradient' + (comment.own === true ? ' own' : '') + '"><div class="comment-metadata' + (comment.own === true ? '-own' : '') + '"><span class="comment-poster">'
+				+ comment.poster + '</span> says...</div><div class="comment-content">' + comment.content +
+				'</div><span class="comment-date">Posted at ' + comment.date +
+				' from web</span></div>')
+		.hide()
+		.appendTo('#comments')
+		.fadeIn();
+		
+		$('#comments').scrollBottom()
+		}, 'json');
+	return false;
+})
+
+</script>

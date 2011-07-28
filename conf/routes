@@ -2,16 +2,14 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Administration
-GET     /admin/?                                Admin.index
-*       /admin                                  module:crud
+
 
 # Import Secure routes
 *       /                                       module:secure
 
 # Home page
 GET     /                                       Application.index
-GET		/receipts/{id}							Receipts.show
+GET     /receipts/{id}							Receipts.show
 
 
 
@@ -23,3 +21,7 @@ GET     /public/                                staticDir:public
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
+
+# Administration
+GET     /admin/?                                Admin.index
+*       /admin                                  module:crud

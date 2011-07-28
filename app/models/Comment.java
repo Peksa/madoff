@@ -1,5 +1,6 @@
 package models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -33,5 +34,17 @@ public class Comment extends Model
 	public String toString()
 	{
 		return poster + ": " + content;
+	}
+	
+	/**
+	 * Return a formatted date.
+	 * TODO(peksa): This is pretty common, perhaps static method in util-class somewhere?
+	 * @param format of the date
+	 * @return formatted date
+	 */
+	public String getFormattedDate(String format)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(this.date);
 	}
 }

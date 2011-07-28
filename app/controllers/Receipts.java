@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Comment;
 import models.Receipt;
 import models.User;
 import play.*;
@@ -24,4 +25,5 @@ public class Receipts extends CRUD
 		User connectedUser = Security.connectedUser();
 		render(receipt, connectedUser);
 	}
+
 }
