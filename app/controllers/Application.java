@@ -27,6 +27,7 @@ public class Application extends Controller
 	public static void receipt(Long id)
 	{
 		Receipt receipt = Receipt.findById(id);
-		render(receipt);
+		User connectedUser = Security.connectedUser();
+		render(receipt, connectedUser);
 	}
 }
