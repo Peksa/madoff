@@ -2,21 +2,21 @@
 User(bob):
     email:          bob@gmail.com
     username:       bob
-    password:       secret
+    password:       kTtGl4u15hnHGEPhI92JlUHma5qTnoJyagd988sZX+7xdy5I++Mgpzg+Yts6EkQE8hMrNU3B095LeAvwB4f77A==
     fullname:       Bob
     accountNumber:  1234-123
    
 User(ann):
     email:          ann@ann.com
     username:       ann
-    password:       secret2
+    password:       /YTMCE+MGh/wMigqAy2G+v/+X1VtrA+LXNRrIZiUYtmiyrUDA/BhCvMSPmft2SRpxQwnmHK+WjzYyq005/DjJw==
     fullname:       Anne
     accountNumber:  4312-12
    
 User(fred):
     email:          fred@fred.com
     username:       fred
-    password:       secret2
+    password:       PdSE4DjyPrl7mDjy/R40//yuMZhilKwKke6BqfVovYaaXMM1PRXKBDku4hy+YHlwHMFC4T46o0KhqHj0pjx6nw==
     fullname:       Fredrik
     accountNumber:  123534-12
     
