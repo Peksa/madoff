@@ -26,7 +26,7 @@ public class User extends Model implements Comparable<User>
 		this.username = username;
 		this.password = password;
 		this.fullname = fullname;
-		receipts = new ArrayList<Receipt>();
+		this.receipts = new ArrayList<Receipt>();
 	}
 
 	@Override

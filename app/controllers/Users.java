@@ -8,7 +8,7 @@ import play.mvc.*;
  * 
  * @author Peksa
  */
-@With(Secure.class) // Require login for contoller access
+@With(Secure.class) // Require login for controller access
 public class Users extends CRUD
 {
 }

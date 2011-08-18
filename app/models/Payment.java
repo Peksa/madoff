@@ -10,15 +10,15 @@ import java.util.*;
 public class Payment extends Model
 {
 	@ManyToOne
-	User payer;
+	public User payer;
 
 	@ManyToOne
-	User receiver;
+	public User receiver;
 
-	Date paid;
-	Date accepted;
+	public Date paid;
+	public Date accepted;
 
-	int amount;
+	public int amount;
 
 	public Payment(User payer, User receiver, int amount)
 	{

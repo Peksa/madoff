@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializer;
 
 import play.templates.JavaExtensions;
 
-	public class CommentJsonSerializer implements JsonSerializer<Comment>
+public class CommentJsonSerializer implements JsonSerializer<Comment>
 {
 
 	@Override
