@@ -1,4 +1,4 @@
-package ext.json.serializers;
+package helpers.serializers;
 
 
 import java.lang.reflect.Type;
@@ -25,6 +25,7 @@ import play.templates.JavaExtensions;
 		obj.addProperty("poster", comment.poster.fullname);
 		obj.addProperty("content", comment.content);
 		obj.addProperty("date", comment.getFormattedDate("yyyy-MM-dd"));
+		obj.addProperty("timestamp", comment.date.getTime());
 		return obj;
 	}
 
