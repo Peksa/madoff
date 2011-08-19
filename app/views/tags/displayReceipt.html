@@ -53,45 +53,57 @@
 		
 	<div id="comments" class="comments">
 	    <h3>
-	        ${_receipt.comments.size() ?: 'no'} 
-	        comment${_receipt.comments.size().pluralize()}
+	        Comments:
 	    </h3>
-	    
-	    #{list items:_receipt.comments, as:'comment'}
-	        <div class="comment round gradient${_receipt.owner == comment.poster ? ' own' : ''}">
-	        	<div class="comment-metadata${_receipt.owner == comment.poster ? '-own' : ''}">
-	        		<span class="comment-poster">${comment.poster.fullname}</span> says...
-	       		</div>
-	            <div class="comment-content">
-	                ${comment.content.escape().nl2br()}
-	            </div>
-	             <span class="comment-date">
-	             	Posted at ${comment.date.format('yyyy-MM-dd')} from web
-	             </span>
-	        </div>
-	    #{/list}
+
 	</div>
 	<h3>Add new comment</h3>
-	<form action="">
-		<input type="text" id="comment-value" class="newComment"/>
-	    <input type="submit" id="postComment" value="Post" onsubmit="return false;"/>
-    </form>
+	
+	<input type="text" id="comment-value" class="newComment"/>
+	<input type="submit" id="postComment" value="Post" onsubmit="return false;"/>
 #{/if}
 
 <script type="text/javascript" charset="utf-8">
+var lastTimestamp = 0
+var imAVirgin = true;
+
 $('#postComment').click(function() {
-	$.post('@{Comments.post()}', {id: ${_receipt.id}, content: $('#comment-value').val()}, function(comment) {
-		$('<div class="comment round gradient' + (comment.own === true ? ' own' : '') + '"><div class="comment-metadata' + (comment.own === true ? '-own' : '') + '"><span class="comment-poster">'
-				+ comment.poster + '</span> says...</div><div class="comment-content">' + comment.content +
-				'</div><span class="comment-date">Posted at ' + comment.date +
-				' from web</span></div>')
-		.hide()
-		.appendTo('#comments')
-		.fadeIn();
-		
-		$('#comments').scrollBottom()
-		}, 'json');
+	$.post('@{Comments.post()}', {id: ${_receipt.id}, content: $('#comment-value').val(), lastPost: lastTimestamp}, renderPosts, 'json');
 	return false;
 })
+
+$(document).ready(function() {
+	getPosts();
+	setInterval(getPosts, 2000);
+});
+
+function getPosts() {
+	$.get('@{Comments.get()}', {id: ${_receipt.id}, lastPost: lastTimestamp}, renderPosts, 'json');
+}
+
+function renderPosts(comments) {
+	$.each(comments, function(index,comment) {
+		if(comment.timestamp > lastTimestamp) {
+			lastTimestamp = Math.max(lastTimestamp,comment.timestamp);
+		
+			var template = '<div class="comment round gradient' + (comment.own === true ? ' own' : '') + '"><div class="comment-metadata' + (comment.own === true ? '-own' : '') + '"><span class="comment-poster">'
+					+ comment.poster + '</span> says...</div><div class="comment-content">' + comment.content +
+					'</div><span class="comment-date">Posted at ' + comment.date +
+					' from web</span></div>';
+		
+			if(imAVirgin) {
+				$(template).appendTo('#comments');
+			} else {
+				$(template)
+				.hide()
+				.appendTo('#comments')
+				.fadeIn();
+			}
+		}
+		
+		//$('#comments').scrollBottom();
+	});
+	imAVirgin = false;
+}
 
 </script>

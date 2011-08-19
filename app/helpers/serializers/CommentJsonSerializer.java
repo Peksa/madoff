@@ -1,4 +1,4 @@
-package ext.json.serializers;
+package helpers.serializers;
 
 
 import java.lang.reflect.Type;
@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializer;
 
 import play.templates.JavaExtensions;
 
-public class CommentJsonSerializer implements JsonSerializer<Comment>
+	public class CommentJsonSerializer implements JsonSerializer<Comment>
 {
 
 	@Override
@@ -25,6 +25,7 @@ public class CommentJsonSerializer implements JsonSerializer<Comment>
 		obj.addProperty("poster", comment.poster.fullname);
 		obj.addProperty("content", comment.content);
 		obj.addProperty("date", comment.getFormattedDate("yyyy-MM-dd"));
+		obj.addProperty("timestamp", comment.date.getTime());
 		return obj;
 	}
 
