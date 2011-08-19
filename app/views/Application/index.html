@@ -1,6 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
+Logged in as: ${authed.username}
 #{if receipts.size()}
     <div class="receipts">
         <h3>Receipts</h3>

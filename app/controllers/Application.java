@@ -16,6 +16,7 @@ public class Application extends Controller
 	public static void index()
 	{
 		List<Receipt> receipts = Receipt.find("order by created asc").fetch();
-		render(receipts);
+		User authed = Security.connectedUser();
+		render(receipts, authed);
 	}
 }

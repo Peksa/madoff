@@ -109,6 +109,17 @@ div.comment-metadata-own
 	z-index: 2;
 }
 
+
+p.success
+{
+	// Successful logout or similiar
+}
+
+p.error
+{
+	color: red;
+}
+
 span.comment-date
 {
 	font-size: 8pt;
@@ -133,3 +144,4 @@ table.receipt td, th
 	border-top: 1px solid black;
 	padding: 3px;
 }
+

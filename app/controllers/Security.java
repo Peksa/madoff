@@ -43,6 +43,15 @@ public class Security extends Secure.Security
 		return false;
 	}
 	
+	public static String sha512Hash(String username, String password) throws NoSuchAlgorithmException
+	{
+		// FIXME(Peksa): Play only has support for shitty md5, patch at:
+		// https://github.com/hhandoko/play/commit/51622677ca9cd8312cd994ae5a3b03524eb3fdc0
+		// but it's not yet in an official version of play.
+		// String hash = Crypto.passwordHash(password);
+		return new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-512").digest((username + password).getBytes())));
+	}
+	
 	static boolean authenticate(String username, String password)
 	{
 		User user = User.find("byUsername", username).first();
@@ -51,12 +60,7 @@ public class Security extends Secure.Security
 
 		try
 		{
-			// FIXME(Peksa): Play only has support for shitty md5, patch at:
-			// https://github.com/hhandoko/play/commit/51622677ca9cd8312cd994ae5a3b03524eb3fdc0
-			// but it's not yet in an official version of play.
-			// String hash = Crypto.passwordHash(password);
-			
-			String hash = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-512").digest((username + password).getBytes())));
+			String hash = sha512Hash(username, password);
 			if (hash.equals(user.password))
 				return true;
 		}

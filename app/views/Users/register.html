@@ -1,0 +1,36 @@
+#{extends 'main.html' /}
+#{set title:'Register' /}
+
+
+<div id="register">
+	
+	<h1>Register</h1>
+		
+	#{form @add()}
+		
+		#{if flash.error}
+			<p class="error">
+				&{flash.error}
+			</p>
+		#{/if}
+		<p id="email-field">
+			<label for="fullname">Full name:</label><br/>
+			<input type="text" name="fullname" id="fullname" value="${flash.fullname}" />
+		</p>
+		<p id="email-field">
+			<label for="email">E-mail address:</label><br/>
+			<input type="text" name="email" id="email" value="${flash.email}" />
+		</p>
+		<p id="username-field">
+			<label for="username">Desired username:</label><br/>
+			<input type="text" name="username" id="username" value="${flash.username}" />
+		</p>
+		<p id="password-field">
+			<label for="password">Password:</label><br/>
+			<input type="password" name="password" id="password" value="" />
+		</p>
+		<p id="register-field">
+			<input type="submit" id="register" value="Register" />
+		</p>
+	#{/form}
+</div>

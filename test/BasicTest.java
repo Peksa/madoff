@@ -15,7 +15,7 @@ public class BasicTest extends UnitTest
 	@Test
 	public void createAndRetrieveUser()
 	{
-		new User("bob@bob.com", "bob", "secret", "Bobby").save();
+		new User("bob@bob.com", "bob", "secret").save();
 
 		User bob = User.find("byEmail", "bob@bob.com").first();
 
@@ -27,7 +27,7 @@ public class BasicTest extends UnitTest
 	@Test
 	public void createReceipt()
 	{
-		User bob = new User("bob@bob.com", "bob", "secret", "Bobby").save();
+		User bob = new User("bob@bob.com", "bob", "secret").save();
 		// User ann = new User("ann@ann.com", "ann", "verysecret", "Anne");
 
 		new Receipt("Hotel-bar 23/4", 432, bob, "Can't remember, but found receipt").save();
