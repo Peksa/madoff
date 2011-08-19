@@ -2,6 +2,7 @@ package controllers;
 
 import models.Comment;
 import models.Receipt;
+import models.User;
 import play.*;
 import play.mvc.*;
 import helpers.serializers.CommentJsonSerializer;
@@ -15,7 +16,7 @@ import java.util.List;
  * 
  * @author Peksa
  */
-@With(Secure.class) // Require login for contoller access
+@With(Secure.class) // Require login for controller access
 public class Comments extends CRUD
 {
 	
@@ -42,5 +43,25 @@ public class Comments extends CRUD
 		// TODO add enterprise generalized code with generics and interfaces
 		List<Comment> comments = Comment.find("receipt.id = ? AND date > ? ORDER BY date asc", id, date).fetch();
 		renderJSON(comments, new CommentJsonSerializer());
+	}
+	
+	
+	/**
+	 * Delete a comment
+	 */
+	public static void delete(Long id)
+	{
+		Comment comment = Comment.findById(id);
+		Receipt receipt = comment.receipt;
+		
+		// Check that the user is either owner of receipt or owner of the post.
+		if (Security.isAuthorized(comment.poster, receipt.owner))
+		{
+			comment.delete();
+		}
+		else
+		{
+			error("WTF. Bad dog!");
+		}
 	}
 }

@@ -1,5 +1,7 @@
 package controllers;
 
+import models.Payment;
+import models.User;
 import play.*;
 import play.mvc.*;
 
@@ -8,7 +10,37 @@ import play.mvc.*;
  * 
  * @author Peksa
  */
-@With(Secure.class) // Require login for contoller access
+@With(Secure.class) // Require login for controller access
 public class Payments extends CRUD
 {
+	public static void add(Long senderId, Long receiverId, int amount)
+	{
+		
+		User sender = User.findById(senderId);
+		if (Security.isAuthorized(sender))
+		{
+			User receiver = User.findById(receiverId);
+			// TODO(peksa): den här borde haxxa runt med PaidAmounts för en massa kvitton också... antagligen samma för delete.
+			Payment payment = new Payment(sender, receiver, amount).save();
+		}
+		else
+		{
+			error("Bad dog.");
+		}
+		
+		// TODO(peksa): Return list of payments, or something?
+	}
+	
+	public static void delete(Long id)
+	{
+		Payment payment = Payment.findById(id);
+		if (Security.isAuthorized(payment.payer))
+		{
+			payment.delete();
+		}
+		else
+		{
+			error("Bad bad dog!");
+		}
+	}
 }

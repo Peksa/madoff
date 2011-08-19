@@ -11,7 +11,7 @@ import play.mvc.*;
  * 
  * @author Peksa
  */
-@With(Secure.class) // Require login for contoller access
+@With(Secure.class) // Require login for controller access
 public class Receipts extends CRUD
 {
 	/**
@@ -24,6 +24,23 @@ public class Receipts extends CRUD
 		Receipt receipt = Receipt.findById(id);
 		User connectedUser = Security.connectedUser();
 		render(receipt, connectedUser);
+	}
+	
+	
+	public static void delete(Long id)
+	{
+		Receipt receipt = Receipt.findById(id);
+		
+		
+		// Check that the user is owner of receipt.
+		if (Security.isAuthorized(receipt.owner))
+		{
+			receipt.delete();
+		}
+		else
+		{
+			error("WTF. Bad dog!");
+		}
 	}
 
 }

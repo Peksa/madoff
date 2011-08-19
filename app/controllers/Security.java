@@ -25,6 +25,24 @@ public class Security extends Secure.Security
 		return User.find("byUsername", Security.connected()).first();
 	}
 	
+	/**
+	 * Check if any of the arguments is the connected user
+	 * @param users list of users that are authorized
+	 * @return true if connected user is one of the arguments, otherwise false.
+	 */
+	public static boolean isAuthorized(User ... users)
+	{
+		User connected = connectedUser();
+		if (connected == null)
+			return false;
+		
+		for (User user : users)
+			if (connected.equals(user))
+				return true;
+				
+		return false;
+	}
+	
 	static boolean authenticate(String username, String password)
 	{
 		User user = User.find("byUsername", username).first();
