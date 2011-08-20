@@ -4,6 +4,7 @@ import models.Comment;
 import models.Receipt;
 import models.User;
 import play.*;
+import play.data.validation.Required;
 import play.mvc.*;
 
 /**
@@ -21,6 +22,8 @@ public class Receipts extends CRUD
 	 */
 	public static void show(Long id)
 	{
+		if (validation.hasErrors())
+			error("id is required.");
 		Receipt receipt = Receipt.findById(id);
 		User connectedUser = Security.connectedUser();
 		render(receipt, connectedUser);
@@ -29,6 +32,8 @@ public class Receipts extends CRUD
 	
 	public static void delete(Long id)
 	{
+		if (validation.hasErrors())
+			error("id is required.");
 		Receipt receipt = Receipt.findById(id);
 		
 		

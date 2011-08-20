@@ -15,7 +15,8 @@ public class Payments extends CRUD
 {
 	public static void add(Long senderId, Long receiverId, int amount)
 	{
-		
+		if (validation.hasErrors())
+			error("params failed validation.");
 		User sender = User.findById(senderId);
 		if (Security.isAuthorized(sender))
 		{
@@ -33,6 +34,8 @@ public class Payments extends CRUD
 	
 	public static void delete(Long id)
 	{
+		if (validation.hasErrors())
+			error("params failed validation.");
 		Payment payment = Payment.findById(id);
 		if (Security.isAuthorized(payment.payer))
 		{

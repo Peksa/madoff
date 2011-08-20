@@ -54,6 +54,8 @@ public class Security extends Secure.Security
 	
 	static boolean authenticate(String username, String password)
 	{
+		if (validation.hasErrors())
+			error("params failed validation.");
 		User user = User.find("byUsername", username).first();
 		if (user == null || user.password == null)
 			return false;
