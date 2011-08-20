@@ -9,7 +9,7 @@
 
 # Home page
 GET     /                                       Application.index
-GET     /receipts/{id}							Receipts.show
+GET     /receipts/{<[0-9]+>id}					Receipts.show
 
 
 

@@ -38,7 +38,7 @@ public class Receipt extends Model
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Subpot> subpots;
 
-	public Receipt(String title, int totalAmount, User owner, String description)
+	public Receipt(String title, User owner, String description)
 	{
 		this.title = title;
 		this.owner = owner;

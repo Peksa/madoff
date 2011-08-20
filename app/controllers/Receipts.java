@@ -1,7 +1,12 @@
 package controllers;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import models.Comment;
 import models.Receipt;
+import models.Subpot;
 import models.User;
 import play.*;
 import play.data.validation.Required;
@@ -47,5 +52,31 @@ public class Receipts extends CRUD
 			error("WTF. Bad dog!");
 		}
 	}
+	
+	public static void add(String title, int tip, List<Long> members, String description)
+	{
+		Set<User> membersSet = new HashSet<User>();
+		
+		for (Long id : members) 
+		{
+			User u = User.findById(id);
+			membersSet.add(u);
+		}
+		
+		Receipt receipt = new Receipt(title, Security.connectedUser(), description);
+		receipt.tip = tip;
+		receipt.members.addAll(membersSet);
+		receipt.save();
+		Application.index();
+	}
+	
+	
+	
+	public static void register()
+	{
+		List<User> members = User.find("order by fullname asc").fetch();
+		render(members);
+	}
+	
 
 }
