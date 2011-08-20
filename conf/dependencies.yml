@@ -4,3 +4,12 @@ require:
     - play
     - secure
     - crud
+    - provided -> ocpsoft-pretty-time 1.0.7
+
+    
+repositories: 
+    - provided: 
+        type:        local 
+        artifact:    "${application.path}/jar/[module]-[revision].jar" 
+        contains: 
+        - provided -> * 

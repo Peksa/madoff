@@ -92,9 +92,11 @@ function renderPosts(comments) {
 function buildHtml(comment) {
 	return '<div class="comment round gradient' + (comment.own === true ? ' own' : '') + '"><div class="comment-metadata' + (comment.own === true ? '-own' : '') + '"><span class="comment-poster">'
 			+ comment.poster + '</span> says...</div><div class="comment-content">' + comment.content +
-			'</div><span class="comment-date">Posted at ' + comment.date +
+			'</div><span class="comment-date">Posted ' + comment.date +
 			' from web</span></div>';
 }
+
+
 
 
 
