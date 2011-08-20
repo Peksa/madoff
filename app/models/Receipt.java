@@ -25,7 +25,6 @@ public class Receipt extends Model
 
 	// Inverse side
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
-	public List<PaidAmount> paid;
 
 	@Lob
 	public String description;
@@ -46,7 +45,6 @@ public class Receipt extends Model
 		this.created = new Date();
 		this.comments = new ArrayList<Comment>();
 		this.members = new TreeSet<User>();
-		this.paid = new ArrayList<PaidAmount>();
 		this.subpots = new ArrayList<Subpot>();
 	}
 
