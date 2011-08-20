@@ -39,6 +39,14 @@ public class Subpot extends Model
 			amount += round.amount;
 		return amount;
 	}
+	
+	public int getTotal(User user)
+	{
+		for (IndebtAmount round : cases)
+			if(round.user.equals(user))
+				return round.amount;
+		return restAmount;
+	}
 
 	// TODO(peksa): Method for adding rounds here?
 }

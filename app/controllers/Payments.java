@@ -21,8 +21,8 @@ public class Payments extends CRUD
 		if (Security.isAuthorized(sender))
 		{
 			User receiver = User.findById(receiverId);
-			// TODO(peksa): den här borde haxxa runt med PaidAmounts för en massa kvitton också... antagligen samma för delete.
-			Payment payment = new Payment(sender, receiver, amount).save();
+			// TODO(dschlyter) FIXA ALLT HÄR OSV
+			//Payment payment = new Payment(sender, receiver, amount).save();
 		}
 		else
 		{
