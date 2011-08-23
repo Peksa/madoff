@@ -39,11 +39,42 @@
           		#{/list}
 			</select>
 		</p>
+		<p id="rounds-field">
+			<label for="rounds">Rounds:</label><br/>
+			<div id="round_list">
+			</div>
+			<input type="text" placeholder="New round title" id="round_title" />
+			<br/>
+			<input type="submit" id="round_add" value="Add" />
+		</p>
 		<p id="register-field">
-			<input type="submit" id="register" value="Register" />
+			<input type="submit" id="register" value="Save receipt" />
 		</p>
 	#{/form}
 	
-	
+	<script type="text/javascript">
+		var rounds = 0;
+		
+		$('#round_add').click(function(event) {
+			event.preventDefault();
+			
+			$('<div id="div_round_' + rounds + '"><h3>' + $('#round_title').val() + '</h3></div><input type="text" placeholder="Member" id="member_' + rounds + '" /><input type="text" placeholder="Amount" id="amount_' + rounds + '" /><br/><input type="submit" id="add_button_' + rounds + '" value="Add" /><br/><br/>')
+			.appendTo($('#round_list'));
+			
+			
+			$('#round_title').val('');
+			
+			$('#add_button_' + rounds).click({round: rounds}, function(event) {
+				event.preventDefault();
+				$('<span class="member">' + $('#member_' + event.data.round).val() + '</span><span class="amount">' + $('#amount_' + event.data.round).val() + '</span><br/>')
+				.appendTo($('#div_round_' + event.data.round));
+				
+			});
+			
+			rounds = rounds + 1;
+		});
+		
+
+	</script> 
 	<script type="text/javascript">$(".chzn-select").chosen(); </script> 
 </div>
