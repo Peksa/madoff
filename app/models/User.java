@@ -23,6 +23,12 @@ public class User extends Model implements Comparable<User>
 	// Inverse side
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
 	public List<Receipt> receipts;
+	
+	@OneToMany(mappedBy = "payer", cascade = CascadeType.PERSIST)
+	public List<Payment> debts;
+	
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.PERSIST)
+	public List<Payment> loans;
 
 	public User(String email, String username, String password)
 	{
