@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>#{get 'title' /}</title>
-        <meta charset="${_response_encoding}">
-        #{stylesheet 'main.css' /}
-        #{get 'moreStyles' /}
-        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
-        #{script 'jquery-1.6.2.min.js' /}
-        #{get 'moreScripts' /}
-    </head>
-    <body>
-    	<div id="content" class="round">
-        	#{doLayout /}
-        </div>
-    </body>
+<head>
+<title>#{get 'title' /}</title>
+<meta charset="${_response_encoding}">
+<!--  #{stylesheet 'main.css' /} -->
+#{get 'moreStyles' /}
+<link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+#{script 'jquery-1.6.2.min.js' /}
+#{script 'application.js' /}
+#{get 'moreScripts' /}
+<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
+</head>
+<body style="padding-top: 50px;">
+	<div class="topbar-wrapper" style="z-index: 5;">
+		<div class="topbar">
+			<div class="topbar-inner">
+				<div class="container">
+					<h3>
+						<a href="@{Application.index()}">madoff</a>
+					</h3>
+					<ul class="nav">
+						<li class="active"><a href="@{Application.index()}">Receipts</a></li>
+						<li><a href="#">Link</a></li>
+						<li><a href="#">Link</a></li>
+						<li><a href="#">Link</a></li>
+						<li class="dropdown"><a href="#" class="dropdown-toggle">Dropdown</a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Secondary link</a></li>
+								<li><a href="#">Something else here</a></li>
+								<li class="divider"></li>
+								<li><a href="#">Another link</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav secondary-nav">
+						<form action="">
+							<input type="text" placeholder="Search" />
+						</form>
+						<li><a href="@{Secure.logout()}">Logout</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /topbar-inner -->
+		</div>
+		<!-- /topbar -->
+	</div>
+	<!-- /topbar-wrapper -->
+	<div class="container">#{doLayout /}</div>
+</body>
 </html>

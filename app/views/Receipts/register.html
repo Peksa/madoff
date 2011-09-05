@@ -1,64 +1,73 @@
 #{extends 'main.html' /}
 #{set title:'Add new receipt' /}
-#{set 'moreScripts'}
-	#{script 'chosen.jquery.min.js' /}
-#{/set}
-#{set 'moreStyles'}
-	#{stylesheet 'chosen.css' /}
-#{/set}
+#{set 'moreScripts'} #{script 'chosen.jquery.min.js' /} #{/set}
+#{set 'moreStyles'} #{stylesheet 'chosen.css' /} #{/set}
 
 <div id="register">
-	
-	<h1>Add new receipt</h1>
-		
-	#{form @add()}
-		
-		#{if flash.error}
-			<p class="error">
-				&{flash.error}
-			</p>
-		#{/if}
-		<p id="title-field">
-			<label for="title">Title:</label><br/>
-			<input type="text" name="title" id="title" value="${flash.title}" />
+
+
+	#{if flash.error}
+	<div class="alert-message error">
+		<p>
+			<strong>Aaahh shieeet!</strong> &{flash.error}
 		</p>
-		<p id="description-field">
-			<label for="description">Description:</label><br/>
-			<textarea name="description" id="description">${flash.description}</textarea>
-		</p>
-		<p id="tip-field">
-			<label for="username">Tip:</label><br/>
-			<input type="text" name="tip" id="tip" value="${flash.tip}" />
-		</p>
-		<p id="members-field">
-			<label for="members">Members:</label><br/>
-			<select data-placeholder="Choose members..." class="chzn-select" style="width:350px;" id="members" name="members" multiple="yes"> 
-				<option value=""></option>
-				#{list items:members, as:'user'}
-          		<option value="${user.id}">${user.fullname} (${user.username})</option>
-          		#{/list}
-			</select>
-		</p>
-		<p id="rounds-field">
-			<label for="rounds">Rounds:</label><br/>
-			<div id="round_list">
+	</div>
+	#{/if} #{form @add()}
+	<fieldset>
+		<legend>Add new receipt</legend>
+		<div class="clearfix">
+			<label for="title">Title:</label>
+			<div class="input">
+				<input type="text" name="title" id="title" value="${flash.title}" />
 			</div>
-			<input type="text" placeholder="New round title" id="round_title" />
-			<br/>
-			<input type="submit" id="round_add" value="Add" />
+		</div>
+		<div class="clearfix">
+			<label for="description">Description:</label>
+			<div class="input">
+				<textarea name="description" id="description">${flash.description}</textarea>
+			</div>
+		</div>
+		<div class="clearfix">
+			<label for="username">Tip:</label>
+			<div class="input">
+				<input type="text" name="tip" id="tip" value="${flash.tip}" />
+			</div>
+		</div>
+		<div class="clearfix">
+			<label for="members">Members:</label>
+			<div class="input">
+				<select data-placeholder="Choose members..." class="chzn-select"
+					style="width: 350px;" id="members" name="members" multiple="yes">
+					<option value=""></option> #{list items:members, as:'user'}
+					<option value="${user.id}">${user.fullname}
+						(${user.username})</option> #{/list}
+				</select>
+			</div>
+		</div>
+		<div class="clearfix">
+			<label for="rounds">Rounds:</label>
+			<div class="input">
+				<div id="round_list"></div>
+				<input type="text" placeholder="New round title" id="round_title" />
+				<br /><br/> <input class="btn info" type="submit" id="round_add" value="Add" />
+			</div>
+		</div>
+		<div class="actions">
+			<input class="btn primary" type="submit" id="register"
+				value="Save receipt" />
+		</div>
 		</p>
-		<p id="register-field">
-			<input type="submit" id="register" value="Save receipt" />
-		</p>
+	</fieldset>
+
 	#{/form}
-	
+
 	<script type="text/javascript">
 		var rounds = 0;
 		
 		$('#round_add').click(function(event) {
 			event.preventDefault();
 			
-			$('<div id="div_round_' + rounds + '"><h3>' + $('#round_title').val() + '</h3></div><input type="text" placeholder="Member" id="member_' + rounds + '" /><input type="text" placeholder="Amount" id="amount_' + rounds + '" /><br/><input type="submit" id="add_button_' + rounds + '" value="Add" /><br/><br/>')
+			$('<div id="div_round_' + rounds + '"><h4>' + $('#round_title').val() + '</h4></div><input type="text" placeholder="Member" id="member_' + rounds + '" /><input type="text" placeholder="Amount" id="amount_' + rounds + '" /><br/><br/><input class="btn" type="submit" id="add_button_' + rounds + '" value="Add" /><br/><br/>')
 			.appendTo($('#round_list'));
 			
 			
@@ -75,6 +84,6 @@
 		});
 		
 
-	</script> 
-	<script type="text/javascript">$(".chzn-select").chosen(); </script> 
+	</script>
+	<script type="text/javascript">$(".chzn-select").chosen(); </script>
 </div>
