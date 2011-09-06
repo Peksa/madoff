@@ -24,11 +24,14 @@ public class User extends Model implements Comparable<User>
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
 	public List<Receipt> receipts;
 	
+	@ManyToMany(mappedBy = "members", cascade = CascadeType.PERSIST)
+	public Set<Receipt> incomingReceipts;
+	
 	@OneToMany(mappedBy = "payer", cascade = CascadeType.PERSIST)
-	public List<Payment> debts;
+	public List<Payment> payments;
 	
 	@OneToMany(mappedBy = "receiver", cascade = CascadeType.PERSIST)
-	public List<Payment> loans;
+	public List<Payment> incomingPayments;
 
 	public User(String email, String username, String password)
 	{

@@ -84,6 +84,23 @@ public class Receipt extends Model
 		
 		return amount;
 	}
+	
+	/**
+	 * Returns whether user has paid money for this receipt
+	 * @param user
+	 * @return True iff user has a payment associated with this receipt
+	 */
+	public boolean hasPayment(User user)
+	{
+		//TODO(dschlyter) later - verify if payments are for correct amount (turns into graph problem)
+		if (!members.contains(user)) return true;
+		
+		for (Payment p : payments) {
+			if (p.payer.equals(user)) return true;
+		}
+		
+		return false;
+	}
 
 	public String toString()
 	{
