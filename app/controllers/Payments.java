@@ -25,6 +25,10 @@ public class Payments extends CRUD
 		if(map.containsKey(key)) map.put(key, map.get(key) + value);
 		else map.put(key, value);
 	}
+	static void addset(HashMap<User,HashSet<Receipt>> map, User key, Receipt receipt) {
+		if(!map.containsKey(key)) map.put(key, new HashSet<Receipt>());
+		map.get(key).add(receipt);
+	}
 	
 	public static void index() {
 		User connected = Security.connectedUser();
@@ -47,7 +51,7 @@ public class Payments extends CRUD
 		
 		User user = User.findById(userId);
 		HashMap<User, Integer> debt = new HashMap<User, Integer>();
-		// Track debt that is linked to fresh receipts
+		// Track debt that is linked to fresh receipts - this is to enable user to verify debt correctness
 		HashMap<User, Integer> freshDebt = new HashMap<User, Integer>();
 		HashMap<User, HashSet<Receipt>> freshReceipts = new HashMap<User, HashSet<Receipt>>();
 		
@@ -57,8 +61,7 @@ public class Payments extends CRUD
 			increment(debt, r.owner, total);
 			if(!r.hasPayment(user)) {
 				increment(freshDebt, r.owner, total);
-				if(!freshReceipts.containsKey(r.owner)) freshReceipts.put(r.owner, new HashSet<Receipt>());
-				freshReceipts.get(r.owner).add(r);
+				addset(freshReceipts, r.owner, r);
 			}
 		}
 		for(Receipt r : user.receipts) {
@@ -67,8 +70,7 @@ public class Payments extends CRUD
 				increment(debt, u, -total);
 				if(!r.hasPayment(u)) { 
 					increment(freshDebt, u, -total);
-					if(!freshReceipts.containsKey(r.owner)) freshReceipts.put(r.owner, new HashSet<Receipt>());
-					freshReceipts.get(r.owner).add(r);
+					addset(freshReceipts, u, r);
 				}
 			}
 		}
@@ -82,6 +84,12 @@ public class Payments extends CRUD
 		}
 		
 		// TODO maybe remove 0 summed
+		for(User u : freshReceipts.keySet()) {
+			System.out.println(u.username);
+			for(Receipt r : freshReceipts.get(u)) {
+				System.out.println(r.id);
+			}
+		}
 		render(debt, freshDebt, freshReceipts);
 	}
 

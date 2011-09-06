@@ -2,33 +2,8 @@
 #{set title:'Payments' /}
 
 #{if debt.size()}
-    <div class="payments">
-        <h3>Due payments</h3>
-        #{list items:debt.keySet(), as:'user'}
-        	%{
-        		owes = debt.get(user);
-        		fresh = freshDebt.get(user);
-        		receipts = freshReceipts.get(user);
-        	}%
-        	#{if owes > 0}
-   				${user} --- ${owes}
-   				#{if receipts = 
-   				
-   			#{/if}
-   				
-   			
-   			<br>
-		#{/list}
-    </div>
-    <div class="payments">
-        <h3>Debts</h3>
-        #{list items:debt.keySet(), as:'user'}
-        	%{owes = debt.get(user)}%
-        	#{if owes < 0}
-   				${user} --- ${owes} <br>
-   			#{/if}
-		#{/list}
-    </div>
+    #{displayPayment heading:'Payments', positive:true, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+    #{displayPayment heading:'Debts', positive:false, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
 #{/if}
 
 <div class="payments">
