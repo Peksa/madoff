@@ -57,10 +57,21 @@
 	    </h3>
 
 	</div>
-	<h3>Add new comment</h3>
-	
-	<input type="text" id="comment-value" class="newComment"/>
-	<input type="submit" id="postComment" value="Post" onsubmit="return false;"/>
+	<br/>
+	<form class="form-stacked">
+		<fieldset>
+			<legend>Add new comment</legend> 
+			<div class="clearfix"> 
+				<div class="input">
+					<textarea id="comment-value" class="newComment"></textarea>
+				</div>
+			</div>
+			<div class="actions">
+				<input class="btn primary" type="submit" id="postComment" value="Post" onsubmit="return false;"/>
+				&nbsp;<button type="reset" class="btn">Cancel</button> 
+			</div>
+		</fieldset>
+	</form>
 #{/if}
 
 

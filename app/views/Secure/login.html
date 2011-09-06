@@ -5,34 +5,48 @@
 	
 	<h1>Login</h1>
 		
-	#{form @authenticate()}
-		
-		#{if flash.error}
-			<p class="error">
+	#{if flash.error}
+		<div class="alert-message error">
+			<p>
+				<strong>Aaahh shieeet!</strong> 
 				&{flash.error}
 			</p>
-		#{/if}
-		#{if flash.success}
-			<p class="success">
+		</div>
+	#{/if}
+	#{if flash.success}
+			<div class="alert-message success">
+			<p>
+				<strong>Aaahh nice!</strong> 
 				&{flash.success}
 			</p>
-		#{/if}
-	
-		<p id="username-field">
-			<label for="username">&{'secure.username'}</label><br/>
-			<input type="text" name="username" id="username" value="${flash.username}" />
-		</p>
-		<p id="password-field">
-			<label for="password">&{'secure.password'}</label><br/>
-			<input type="password" name="password" id="password" value="" />
-		</p>
-		<p id="remember-field">
-			<input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
-			<label for="remember">&{'secure.remember'}</label>
-		</p>
-		<p id="signin-field">
-			<input type="submit" id="signin" value="&{'secure.signin'}" />
-		</p>
+		</div>
+	#{/if}
+	#{form @authenticate()}
+		<fieldset>
+			<legend>Login</legend>
+			<div class="clearfix">
+				<label for="username">&{'secure.username'}</label>
+				<div class="input">
+					<input type="text" name="username" id="username" value="${flash.username}" />
+				</div>
+			</div>
+			<div class="clearfix">
+				<label for="password">&{'secure.password'}</label>
+				<div class="input">
+					<input type="password" name="password" id="password" value="" />
+				</div>
+			</div>
+			<div class="clearfix">
+				<label for="remember">&{'secure.remember'}</label>
+				<div class="input">
+					<input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
+				</div>
+			</div>
+			<div class="actions"> 
+				<input class="btn primary" type="submit" id="signin" value="&{'secure.signin'}" />
+				&nbsp;<button type="reset" class="btn">Cancel</button> 
+			</div>
+		</fieldset>
 	#{/form}
 	<p id="signup">
 		Don't have an account? #{a @Users.register()}Register#{/a}
