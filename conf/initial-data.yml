@@ -36,6 +36,21 @@ Receipt(firstBobReceipt):
                     - fred
                     - bob
                     
+Subpot(firstBobReceipt_s1):
+    receipt:        firstBobReceipt
+    description:    Booze
+    restAmount:     100
+IndebtAmount(firstBobReceipt_s1_i1):
+    subpot:         firstBobReceipt_s1
+    user:           fred
+    amount:         200
+    
+Comment(firstBobReceipt_c1):
+    poster:         ann
+    date:           2011-04-24
+    receipt:        firstBobReceipt
+    content:        Bob! You should go easy on the Booze!
+                    
 Receipt(secondBobReceipt):
     title:          Just a test
     created:        2009-04-23
