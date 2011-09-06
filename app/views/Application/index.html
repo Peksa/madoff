@@ -10,12 +10,14 @@ Logged in as: ${authed.username}
             #{displayReceipt receipt:receipt, as:'teaser' /}
         #{/list}
     </div>
+    
+    
 #{/if}
  
 #{else}
     <div class="empty">
         There is currently nothing to see here.
 	</div>
-#{/else}
-
+#{/else}<br/>
+<a href="@{Receipts.register()}">Create a new receipt</a><br/><br/>
 <a href="@{Secure.logout()}">Log out</a>
