@@ -57,7 +57,8 @@ public class Payments extends CRUD
 			increment(debt, r.owner, total);
 			if(!r.hasPayment(user)) {
 				increment(freshDebt, r.owner, total);
-				//freshReceipts.get(r.owner).add(r);
+				if(!freshReceipts.containsKey(r.owner)) freshReceipts.put(r.owner, new HashSet<Receipt>());
+				freshReceipts.get(r.owner).add(r);
 			}
 		}
 		for(Receipt r : user.receipts) {
@@ -66,7 +67,8 @@ public class Payments extends CRUD
 				increment(debt, u, -total);
 				if(!r.hasPayment(u)) { 
 					increment(freshDebt, u, -total);
-					//freshReceipts.get(r.owner).add(r);
+					if(!freshReceipts.containsKey(r.owner)) freshReceipts.put(r.owner, new HashSet<Receipt>());
+					freshReceipts.get(r.owner).add(r);
 				}
 			}
 		}
