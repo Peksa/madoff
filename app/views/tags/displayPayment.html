@@ -1,37 +1,33 @@
 *{ Just a simple tag for Payments/show to avoid duplication, tag usage is bloated and ugly imo :( }*
 
-<div class="payments">
-    <h3>${_heading}</h3>
-    <ul>
-    #{list items:_debt.keySet(), as:'user'}
-
-    	%{
-    		owes = _debt.get(user);
-    		fresh = _freshDebt.get(user);
-    		receipts = _freshReceipts.get(user);
-    		
-    		if(!_positive) {
-    			owes = -owes
-    			fresh = fresh == null ? owes : -fresh
-    		}
-    	}%
-    	#{if owes > 0}
-    	    <li>
-			${user.fullname} (${user.username}): ${owes} SEK
-			#{if receipts != null}
-				#{if fresh != null && owes != fresh}
-					${fresh} from:
-				#{/if}
-				<ul>
-				#{list items:receipts, as:'receipt'}
-					<li>
-					<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a>
-					</li>
-				#{/list}
-				</ul>
+<ul>
+#{list items:_debt.keySet(), as:'user'}
+	%{
+		owes = _debt.get(user);
+		fresh = _freshDebt.get(user);
+		receipts = _freshReceipts.get(user);
+		
+		if(!_positive) {
+			owes = -owes
+			fresh = fresh == null ? owes : -fresh
+		}
+	}%
+	#{if owes > 0}
+	    <li>
+		${user.fullname} (${user.username}): ${owes} SEK
+		#{if receipts != null}
+			#{if fresh != null && owes != fresh}
+				${fresh} from:
 			#{/if}
-			</li> 
+			<ul>
+			#{list items:receipts, as:'receipt'}
+				<li>
+				<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a>
+				</li>
+			#{/list}
+			</ul>
 		#{/if}
-	#{/list}
-	</ul>
-</div>
+		</li> 
+	#{/if}
+#{/list}
+</ul>

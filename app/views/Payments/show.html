@@ -2,12 +2,19 @@
 #{set title:'Payments' /}
 
 #{if debt.size()}
-    #{displayPayment heading:'Payments', positive:true, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
-    #{displayPayment heading:'Debts', positive:false, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+	<div>
+	    <h3>Liabilites</h3>
+	    #{displayPayment positive:true, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+	</div>
+	
+	<div>
+	    <h3>Securities</h3>
+	    #{displayPayment positive:false, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+	</div>
 #{/if}
 
 <div class="payments">
-	<h3>Incomming payments</h3>
+	<h3>Deposits</h3>
 	TODO
 </div>
 
@@ -20,5 +27,3 @@
 	<h3>Historic payments</h3>
 	TODO
 </div>
-	
-<a href="@{Secure.logout()}">Log out</a>
