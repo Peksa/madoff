@@ -8,6 +8,7 @@
 
 	#{if flash.error}
 	<div class="alert-message error">
+		<a class="close" href="#">&times;</a> 
 		<p>
 			<strong>Aaahh shieeet!</strong> &{flash.error}
 		</p>
@@ -49,14 +50,13 @@
 			<div class="input">
 				<div id="round_list"></div>
 				<input type="text" placeholder="New round title" id="round_title" />
-				<br /><br/> <input class="btn info" type="submit" id="round_add" value="Add" />
+				<br /><br/>
+				<input class="btn info" type="submit" id="round_add" value="Add" />
 			</div>
 		</div>
 		<div class="actions">
-			<input class="btn primary" type="submit" id="register"
-				value="Save receipt" />
+			<input class="btn primary" type="submit" id="register" value="Save receipt" />
 		</div>
-		</p>
 	</fieldset>
 
 	#{/form}
@@ -67,7 +67,7 @@
 		$('#round_add').click(function(event) {
 			event.preventDefault();
 			
-			$('<div id="div_round_' + rounds + '"><h4>' + $('#round_title').val() + '</h4></div><input type="text" placeholder="Member" id="member_' + rounds + '" /><input type="text" placeholder="Amount" id="amount_' + rounds + '" /><br/><br/><input class="btn" type="submit" id="add_button_' + rounds + '" value="Add" /><br/><br/>')
+			$('<div id="div_round_' + rounds + '"><h4>' + $('#round_title').val() + '</h4></div><input type="text" placeholder="Member" id="member_' + rounds + '" /><input type="text" placeholder="Amount" id="amount_' + rounds + '" /><br/><br/><input class="btn" type="submit" id="add_button_' + rounds + '" value="Add" /><br/><br/><hr/>')
 			.appendTo($('#round_list'));
 			
 			

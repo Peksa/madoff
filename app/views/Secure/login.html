@@ -7,6 +7,7 @@
 		
 	#{if flash.error}
 		<div class="alert-message error">
+			<a class="close" href="#">&times;</a> 
 			<p>
 				<strong>Aaahh shieeet!</strong> 
 				&{flash.error}
@@ -14,7 +15,8 @@
 		</div>
 	#{/if}
 	#{if flash.success}
-			<div class="alert-message success">
+		<div class="alert-message success">
+			<a class="close" href="#">&times;</a> 
 			<p>
 				<strong>Aaahh nice!</strong> 
 				&{flash.success}
