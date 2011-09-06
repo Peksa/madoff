@@ -2,7 +2,9 @@
 
 <div class="payments">
     <h3>${_heading}</h3>
+    <ul>
     #{list items:_debt.keySet(), as:'user'}
+
     	%{
     		owes = _debt.get(user);
     		fresh = _freshDebt.get(user);
@@ -14,18 +16,22 @@
     		}
     	}%
     	#{if owes > 0}
-			${user}: ${owes} 
+    	    <li>
+			${user.fullname} (${user.username}): ${owes} SEK
 			#{if receipts != null}
-				(
 				#{if fresh != null && owes != fresh}
 					${fresh} from:
 				#{/if}
+				<ul>
 				#{list items:receipts, as:'receipt'}
-					<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a> 
+					<li>
+					<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a>
+					</li>
 				#{/list}
-				)
+				</ul>
 			#{/if}
-			<br>
+			</li> 
 		#{/if}
 	#{/list}
+	</ul>
 </div>
