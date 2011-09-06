@@ -13,7 +13,8 @@
 			<strong>Aaahh shieeet!</strong> &{flash.error}
 		</p>
 	</div>
-	#{/if} #{form @add()}
+	#{/if}
+	#{form @add()}
 	<fieldset>
 		<legend>Add new receipt</legend>
 		<div class="clearfix">
@@ -37,11 +38,11 @@
 		<div class="clearfix">
 			<label for="members">Members:</label>
 			<div class="input">
-				<select data-placeholder="Choose members..." class="chzn-select"
-					style="width: 350px;" id="members" name="members" multiple="yes">
-					<option value=""></option> #{list items:members, as:'user'}
-					<option value="${user.id}">${user.fullname}
-						(${user.username})</option> #{/list}
+				<select data-placeholder="Choose members..." class="chzn-select" style="width: 350px;" id="members" name="members" multiple="yes">
+					<option value=""></option> 
+					#{list items:members, as:'user'}
+					<option value="${user.id}">${user.fullname} (${user.username})</option>
+					#{/list}
 				</select>
 			</div>
 		</div>
@@ -50,6 +51,7 @@
 			<div class="input">
 				<div id="round_list"></div>
 				<input type="text" placeholder="New round title" id="round_title" />
+				<input type="text" placeholder="Rest amount" id="round_rest" />
 				<br /><br/>
 				<input class="btn info" type="submit" id="round_add" value="Add" />
 			</div>
@@ -67,15 +69,22 @@
 		$('#round_add').click(function(event) {
 			event.preventDefault();
 			
-			$('<div id="div_round_' + rounds + '"><h4>' + $('#round_title').val() + '</h4></div><input type="text" placeholder="Member" id="member_' + rounds + '" /><input type="text" placeholder="Amount" id="amount_' + rounds + '" /><br/><br/><input class="btn" type="submit" id="add_button_' + rounds + '" value="Add" /><br/><br/><hr/>')
+			$('<div id="div_round_' + rounds + '"><h4>' + $('#round_title').val() + ' (Rest: ' + $('#round_rest').val() + ')</h4></div>\
+			<select data-placeholder="Choose member..." class="chzn-select" style="width: 200px;" name="members" id="member_' + rounds + '">\
+			<option value=""></option>\
+			#{list items:members, as:'user'} <option value="${user.id}">${user.fullname} (${user.username})</option>\
+			#{/list}\
+			</select>\
+			<input type="text" maxlength="5" size="5" placeholder="Amount" id="amount_' + rounds + '"/><br/><br/><input class="btn" type="submit" id="add_button_' + rounds + '" value="Add" /><br/><br/><hr/>')
 			.appendTo($('#round_list'));
 			
+			$(".chzn-select").chosen();
 			
 			$('#round_title').val('');
 			
 			$('#add_button_' + rounds).click({round: rounds}, function(event) {
 				event.preventDefault();
-				$('<span class="member">' + $('#member_' + event.data.round).val() + '</span><span class="amount">' + $('#amount_' + event.data.round).val() + '</span><br/>')
+				$('<span class="member">' + $('#member_' + event.data.round + ' option:selected').text() + '</span>  <span class="amount">' + $('#amount_' + event.data.round).val() + '</span><br/>')
 				.appendTo($('#div_round_' + event.data.round));
 				
 			});
