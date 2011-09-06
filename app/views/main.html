@@ -21,8 +21,8 @@
 						<a href="@{Application.index()}">madoff</a>
 					</h3>
 					<ul class="nav">
-						<li class="active"><a href="@{Application.index()}">Receipts</a></li>
-						<li class="active"><a href="@{Payments.index()}">Payments</a></li>
+						<li #{if request.action == "Application.index"} class="active" #{/if}><a href="@{Application.index()}">Receipts</a></li>
+						<li #{if request.action == "Payments.show"} class="active" #{/if}><a href="@{Payments.index()}">Payments</a></li>
 						<li><a href="#">Link</a></li>
 						<li><a href="#">Link</a></li>
 						<li><a href="#">Link</a></li>
