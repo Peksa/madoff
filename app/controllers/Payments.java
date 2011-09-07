@@ -84,12 +84,6 @@ public class Payments extends CRUD
 		}
 		
 		// TODO maybe remove 0 summed
-		for(User u : freshReceipts.keySet()) {
-			System.out.println(u.username);
-			for(Receipt r : freshReceipts.get(u)) {
-				System.out.println(r.id);
-			}
-		}
 		render(debt, freshDebt, freshReceipts);
 	}
 

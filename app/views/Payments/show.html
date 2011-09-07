@@ -1,6 +1,16 @@
 #{extends 'main.html' /}
 #{set title:'Payments' /}
 
+#{set 'moreScripts'}
+	#{script 'jquery.tablesorter.min.js' /}
+#{/set}
+
+<script >
+  $(function() {
+    $("table#sortTableExample").tablesorter({ sortList: [[1,0]] });
+  });
+</script>
+
 <div class="row">
     <div class="span8 columns">
 	    <div class="alert-message block-message error">
@@ -34,28 +44,39 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message success">		
 			<div>
-				<h3>Redemptions</h3>
+				<h3>Redeem</h3>
 				TODO [ACCEPT BUTTON HERE]
 			</div>
 		</div>
     </div><!-- /col -->
 </div>  
 
-<div class="row">
-    <div class="span8 columns">
-	    <div class="alert-message block-message error">
-			<div>
-				<h3>Historic</h3>
-				TODO
-			</div>
-		</div>
-    </div><!-- /col -->
-    <div class="span8 columns">
-	    <div class="alert-message block-message success">		
-			<div>
-				<h3>Historic</h3>
-				TODO
-			</div>
-		</div>
-    </div><!-- /col -->
-</div>  
+<h3>Historic</h3>
+<table class="zebra-striped" id="sortTableExample">
+    <thead>
+      <tr>
+        <th class="header">#</th>
+        <th class="yellow header headerSortDown">First Name</th>
+        <th class="blue header">Last Name</th>
+        <th class="green header">Language</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    <tr>
+        <td class="red">2</td>
+        <td class="red">Joe</td>
+        <td class="red">Sixpack</td>
+        <td class="red">English</td>
+      </tr><tr>
+        <td class="green">3</td>
+        <td class="green">Stu</td>
+        <td class="green">Dent</td>
+        <td class="green">Code</td>
+      </tr><tr>
+        <td class="green">1</td>
+        <td class="green">Your</td>
+        <td class="green">One</td>
+        <td class="green">English</td>
+      </tr></tbody>
+  </table>
