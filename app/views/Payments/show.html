@@ -7,7 +7,7 @@
 
 <script >
   $(function() {
-    $("table#sortTableExample").tablesorter({ sortList: [[1,0]] });
+    $("table#sortTableExample").tablesorter({ sortList: [[1,1]] });
   });
 </script>
 
@@ -25,7 +25,7 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message success">
 	    	<div>
-			    <h2>Securities</h2>
+			    <h2>Debt securities</h2>
 			    #{displayPayment positive:false, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
 			</div>
 		</div>
@@ -55,28 +55,36 @@
 <table class="zebra-striped" id="sortTableExample">
     <thead>
       <tr>
-        <th class="header">#</th>
-        <th class="yellow header headerSortDown">First Name</th>
-        <th class="blue header">Last Name</th>
-        <th class="green header">Language</th>
+        <th class="header">Issued</th>
+        <th class="header">Accepted</th>
+        <th class="header">From</th>
+        <th class="header">To</th>
+        <th class="header">Amount</th>
+        <th class="header">Receipts</th>
       </tr>
     </thead>
     <tbody>
       
     <tr>
-        <td class="red">2</td>
-        <td class="red">Joe</td>
-        <td class="red">Sixpack</td>
-        <td class="red">English</td>
+        <td class="red">2011-01-01</td>
+        <td class="red">2011-01-05</td>
+        <td class="red">Gunde</td>
+        <td class="red">Peksa</td>
+        <td class="red">4711</td>
+        <td class="red">Link1,Link2,Link3,Link4</td>
       </tr><tr>
-        <td class="green">3</td>
-        <td class="green">Stu</td>
-        <td class="green">Dent</td>
-        <td class="green">Code</td>
+        <td class="green">2011-06-01</td>
+        <td class="green">2011-12-05</td>
+        <td class="green">Peksa</td>
+        <td class="green">Gunde</td>
+        <td class="green">450</td>
+        <td class="green">Link1,Link2</td>
       </tr><tr>
-        <td class="green">1</td>
-        <td class="green">Your</td>
-        <td class="green">One</td>
-        <td class="green">English</td>
+        <td class="green">2011-07-01</td>
+        <td class="green">2011-12-05</td>
+        <td class="green">Blunden</td>
+        <td class="green">Gunde</td>
+        <td class="green">65</td>
+        <td class="green">Link1,Link2</td>
       </tr></tbody>
   </table>
