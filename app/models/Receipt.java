@@ -59,8 +59,8 @@ public class Receipt extends Model
 			amount += pot.getTotal();
 			// Add restAmount here, since Subpot does not know number of members
 			amount += (members.size() - pot.cases.size()) * pot.restAmount;
-			amount += tip;
 		}
+		amount += tip;
 		return amount;
 	}
 	
