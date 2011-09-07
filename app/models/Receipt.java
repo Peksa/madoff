@@ -79,8 +79,15 @@ public class Receipt extends Model
 		// Calculate amount of tip user should pay
 		// if user has X% of non-tip debt, he should pay X% of the tip
 		int allUsers = getTotal() - tip;
-		double percentage = amount / (double) allUsers;
-		amount += tip * percentage;
+		if(allUsers == 0) 
+		{
+			amount += tip / members.size();
+		} 
+		else 
+		{
+			double percentage = amount / (double) allUsers;
+			amount += tip * percentage;
+		}
 		
 		return amount;
 	}
