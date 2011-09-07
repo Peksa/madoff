@@ -1,29 +1,42 @@
 #{extends 'main.html' /}
 #{set title:'Payments' /}
 
-#{if debt.size()}
-	<div>
-	    <h3>Liabilites</h3>
-	    #{displayPayment positive:true, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
-	</div>
-	
-	<div>
-	    <h3>Securities</h3>
-	    #{displayPayment positive:false, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
-	</div>
-#{/if}
-
-<div class="payments">
-	<h3>Deposits</h3>
-	TODO
-</div>
-
-<div class="payments">
-	<h3>Outgoing payments</h3>
-	TODO
-</div>
-
-<div class="payments">
-	<h3>Historic payments</h3>
-	TODO
-</div>
+<div class="row">
+    <div class="span8 columns">
+	    <div class="alert-message block-message error">
+	    	<div>
+			    <h2>Liabilites</h2>
+			    #{displayPayment positive:true, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+			    [PAY BUTTON HERE SOMEWHERE]
+			</div>
+			
+			<div>
+				<h3>Redemptions</h3>
+				TODO
+			</div>
+			
+			<div>
+				<h3>Historic</h3>
+				TODO
+			</div>
+		</div>
+    </div><!-- /col -->
+    <div class="span8 columns">
+	    <div class="alert-message block-message success">
+	    	<div>
+			    <h2>Securities</h2>
+			    #{displayPayment positive:false, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+			</div>
+			
+			<div>
+				<h3>Redemptions</h3>
+				TODO [ACCEPT BUTTON HERE]
+			</div>
+			
+			<div>
+				<h3>Historic</h3>
+				TODO
+			</div>
+		</div>
+    </div><!-- /col -->
+</div>  
