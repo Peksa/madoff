@@ -23,9 +23,9 @@
 	        member${_receipt.members.size().pluralize()}
 		</h3>
 	    #{list items:_receipt.members, as:'member'}
-                <li class="member">
-                    ${member.fullname}
-                </li>
+            <li class="member">
+                ${member.fullname} (${_receipt.getTotal(member)} SEK)
+            </li>
 	    #{/list}
 	</div>
 	
@@ -48,6 +48,7 @@
 				</tr>
 			#{/list}
 		</table>
+		<div class="tip">Tip: ${_receipt.tip} SEK</div>
 		<span class="total">Total: ${_receipt.total} SEK</span>
 	</div>
 		
