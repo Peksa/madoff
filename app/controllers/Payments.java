@@ -84,7 +84,7 @@ public class Payments extends CRUD
 		}
 		
 		// TODO maybe remove 0 summed
-		render(debt, freshDebt, freshReceipts);
+		render(debt, freshDebt, freshReceipts, user);
 	}
 
 	

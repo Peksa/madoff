@@ -14,20 +14,30 @@
 	}%
 	#{if owes > 0}
 	    <li>
-		${user.fullname} (${user.username}): ${owes} SEK
+		${user.fullname} (${user.username}): ${owes} SEK *{Gunde12345 <button class="btn primary small">Pay</button>}*
 		#{if receipts != null}
 			#{if fresh != null && owes != fresh}
 				${fresh} from:
 			#{/if}
 			<ul>
 			#{list items:receipts, as:'receipt'}
+				%{
+					if(receipt.owner.equals(_activeUser)) {
+						receiptDebt = receipt.getTotal(user)
+						if(_positive) receiptDebt *= -1
+					} else {
+						receiptDebt = receipt.getTotal(_activeUser)
+						if(!_positive) receiptDebt *= -1
+					}
+				}%
 				<li>
-				<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a>
+				<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a> (${receiptDebt})
+				
 				</li>
 			#{/list}
 			</ul>
 		#{/if}
-		</li> 
+		</li>
 	#{/if}
 #{/list}
 </ul>

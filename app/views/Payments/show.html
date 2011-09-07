@@ -16,7 +16,7 @@
 	    <div class="alert-message block-message error">
 	    	<div>
 			    <h2>Liabilites</h2>
-			    #{displayPayment positive:true, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+			    #{displayPayment positive:true, activeUser:user, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
 			    [PAY BUTTON HERE SOMEWHERE]
 			</div>
 
@@ -26,7 +26,7 @@
 	    <div class="alert-message block-message success">
 	    	<div>
 			    <h2>Debt securities</h2>
-			    #{displayPayment positive:false, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+			    #{displayPayment positive:false, activeUser:user, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
 			</div>
 		</div>
     </div><!-- /col -->
@@ -36,7 +36,7 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message error">
 			<div>
-				<h3>Redemptions</h3>
+				<h3>Pending settlements</h3>
 				TODO
 			</div>
 		</div>
@@ -44,14 +44,14 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message success">		
 			<div>
-				<h3>Redeem</h3>
+				<h3>Accept settlements</h3>
 				TODO [ACCEPT BUTTON HERE]
 			</div>
 		</div>
     </div><!-- /col -->
 </div>  
 
-<h3>Historic</h3>
+<h3>Settled</h3>
 <table class="zebra-striped" id="sortTableExample">
     <thead>
       <tr>
@@ -71,20 +71,20 @@
         <td class="red">Gunde</td>
         <td class="red">Peksa</td>
         <td class="red">4711</td>
-        <td class="red">Link1,Link2,Link3,Link4</td>
+        <td class="red">TODO Popover</td>
       </tr><tr>
         <td class="green">2011-06-01</td>
         <td class="green">2011-12-05</td>
         <td class="green">Peksa</td>
         <td class="green">Gunde</td>
         <td class="green">450</td>
-        <td class="green">Link1,Link2</td>
+        <td class="green">TODO Popover</td>
       </tr><tr>
         <td class="green">2011-07-01</td>
         <td class="green">2011-12-05</td>
         <td class="green">Blunden</td>
         <td class="green">Gunde</td>
         <td class="green">65</td>
-        <td class="green">Link1,Link2</td>
+        <td class="green">TODO Popover</td>
       </tr></tbody>
   </table>
