@@ -70,8 +70,8 @@
     	else color = "green"
     }%
     <tr>
-        <td class="${color}">${payment.paid}</td>
-        <td class="${color}">${payment.accepted}</td>
+        <td class="${color}">${payment.paid.format('yyyy-MM-dd')}</td>
+        <td class="${color}">${payment.accepted.format('yyyy-MM-dd')}</td>
         <td class="${color}">${payment.payer}</td>
         <td class="${color}">${payment.receiver}</td>
         <td class="${color}">${payment.amount}</td>

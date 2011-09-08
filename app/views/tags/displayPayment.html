@@ -8,7 +8,7 @@ YAY nothing here!
 #{list items:_payments, as:'payment'}
     <li>
     #{if payment.paid && _showDate}
-    	${payment.paid}<br>
+    	${payment.paid.format('yyyy-MM-dd')}<br>
     #{/if}
     %{
     	if(_outgoing) user = payment.receiver
