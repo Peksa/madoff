@@ -115,8 +115,8 @@ public class Payments extends CRUD
 			}	
 		}
 		
-		//render(liabilities, pending, securities, accept, settled);
-		render(debt, freshDebt, freshReceipts, user);
+		render(liabilities, pending, securities, accept, settled);
+		//render(debt, freshDebt, freshReceipts, user);
 	}
 
 	

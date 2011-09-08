@@ -16,7 +16,7 @@
 	    <div class="alert-message block-message error">
 	    	<div>
 			    <h2>Liabilites</h2>
-			    #{displayPayment positive:true, activeUser:user, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+			    #{displayPayment payments:liabilities, action:'pay', outgoing:true, showDate:false /}
 			</div>
 
 		</div>
@@ -25,7 +25,7 @@
 	    <div class="alert-message block-message success">
 	    	<div>
 			    <h2>Debt securities</h2>
-			    #{displayPayment positive:false, activeUser:user, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
+			    #{displayPayment payments:securities, action:'none', outgoing:false, showDate:false /}
 			</div>
 		</div>
     </div><!-- /col -->
@@ -36,7 +36,7 @@
 	    <div class="alert-message block-message error">
 			<div>
 				<h3>Pending settlements</h3>
-				TODO
+				#{displayPayment payments:liabilities, action:'none', outgoing:true, showDate:true /}
 			</div>
 		</div>
     </div><!-- /col -->
@@ -44,7 +44,7 @@
 	    <div class="alert-message block-message success">		
 			<div>
 				<h3>Accept settlements</h3>
-				<button class="btn primary small">Accept</button>
+				#{displayPayment payments:securities, action:'accept', outgoing:false, showDate:true /}
 			</div>
 		</div>
     </div><!-- /col -->

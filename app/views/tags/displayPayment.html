@@ -1,47 +1,44 @@
 *{ Just a simple tag for Payments/show to avoid duplication, tag usage is bloated and ugly imo :( }*
-*{ Takes payments, action:'pay'/'accept'/'none', outgoing:true/false }*
+*{ Takes payments, action:'pay'/'accept'/'none', outgoing:true/false}*
 
 <ul>
-#{list items:_debt.keySet(), as:'user'}
-	%{
-		owes = _debt.get(user);
-		fresh = _freshDebt.get(user);
-		receipts = _freshReceipts.get(user);
-		
-		if(!_positive) {
-			owes = -owes
-			fresh = fresh == null ? owes : -fresh
-		}
-	}%
-	#{if owes > 0}
-	    <li>
-		${user.fullname} (${user.username}): ${owes} SEK 
-		#{if _positive}
-			- <strong>Gunde12345</strong> <button class="btn success small">Payed</button>
-		#{/if}
-		#{if receipts != null}
-			#{if fresh != null && owes != fresh}
-				${fresh} from:
-			#{/if}
-			<ul>
-			#{list items:receipts, as:'receipt'}
-				%{
-					if(receipt.owner.equals(_activeUser)) {
-						receiptDebt = receipt.getTotal(user)
-						if(_positive) receiptDebt *= -1
-					} else {
-						receiptDebt = receipt.getTotal(_activeUser)
-						if(!_positive) receiptDebt *= -1
-					}
-				}%
-				<li>
-				<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a> (${receiptDebt})
-				
-				</li>
-			#{/list}
-			</ul>
-		#{/if}
-		</li>
+#{list items:_payments, as:'payment'}
+    <li>
+    #{if payment.paid && _showDate}
+    	${payment.paid}<br>
+    #{/if}
+    %{
+    	if(outgoing) user = payment.receiver
+    	else user = payment.payer
+    }%
+	${user.fullname} (${user.username}): ${payment.amount} SEK 
+	#{if payment.identifier}
+		- <strong>${payment.identifier}</strong> 
 	#{/if}
+	#{if payment.receipts}
+		<ul>
+		#{list items:payment.receipts, as:'receipt'}
+			<li>
+			<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a>
+			#{if receipt.owner.equals(payment.payer)}
+				&#40;-${receipt.getTotal(payment.payer)}&#41;
+			#{/if}
+			#{else}
+				&#40;${receipt.getTotal(payment.receiver)}&#41;
+			#{/else}
+			</li>
+		#{/list}
+		#{if payment.unsourced}
+			<li>Unsourced (${payment.unsourced})</li>
+		#{/if}
+		</ul>
+		#{if _action == 'pay'}
+			<button class="btn success small">Send</button>
+		#{/if}
+		#{if _action == 'accept'}
+			<button class="btn primary small">Accept</button>
+		#{/if}
+	#{/if}
+	</li>
 #{/list}
 </ul>
