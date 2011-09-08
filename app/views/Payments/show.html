@@ -7,7 +7,7 @@
 
 <script >
   $(function() {
-    $("table#sortTableExample").tablesorter({ sortList: [[2,1]] });
+    $("table#sortTableExample").tablesorter({ sortList: [[1,1]] });
   });
 </script>
 
@@ -50,12 +50,11 @@
     </div><!-- /col -->
 </div>  
 
-*{
-<h3>Settled (TODO Example data only!)</h3>
+<h3>Settled</h3>
 <table class="zebra-striped" id="sortTableExample">
     <thead>
       <tr>
-        <th class="header">Issued</th>
+        <th class="header">Paid</th>
         <th class="header">Accepted</th>
         <th class="header">From</th>
         <th class="header">To</th>
@@ -65,31 +64,20 @@
       </tr>
     </thead>
     <tbody>
-      
+	#{list items:settled, as:'payment'}
+	%{
+    	if(user == payment.payer) color = "red"
+    	else color = "green"
+    }%
     <tr>
-        <td class="red">2011-01-01</td>
-        <td class="red">2011-01-05</td>
-        <td class="red">Gunde</td>
-        <td class="red">Peksa</td>
-        <td class="red">4711</td>
-        <td class="red">Gunde4711</td>
-        <td class="red">11 Receipts Popover</td>
-      </tr><tr>
-        <td class="green">2011-06-01</td>
-        <td class="green">2011-12-05</td>
-        <td class="green">Peksa</td>
-        <td class="green">Gunde</td>
-        <td class="green">450</td>
-        <td class="green">Peksa1337</td>
-        <td class="green">2 Receipts Popover</td>
-      </tr><tr>
-        <td class="green">2011-07-01</td>
-        <td class="green">2011-12-05</td>
-        <td class="green">Blunden</td>
-        <td class="green">Gunde</td>
-        <td class="green">65</td>
-        <td class="green">Blunden5678</td>
-        <td class="green">2 Receipts Popover</td>
-      </tr></tbody>
+        <td class="${color}">${payment.paid}</td>
+        <td class="${color}">${payment.accepted}</td>
+        <td class="${color}">${payment.payer}</td>
+        <td class="${color}">${payment.receiver}</td>
+        <td class="${color}">${payment.amount}</td>
+        <td class="${color}">${payment.identifier}</td>
+        <td class="${color}">${payment.receipts.size()}</td>
+     </tr>
+     #{/list}
+     </tbody>
   </table>
-  f}*

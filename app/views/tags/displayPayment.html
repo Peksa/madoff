@@ -2,13 +2,16 @@
 *{ Takes payments, action:'pay'/'accept'/'none', outgoing:true/false}*
 
 <ul>
+#{if !_payments}
+YAY nothing here!
+#{/if}
 #{list items:_payments, as:'payment'}
     <li>
     #{if payment.paid && _showDate}
     	${payment.paid}<br>
     #{/if}
     %{
-    	if(outgoing) user = payment.receiver
+    	if(_outgoing) user = payment.receiver
     	else user = payment.payer
     }%
 	${user.fullname} (${user.username}): ${payment.amount} SEK 

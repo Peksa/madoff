@@ -115,7 +115,7 @@ public class Payments extends CRUD
 			}	
 		}
 		
-		render(liabilities, pending, securities, accept, settled);
+		render(liabilities, pending, securities, accept, settled, user);
 		//render(debt, freshDebt, freshReceipts, user);
 	}
 
@@ -147,7 +147,7 @@ public class Payments extends CRUD
 		Payment payment = new Payment(Security.connectedUser(), receiver, identifier, amount, unsourced, receipts);
 		payment.save();
 
-		// Do nothing, this should be accessed by ajax?
+		index();
 	}
 	
 	/**
@@ -162,6 +162,8 @@ public class Payments extends CRUD
 		
 		payment.accepted = new Date();
 		payment.save();
+		
+		index();
 	}
 	
 	/**
