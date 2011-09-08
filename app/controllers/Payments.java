@@ -72,6 +72,7 @@ public class Payments extends CRUD
 			if(!r.hasPayment(user)) {
 				increment(freshDebt, r.owner, total);
 				addset(freshReceipts, r.owner, r);
+				System.out.println(r.owner.toString() + -total);
 			}
 		}
 		for(Receipt r : user.receipts) {
@@ -81,6 +82,7 @@ public class Payments extends CRUD
 				if(!r.hasPayment(u)) { 
 					increment(freshDebt, u, -total);
 					addset(freshReceipts, u, r);
+					System.out.println(u.toString() + -total);
 				}
 			}
 		}
@@ -116,7 +118,6 @@ public class Payments extends CRUD
 		}
 		
 		render(liabilities, pending, securities, accept, settled, user);
-		//render(debt, freshDebt, freshReceipts, user);
 	}
 
 	
