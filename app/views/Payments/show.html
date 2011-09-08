@@ -7,7 +7,7 @@
 
 <script >
   $(function() {
-    $("table#sortTableExample").tablesorter({ sortList: [[1,1]] });
+    $("table#sortTableExample").tablesorter({ sortList: [[2,1]] });
   });
 </script>
 
@@ -17,7 +17,6 @@
 	    	<div>
 			    <h2>Liabilites</h2>
 			    #{displayPayment positive:true, activeUser:user, debt:debt, freshDebt:freshDebt, freshReceipts:freshReceipts /}
-			    [PAY BUTTON HERE SOMEWHERE]
 			</div>
 
 		</div>
@@ -45,13 +44,14 @@
 	    <div class="alert-message block-message success">		
 			<div>
 				<h3>Accept settlements</h3>
-				TODO [ACCEPT BUTTON HERE]
+				<button class="btn primary small">Accept</button>
 			</div>
 		</div>
     </div><!-- /col -->
 </div>  
 
-<h3>Settled</h3>
+*{
+<h3>Settled (TODO Example data only!)</h3>
 <table class="zebra-striped" id="sortTableExample">
     <thead>
       <tr>
@@ -60,6 +60,7 @@
         <th class="header">From</th>
         <th class="header">To</th>
         <th class="header">Amount</th>
+        <th class="header">Id</th>
         <th class="header">Receipts</th>
       </tr>
     </thead>
@@ -71,20 +72,24 @@
         <td class="red">Gunde</td>
         <td class="red">Peksa</td>
         <td class="red">4711</td>
-        <td class="red">TODO Popover</td>
+        <td class="red">Gunde4711</td>
+        <td class="red">11 Receipts Popover</td>
       </tr><tr>
         <td class="green">2011-06-01</td>
         <td class="green">2011-12-05</td>
         <td class="green">Peksa</td>
         <td class="green">Gunde</td>
         <td class="green">450</td>
-        <td class="green">TODO Popover</td>
+        <td class="green">Peksa1337</td>
+        <td class="green">2 Receipts Popover</td>
       </tr><tr>
         <td class="green">2011-07-01</td>
         <td class="green">2011-12-05</td>
         <td class="green">Blunden</td>
         <td class="green">Gunde</td>
         <td class="green">65</td>
-        <td class="green">TODO Popover</td>
+        <td class="green">Blunden5678</td>
+        <td class="green">2 Receipts Popover</td>
       </tr></tbody>
   </table>
+  f}*

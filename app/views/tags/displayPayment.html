@@ -1,4 +1,5 @@
 *{ Just a simple tag for Payments/show to avoid duplication, tag usage is bloated and ugly imo :( }*
+*{ Takes payments, action:'pay'/'accept'/'none', outgoing:true/false }*
 
 <ul>
 #{list items:_debt.keySet(), as:'user'}
@@ -14,7 +15,10 @@
 	}%
 	#{if owes > 0}
 	    <li>
-		${user.fullname} (${user.username}): ${owes} SEK *{Gunde12345 <button class="btn primary small">Pay</button>}*
+		${user.fullname} (${user.username}): ${owes} SEK 
+		#{if _positive}
+			- <strong>Gunde12345</strong> <button class="btn success small">Payed</button>
+		#{/if}
 		#{if receipts != null}
 			#{if fresh != null && owes != fresh}
 				${fresh} from:

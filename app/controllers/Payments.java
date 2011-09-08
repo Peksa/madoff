@@ -20,7 +20,7 @@ import play.mvc.*;
 @With(Secure.class) // Require login for controller access
 public class Payments extends CRUD
 {
-	// Helper for index
+	// Helpers for show
 	static void increment(HashMap<User,Integer> map, User key, Integer value) {
 		if(map.containsKey(key)) map.put(key, map.get(key) + value);
 		else map.put(key, value);
@@ -28,6 +28,10 @@ public class Payments extends CRUD
 	static void addset(HashMap<User,HashSet<Receipt>> map, User key, Receipt receipt) {
 		if(!map.containsKey(key)) map.put(key, new HashSet<Receipt>());
 		map.get(key).add(receipt);
+	}
+	static void addPayment(ArrayList<Payment> active, ArrayList<Payment> settled, Payment payment) {
+		if(payment.accepted == null) active.add(payment);
+		else settled.add(payment);
 	}
 	
 	public static void index() {
@@ -55,6 +59,12 @@ public class Payments extends CRUD
 		HashMap<User, Integer> freshDebt = new HashMap<User, Integer>();
 		HashMap<User, HashSet<Receipt>> freshReceipts = new HashMap<User, HashSet<Receipt>>();
 		
+		ArrayList<Payment> liabilities = new ArrayList<Payment>(); // Outgoing unpayed
+		ArrayList<Payment> pending = new ArrayList<Payment>(); // Outgoing payed, not accepted
+		ArrayList<Payment> securities = new ArrayList<Payment>(); // Incomming unpayed
+		ArrayList<Payment> accept = new ArrayList<Payment>(); // Incomming payed, not accepted
+		ArrayList<Payment> settled = new ArrayList<Payment>(); // All accepted payments
+		
 		// Sum all receipts where you owe money, subtract sum of all receipts owned
 		for(Receipt r : user.incomingReceipts) {
 			int total = r.getTotal(user);
@@ -78,24 +88,48 @@ public class Payments extends CRUD
 		// Sum all payments received, subtract sum of all payments made
 		for(Payment p : user.incomingPayments) {
 			increment(debt, p.payer, p.amount);
+			addPayment(accept,settled,p);
 		}
 		for(Payment p : user.payments) {
 			increment(debt, p.receiver, -p.amount);
+			addPayment(pending,settled,p);
 		}
 		
-		// TODO maybe remove 0 summed
+		// TODO break up into payment objects
+		int paymentCounter = user.payments.size();
+		for(User u : debt.keySet()) {
+			int userDebt = debt.get(u);
+			if(userDebt != 0) {
+				int missing = Math.abs(userDebt - freshDebt.get(u));
+				
+				ArrayList<Receipt> receipts = new ArrayList<Receipt>();
+				if(freshReceipts.containsKey(u)) receipts.addAll(freshReceipts.get(u));
+				
+				if(userDebt > 0) {
+					paymentCounter = (paymentCounter + 1) % 10000;
+					String paymentId = user.username.substring(0,Math.min(6,user.username.length())) 
+						+ Integer.toString(paymentCounter);
+					liabilities.add(new Payment(user, u, paymentId, userDebt, missing, receipts));
+				}
+				else if(userDebt < 0) securities.add(new Payment(u, user, "", -userDebt, missing, receipts));
+			}	
+		}
+		
+		//render(liabilities, pending, securities, accept, settled);
 		render(debt, freshDebt, freshReceipts, user);
 	}
 
 	
 	/**
-	 * Adds a new payment
+	 * Creates new payment
 	 * @param senderId
 	 * @param receiverId
-	 * @param receiptId A list of receipts this payment corresponds to
+	 * @param identifier a 10 char identifier for this payment
 	 * @param amount
+	 * @param unsourced money not trackable to related receipts
+	 * @param receipts List of receipts this payment is covering
 	 */
-	public static void add(Long senderId, Long receiverId, List<Long> receiptId, int amount)
+	public static void add(Long senderId, Long receiverId, String identifier, int amount, int unsourced, List<Long> receiptId)
 	{
 		validation.required(senderId);
 		validation.required(receiverId);
@@ -103,7 +137,6 @@ public class Payments extends CRUD
 		if(!validate(senderId)) return;
 		
 		List<Receipt> receipts = new ArrayList<Receipt>();
-		
 		for (Long id : receiptId) 
 		{
 			Receipt r = Receipt.findById(id);
@@ -111,33 +144,10 @@ public class Payments extends CRUD
 		}
 		
 		User receiver = User.findById(receiverId);
-		Payment payment = new Payment(Security.connectedUser(), receiver, amount, receipts);
+		Payment payment = new Payment(Security.connectedUser(), receiver, identifier, amount, unsourced, receipts);
 		payment.save();
 
 		// Do nothing, this should be accessed by ajax?
-	}
-	
-	/**
-	 * List incoming payments that are to be accepted
-	 * @param userId
-	 */
-	public static void listIncomming(Long userId) {
-		validation.required(userId);
-		if(!validate(userId)) return;
-		
-		List<Payments> incoming = Payment.find("receiver = ? AND accepted = NULL", userId).fetch();
-		//TODO render(incoming)
-	}
-	
-	/**
-	 * List the complete history of payments done
-	 * @param userId
-	 */
-	public static void listHistory(Long userId) {
-		validation.required(userId);
-		if(!validate(userId)) return;
-		
-		//TODO(dschlyter) later - not critical
 	}
 	
 	/**
