@@ -96,7 +96,6 @@ public class Payments extends CRUD
 		}
 		
 		// TODO break up into payment objects
-		int paymentCounter = user.payments.size();
 		for(User u : debt.keySet()) {
 			int userDebt = debt.get(u);
 			if(userDebt != 0) {
@@ -106,7 +105,7 @@ public class Payments extends CRUD
 				if(freshReceipts.containsKey(u)) receipts.addAll(freshReceipts.get(u));
 				
 				if(userDebt > 0) {
-					paymentCounter = (paymentCounter + 1) % 10000;
+					int paymentCounter = Payment.find("payer = ? AND receiver = ?", user, u).fetch().size() % 9999 + 1;
 					String paymentId = user.username.substring(0,Math.min(6,user.username.length())) 
 						+ Integer.toString(paymentCounter);
 					liabilities.add(new Payment(user, u, paymentId, userDebt, missing, receipts));
