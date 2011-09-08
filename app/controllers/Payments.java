@@ -155,12 +155,11 @@ public class Payments extends CRUD
 	 * @param userId
 	 * @param paymentId
 	 */
-	public static void accept(Long userId, Long paymentId) {
-		validation.required(userId);
+	public static void accept(Long paymentId) {
 		validation.required(paymentId);
-		if(!validate(userId)) return;
-		
 		Payment payment = Payment.findById(paymentId);
+		if(!validate(payment.receiver.id)) return;
+		
 		payment.accepted = new Date();
 		payment.save();
 	}

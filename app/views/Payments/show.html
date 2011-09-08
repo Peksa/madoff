@@ -36,7 +36,7 @@
 	    <div class="alert-message block-message error">
 			<div>
 				<h3>Pending settlements</h3>
-				#{displayPayment payments:liabilities, action:'none', outgoing:true, showDate:true /}
+				#{displayPayment payments:pending, action:'none', outgoing:true, showDate:true /}
 			</div>
 		</div>
     </div><!-- /col -->
@@ -44,7 +44,7 @@
 	    <div class="alert-message block-message success">		
 			<div>
 				<h3>Accept settlements</h3>
-				#{displayPayment payments:securities, action:'accept', outgoing:false, showDate:true /}
+				#{displayPayment payments:accept, action:'accept', outgoing:false, showDate:true /}
 			</div>
 		</div>
     </div><!-- /col -->

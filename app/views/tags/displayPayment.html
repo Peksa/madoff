@@ -33,10 +33,23 @@
 		#{/if}
 		</ul>
 		#{if _action == 'pay'}
-			<button class="btn success small">Send</button>
+			#{form @Payments.add()}
+				<input type="hidden" name="senderId" value="${payment.payer.id}"/>
+				<input type="hidden" name="receiverId" value="${payment.receiver.id}"/>
+				<input type="hidden" name="identifier" value="${payment.identifier}"/>
+				<input type="hidden" name="amount" value="${payment.amount}"/>
+				<input type="hidden" name="unsourced" value="${payment.unsourced}"/>
+				#{list items:payment.receipts, as:'receipt'}
+					<input type="hidden" name="receiptId" value="${receipt.id}"/>
+				#{/list}
+				<input type="submit" class="btn success small" value="Send"/>
+			#{/form}
 		#{/if}
 		#{if _action == 'accept'}
-			<button class="btn primary small">Accept</button>
+			#{form @Payments.accept()}
+				<input type="hidden" name="paymentId" value="${payment.id}"/>
+				<input type="submit" class="btn primary small" value="Accept"/>
+			#{form @Payments.accept()}
 		#{/if}
 	#{/if}
 	</li>
