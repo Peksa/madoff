@@ -1,3 +1,4 @@
+/*
 body
 {
 	background-image: url('/public/images/bg.jpg');
@@ -10,6 +11,7 @@ body
 	min-height: 100%;
 	overflow-y: scroll;
 }
+
 
 A:link, A:visited, A:active
 {
@@ -143,5 +145,12 @@ table.receipt td, th
 	border-left: 1px solid black;
 	border-top: 1px solid black;
 	padding: 3px;
+}
+
+*/
+div.alert-message.block-message
+{
+	 background-color: #eee;
+	 border-color: #ddd;
 }
 

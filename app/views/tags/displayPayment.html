@@ -45,13 +45,13 @@ YAY nothing here!
 				#{list items:payment.receipts, as:'receipt'}
 					<input type="hidden" name="receiptId" value="${receipt.id}"/>
 				#{/list}
-				<input type="submit" class="btn success small" value="Send"/>
+				<input type="submit" class="btn error small" value="Send"/>
 			#{/form}
 		#{/if}
 		#{if _action == 'accept'}
 			#{form @Payments.accept()}
 				<input type="hidden" name="paymentId" value="${payment.id}"/>
-				<input type="submit" class="btn primary small" value="Accept"/>
+				<input type="submit" class="btn error small" value="Accept"/>
 			#{/form}
 		#{/if}
 	#{/if}

@@ -10,10 +10,9 @@
     $("table#sortTableExample").tablesorter({ sortList: [[1,1]] });
   });
 </script>
-
 <div class="row">
     <div class="span8 columns">
-	    <div class="alert-message block-message error">
+	    <div class="alert-message block-message #{if liabilities}error#{/if}">
 	    	<div>
 			    <h2>Liabilites</h2>
 			    #{displayPayment payments:liabilities, action:'pay', outgoing:true, showDate:false /}
@@ -22,7 +21,7 @@
 		</div>
     </div><!-- /col -->
     <div class="span8 columns">
-	    <div class="alert-message block-message success">
+	    <div class="alert-message block-message #{if securities}error#{/if}">
 	    	<div>
 			    <h2>Debt securities</h2>
 			    #{displayPayment payments:securities, action:'none', outgoing:false, showDate:false /}
@@ -30,10 +29,9 @@
 		</div>
     </div><!-- /col -->
 </div>  
-
 <div class="row">
     <div class="span8 columns">
-	    <div class="alert-message block-message error">
+	    <div class="alert-message block-message #{if pending}warning#{/if}">
 			<div>
 				<h3>Pending settlements</h3>
 				#{displayPayment payments:pending, action:'none', outgoing:true, showDate:true /}
@@ -41,14 +39,14 @@
 		</div>
     </div><!-- /col -->
     <div class="span8 columns">
-	    <div class="alert-message block-message success">		
+	    <div class="alert-message block-message #{if accept}error#{/if}">		
 			<div>
 				<h3>Accept settlements</h3>
 				#{displayPayment payments:accept, action:'accept', outgoing:false, showDate:true /}
 			</div>
 		</div>
     </div><!-- /col -->
-</div>  
+</div> 
 
 <h3>Settled</h3>
 <table class="zebra-striped" id="sortTableExample">
