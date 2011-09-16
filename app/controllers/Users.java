@@ -4,6 +4,7 @@ import models.Picture;
 import models.User;
 import play.*;
 import play.mvc.*;
+import play.i18n.Messages;
 
 /**
  * For CRUD-interface
@@ -23,19 +24,19 @@ public class Users extends CRUD
 		// TODO(Peksa): why doesn't this work?
 		if(validation.hasErrors())
 		{
-            flash.error("Fix params, bitch");
+            flash.error(Messages.get("errors.Parameters"));
             params.flash();
             register();
 		}
 		if (User.count("username = ?", username) > 0)
 		{
-            flash.error("Username taken :(");
+            flash.error(Messages.get("errors.TakenUsername"));
             params.flash();
             register();
 		}
 		else if (User.count("email = ?", email) > 0)
 		{
-            flash.error("E-mail taken :(");
+            flash.error(Messages.get("errors.TakenEmail"));
             params.flash();
             register();
 		}
@@ -49,7 +50,7 @@ public class Users extends CRUD
 			user.save();
 			
 			flash.keep("url"); // TODO(peksa): wat?
-			flash.success("User added, please login!");
+			flash.success(Messages.get("controllers.Users.success"));
 			Secure.login();
 		}
 		

@@ -1,5 +1,7 @@
 #{extends 'main.html' /}
-#{set title:'Add new receipt' /}
+#{set 'title'}
+	&{'views.Receipts.register.Title'}
+#{/set}
 #{set 'moreScripts'} #{script 'chosen.jquery.min.js' /} #{/set}
 #{set 'moreStyles'} #{stylesheet 'chosen.css' /} #{/set}
 
@@ -10,42 +12,42 @@
 	<div class="alert-message error">
 		<a class="close" href="#">&times;</a> 
 		<p>
-			<strong>Aaahh shieeet!</strong> &{flash.error}
+			<strong>&{'error'}</strong> &{flash.error}
 		</p>
 	</div>
 	#{/if}
 	#{form @add()}
 	<fieldset>
-		<legend>Add new receipt</legend>
+		<legend>&{'views.Receipts.register.addNew'}</legend>
 		<div class="clearfix">
-			<label for="title">Title:</label>
+			<label for="title">&{'Title'}:</label>
 			<div class="input">
 				<input type="text" name="title" id="title" value="${flash.title}" />
 			</div>
 		</div>
 		<div class="clearfix">
-			<label for="description">Description:</label>
+			<label for="description">&{'Description'}:</label>
 			<div class="input">
 				<textarea name="description" id="description" rows="4">${flash.description}</textarea>
 			</div>
 		</div>
 		<div class="clearfix">
-			<label for="date">Date:</label>
+			<label for="date">&{'Date'}:</label>
 			<div class="input">
 				<input type="text" id="datepicker" />
 			</div>
 		</div>
 		<div class="clearfix">
-			<label for="username">Tip:</label>
+			<label for="username">&{'Tip'}:</label>
 			<div class="input">
 				<input type="text" name="tip" id="tip" value="${flash.tip}" />
 			</div>
 		</div>
 
 		<div class="clearfix">
-			<label for="members">Members:</label>
+			<label for="members">&{'Members'}:</label>
 			<div class="input">
-				<select data-placeholder="Choose members..." class="chzn-select"
+				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
 					style="width: 350px;" id="members" name="members" multiple="yes">
 					<option value=""></option> #{list items:members, as:'user'}
 					<option value="${user.id}">${user.fullname}
@@ -54,8 +56,8 @@
 			</div>
 		</div>
 		<div class="actions">
-			<input class="btn primary" type="submit" id="register" value="Continue" />
-			<a href="@{Application.index()}" class="btn">Cancel</a>
+			<input class="btn primary" type="submit" id="register" value="&{'Continue'}" />
+			<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
 		</div>
 	</fieldset>
 

@@ -5,6 +5,7 @@ import models.Receipt;
 import models.User;
 import play.*;
 import play.mvc.*;
+import play.i18n.Messages;
 import helpers.serializers.CommentJsonSerializer;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class Comments extends CRUD
 		}
 		else
 		{
-			error("WTF. Bad dog!");
+			error(Messages.get("error"));
 		}
 	}
 }

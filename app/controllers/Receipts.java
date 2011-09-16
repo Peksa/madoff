@@ -10,6 +10,7 @@ import models.Subpot;
 import models.User;
 import play.*;
 import play.data.validation.Required;
+import play.i18n.Messages;
 import play.mvc.*;
 
 /**
@@ -28,7 +29,7 @@ public class Receipts extends CRUD
 	public static void show(Long id)
 	{
 		if (validation.hasErrors())
-			error("id is required.");
+			error(Messages.get("controllers.Receipts.show.error"));
 		Receipt receipt = Receipt.findById(id);
 		User connectedUser = Security.connectedUser();
 		render(receipt, connectedUser);
@@ -38,7 +39,7 @@ public class Receipts extends CRUD
 	public static void delete(Long id)
 	{
 		if (validation.hasErrors())
-			error("id is required.");
+			error(Messages.get("controllers.Receipts.show.error"));
 		Receipt receipt = Receipt.findById(id);
 		
 		
@@ -49,7 +50,7 @@ public class Receipts extends CRUD
 		}
 		else
 		{
-			error("WTF. Bad dog!");
+			error(Messages.get("error"));
 		}
 	}
 	

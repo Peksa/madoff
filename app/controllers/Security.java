@@ -8,6 +8,7 @@ import org.apache.commons.codec.binary.Base64;
 import com.sun.corba.se.spi.orbutil.fsm.Input;
 
 import play.libs.Crypto;
+import play.i18n.Messages;
 import models.User;
 
 /**
@@ -55,7 +56,7 @@ public class Security extends Secure.Security
 	static boolean authenticate(String username, String password)
 	{
 		if (validation.hasErrors())
-			error("params failed validation.");
+			error(Messages.get("paramsFail"));
 		User user = User.find("byUsername", username).first();
 		if (user == null || user.password == null)
 			return false;
@@ -69,7 +70,7 @@ public class Security extends Secure.Security
 		catch (NoSuchAlgorithmException e)
 		{
 			// FIXME(Peksa): Yea whatever. :p Should throw exception or something, throw error..
-			error("Didn't find SHA-512");
+			error("Couldn't find SHA-512");
 			return false;
 		}
 		return false;

@@ -1,57 +1,59 @@
 #{extends 'main.html' /}
-#{set title:'Register' /}
+#{set 'title'}
+	&{'views.Users.register.Title'}
+#{/set}
 
 
 <div id="register">
 	
-	<h1>Register</h1>
+	<h1>&{'views.Users.register.Title'}</h1>
 	#{if flash.error}
 		<div class="alert-message error">
 			<a class="close" href="#">&times;</a> 
 			<p>
-				<strong>Aaahh shieeet!</strong> 
+				<strong>&{'error'}</strong> 
 				&{flash.error}
 			</p>
 		</div>
 	#{/if}
 	#{form @add(), enctype:'multipart/form-data'}
 		<fieldset>
-		<legend>Register</legend>
+		<legend>&{'views.Users.register.Title'}</legend>
 			<div class="clearfix">
-				<label for="fullname">Full name</label>
+				<label for="fullname">&{'views.Users.register.fullName'}</label>
 				<div class="input">
 					<input type="text" name="fullname" id="fullname" value="${flash.fullname}" />
 				</div>
 			</div>
 			
 			<div class="clearfix">
-				<label for="email">E-mail address</label>
+				<label for="email">&{'views.Users.register.email'}</label>
 				<div class="input">
 					<input type="text" name="email" id="email" value="${flash.email}" />
 				</div>
 			</div>
 			
 			<div class="clearfix">
-				<label for="username">Desired username</label>
+				<label for="username">&{'views.Users.register.username'}</label>
 				<div class="input">
 					<input type="text" name="username" id="username" value="${flash.username}" />
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="password">Password</label>
+				<label for="password">&{'views.Users.register.password'}</label>
 				<div class="input">
 					<input type="password" name="password" id="password" value="" />
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="picture">Picture</label>
+				<label for="picture">&{'views.Users.register.picture'}</label>
 				<div class="input">
 					<input type="file" name="picture.image" id="picture" value="" />
 				</div>
 			</div>
 			 <div class="actions"> 
-				<input type="submit" class="btn primary" id="register" value="Register" />
-				&nbsp;<button type="reset" class="btn">Cancel</button> 
+				<input type="submit" class="btn primary" id="register" value="&{'views.Users.register.Title'}" />
+				&nbsp;<button type="reset" class="btn">&{'Cancel'}</button> 
 			</div>
 			
 		</fieldset>

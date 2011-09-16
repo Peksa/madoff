@@ -21,11 +21,11 @@
 			<div class="topbar-inner">
 				<div class="container">
 					<h3>
-						<a href="@{Application.index()}">madoff</a>
+						<a href="@{Application.index()}">&{'views.main.madoff'}</a>
 					</h3>
 					<ul class="nav">
-						<li #{if request.action == "Application.index"} class="active" #{/if}><a href="@{Application.index()}">Receipts</a></li>
-						<li #{if request.action == "Payments.show"} class="active" #{/if}><a href="@{Payments.index()}">Payments</a></li>
+						<li #{if request.action == "Application.index"} class="active" #{/if}><a href="@{Application.index()}">&{'Receipts'}</a></li>
+						<li #{if request.action == "Payments.show"} class="active" #{/if}><a href="@{Payments.index()}">&{'Payments'}</a></li>
 						<li><a href="#">Link</a></li>
 						<li><a href="#">Link</a></li>
 						<li><a href="#">Link</a></li>
@@ -42,7 +42,7 @@
 						<form action="">
 							<input type="text" placeholder="Search" />
 						</form>
-						<li><a href="@{Secure.logout()}">Logout</a></li>
+						<li><a href="@{Secure.logout()}">&{'logout'}</a></li>
 					</ul>
 				</div>
 			</div>

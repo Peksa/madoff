@@ -1,5 +1,7 @@
 #{extends 'main.html' /}
-#{set title:receipt.title /}
+#{set 'title'}
+	&{'views.Receipts.details.Title', receipt.title}
+#{/set}
 
 <h2>&{'views.Receipts.details.title'}</h2>
 <div class="row">
@@ -26,17 +28,17 @@
 	</div>
 	<div class="span8 columns">
 		<div class="well">
-			<h3>New item</h3>
+			<h3>&{'views.Receipts.details.newItem'}</h3>
 			#{form @add()}
 			<fieldset>
 				<div class="clearfix">
-					<label for="name">Name:</label>
+					<label for="name">&{'Name'}:</label>
 					<div class="input">
 						<input type="text" name="name" />
 					</div>
 				</div>
 				<div class="clearfix">
-					<label for="cost">Cost:</label>
+					<label for="cost">&{'Cost'}:</label>
 					<div class="input">
 						<input type="text" name="cost" />
 					</div>
@@ -46,18 +48,18 @@
 			<div class="row">
 				<div class="span4 columns">
 					<div class="well">
-						Drop something, bitch.
+						&{'views.Receipts.details.dropText'}
 					</div>
 				</div>
 				<div class="span3 columns">
 					<div class="well">
-						Picture here. width: 110px
+						&{'views.Receipts.details.pictureText'}
 					</div>
 				</div>
 			</div>
 			<div class="actions">
-				<input class="btn primary" type="submit" id="register" value="Continue" />
-				<a href="@{Application.index()}" class="btn">Cancel</a>
+				<input class="btn primary" type="submit" id="register" value="&{'Continue'}" />
+				<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
 			</div>
 		</div>
 	</div>

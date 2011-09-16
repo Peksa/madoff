@@ -3,7 +3,7 @@
 
 <ul>
 #{if !_payments}
-YAY nothing here!
+&{'views.tags.displayPayment.empty'}
 #{/if}
 #{list items:_payments, as:'payment'}
     <li>
@@ -16,7 +16,7 @@ YAY nothing here!
     }%
 	${user.fullname} (${user.username}): ${payment.amount} SEK 
 	#{if payment.identifier}
-		- <strong>${payment.identifier}</strong> 
+		- <strong>${payment.identifier}</strong>
 	#{/if}
 	#{if payment.receipts}
 		<ul>
@@ -32,7 +32,7 @@ YAY nothing here!
 			</li>
 		#{/list}
 		#{if payment.unsourced}
-			<li>Unsourced (${payment.unsourced})</li>
+			<li>&{'views.tags.displayPayment.unsourced'} (${payment.unsourced})</li>
 		#{/if}
 		</ul>
 		#{if _action == 'pay'}
@@ -45,13 +45,13 @@ YAY nothing here!
 				#{list items:payment.receipts, as:'receipt'}
 					<input type="hidden" name="receiptId" value="${receipt.id}"/>
 				#{/list}
-				<input type="submit" class="btn error small" value="Send"/>
+				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.send'}"/>
 			#{/form}
 		#{/if}
 		#{if _action == 'accept'}
 			#{form @Payments.accept()}
 				<input type="hidden" name="paymentId" value="${payment.id}"/>
-				<input type="submit" class="btn error small" value="Accept"/>
+				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.accept'}"/>
 			#{/form}
 		#{/if}
 	#{/if}

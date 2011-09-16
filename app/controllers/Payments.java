@@ -11,6 +11,7 @@ import models.User;
 import models.Receipt;
 import play.*;
 import play.mvc.*;
+import play.i18n.Messages;
 
 /**
  * For CRUD-interface
@@ -171,13 +172,13 @@ public class Payments extends CRUD
 	 */
 	static boolean validate(Long userId) {
 		if (validation.hasErrors()) {
-			error("Params failed validation.");
+			error(Messages.get("validateFail"));
 			return false;
 		}
 		
 		User user = User.findById(userId);
 		if (user == null || !Security.isAuthorized(user)) {
-			error("User not authorized");
+			error(Messages.get("controllers.Payments.validate.unauthorized"));
 			return false;
 		}
 			

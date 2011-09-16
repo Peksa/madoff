@@ -5,12 +5,12 @@
 		<a href="@{Receipts.show(_receipt.id)}">${_receipt.title}</a>
 	</h2>
 	<div class="details">
-		<span class="receipt-owner">by ${_receipt.owner.fullname}</span>,
+		&{'views.tags.displayReceipt.receiptOwner', _receipt.owner.fullname},
 		<span class="receipt-created">${_receipt.created.format('yyyy-MM-dd')}</span>
 	</div>
 	#{if _as != 'teaser'}
 		<div class="receipt-content">
-			<div class="about">Details:</div>
+			<div class="about">&{'Details'}:</div>
 			${_receipt.description.nl2br()}
 		</div>
 	#{/if}
@@ -30,10 +30,10 @@
 	</div>
 	
 	<div class="rounds">
-		<h3>Receipt</h3>
+		<h3>&{'Receipt'}</h3>
 		<table class="receipt" cellspacing="0">
 			<tr>
-				<th>Item</th><th>Special cases</th>
+				<th>&{'Item'}</th><th>&{'views.tags.displayReceipt.specialCases'}</th>
 			</tr>
 			#{list items:_receipt.subpots, as:'round'}
 				<tr>
@@ -43,33 +43,33 @@
 							${special.user.fullname}: ${special.amount} SEK
 							<br/>
 						#{/list}
-						Rest: ${round.restAmount} SEK
+						&{'Rest'}: ${round.restAmount} SEK
 					</td>
 				</tr>
 			#{/list}
 		</table>
-		<div class="tip">Tip: ${_receipt.tip} SEK</div>
-		<span class="total">Total: ${_receipt.total} SEK</span>
+		<div class="tip">&{'Tip'}: ${_receipt.tip} SEK</div>
+		<span class="total">&{'Total'}: ${_receipt.total} SEK</span>
 	</div>
 		
 	<div id="comments" class="comments">
 	    <h3>
-	        Comments:
+	        &{'Comments'}:
 	    </h3>
 
 	</div>
 	<br/>
 	<form class="form-stacked">
 		<fieldset>
-			<legend>Add new comment</legend> 
+			<legend>&{'newComment'}</legend> 
 			<div class="clearfix"> 
 				<div class="input">
 					<textarea id="comment-value" class="newComment"></textarea>
 				</div>
 			</div>
 			<div class="actions">
-				<input class="btn primary" type="submit" id="postComment" value="Post" onsubmit="return false;"/>
-				&nbsp;<button type="reset" class="btn">Cancel</button> 
+				<input class="btn primary" type="submit" id="postComment" value="&{'Post'}" onsubmit="return false;"/>
+				&nbsp;<button type="reset" class="btn">&{'Cancel'}</button> 
 			</div>
 		</fieldset>
 	</form>
@@ -103,9 +103,9 @@ function renderPosts(comments) {
 
 function buildHtml(comment) {
 	return '<div class="comment round gradient' + (comment.own === true ? ' own' : '') + '"><div class="comment-metadata' + (comment.own === true ? '-own' : '') + '"><span class="comment-poster">'
-			+ comment.poster + '</span> says...</div><div class="comment-content">' + comment.content +
-			'</div><span class="comment-date">Posted ' + comment.date +
-			' from web</span></div>';
+			+ comment.poster + '</span> &{'views.tags.displayReceipt.says'}...</div><div class="comment-content">' + comment.content +
+			'</div><span class="comment-date">&{'views.tags.displayReceipt.posted'} ' + comment.date +
+			' &{'views.tags.displayReceipt.from', 'web'}</span></div>';
 }
 
 

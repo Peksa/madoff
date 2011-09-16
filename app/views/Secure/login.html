@@ -1,15 +1,16 @@
 #{extends 'main.html' /}
-#{set title:'Login' /}
-
+#{set 'title'}
+	&{'login'}
+#{/set}
 <div id="login">
 	
-	<h1>Login</h1>
+	<h1>&{'login'}</h1>
 		
 	#{if flash.error}
 		<div class="alert-message error">
 			<a class="close" href="#">&times;</a> 
 			<p>
-				<strong>Aaahh shieeet!</strong> 
+				<strong>&{'error'}</strong> 
 				&{flash.error}
 			</p>
 		</div>
@@ -18,14 +19,14 @@
 		<div class="alert-message success">
 			<a class="close" href="#">&times;</a> 
 			<p>
-				<strong>Aaahh nice!</strong> 
+				<strong>&{'success'}</strong> 
 				&{flash.success}
 			</p>
 		</div>
 	#{/if}
 	#{form @authenticate()}
 		<fieldset>
-			<legend>Login</legend>
+			<legend>&{'login'}</legend>
 			<div class="clearfix">
 				<label for="username">&{'secure.username'}</label>
 				<div class="input">
@@ -46,12 +47,12 @@
 			</div>
 			<div class="actions"> 
 				<input class="btn primary" type="submit" id="signin" value="&{'secure.signin'}" />
-				&nbsp;<button type="reset" class="btn">Cancel</button> 
+				&nbsp;<button type="reset" class="btn">&{'Cancel'}</button> 
 			</div>
 		</fieldset>
 	#{/form}
 	<p id="signup">
-		Don't have an account? #{a @Users.register()}Register#{/a}
+		&{'views.Secure.login.noAccount'} #{a @Users.register()}&{'views.Secure.login.register'}#{/a}
 	</p>
 	
 </div>
