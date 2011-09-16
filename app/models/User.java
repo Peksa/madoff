@@ -19,6 +19,9 @@ public class User extends Model implements Comparable<User>
 	public String password;
 	public String fullname;
 	public String accountNumber;
+	
+	@OneToOne
+	public Picture picture;
 
 	// Inverse side
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)

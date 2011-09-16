@@ -14,7 +14,7 @@
 			</p>
 		</div>
 	#{/if}
-	#{form @add()}
+	#{form @add(), enctype:'multipart/form-data'}
 		<fieldset>
 		<legend>Register</legend>
 			<div class="clearfix">
@@ -41,6 +41,12 @@
 				<label for="password">Password</label>
 				<div class="input">
 					<input type="password" name="password" id="password" value="" />
+				</div>
+			</div>
+			<div class="clearfix">
+				<label for="picture">Picture</label>
+				<div class="input">
+					<input type="file" name="picture.image" id="picture" value="" />
 				</div>
 			</div>
 			 <div class="actions"> 

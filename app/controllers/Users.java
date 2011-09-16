@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Picture;
 import models.User;
 import play.*;
 import play.mvc.*;
@@ -17,7 +18,7 @@ public class Users extends CRUD
 		render();
 	}
 	
-	public static void add(String email, String username, String password, String fullname) throws Throwable
+	public static void add(String email, String username, String password, String fullname, Picture picture) throws Throwable
 	{
 		// TODO(Peksa): why doesn't this work?
 		if(validation.hasErrors())
@@ -40,10 +41,11 @@ public class Users extends CRUD
 		}
 		else
 		{
-			
 			String hash = Security.sha512Hash(username, password);
 			User user = new User(email, username, hash);
+			picture.save();
 			user.fullname = fullname;
+			user.picture = picture;
 			user.save();
 			
 			flash.keep("url"); // TODO(peksa): wat?
