@@ -1,0 +1,36 @@
+# Default English language message file
+
+receipt=receipt
+receipts=receipts
+Receipt=Receipt
+Receipts=Receipts
+Home=Home
+
+emptyMsg=There is currently nothing to see here.
+logout=Log out
+
+views.Application.index.loggedinMsg=Logged in as
+views.Application.index.newReceipt=Create a new receipt
+
+views.errors.404.Title=Not found
+views.errors.404.notFound=Not found
+views.errors.500.Title=Application error
+views.errors.500.message=Oops, an error occurred
+views.errors.500.logged=This exception has been logged with id <strong>%d</strong>
+
+views.Payments.show.Title=Payments
+views.Payments.show.liabilities=Liabilities
+views.Payments.show.securities=Debt securities
+views.Payments.show.pending=Pending settlements
+views.Payments.show.accept=Accept settlements
+views.Payments.show.Settled=Settled
+views.Payments.show.Paid=Paid
+views.Payments.show.Accepted=Accepted
+views.Payments.show.From=From
+views.Payments.show.To=To
+views.Payments.show.Amount=Amount
+views.Payments.show.Id=Id
+views.Payments.show.Receipts=Receipts
+
+views.Receipts.details.title=Edit receipt
+views.Receipts.details

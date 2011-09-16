@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>Application error</title>
+        <title>&{'views.errors.500.Title'}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=${_response_encoding}"/>	
     </head>
     <body>
@@ -10,10 +10,10 @@
             #{500 exception /}
         #{/if}
         #{else}
-            <h1>Oops, an error occured</h1>
+            <h1>&{'views.errors.500.message'}</h1>
             #{if exception instanceof play.exceptions.PlayException}
                 <p>
-                    This exception has been logged with id <strong>${exception.id}</strong>.
+                	&{'views.errors.500.logged', exception.id}
                 </p>
             #{/if}
         #{/else}

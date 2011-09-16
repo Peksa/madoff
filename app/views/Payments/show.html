@@ -1,6 +1,7 @@
 #{extends 'main.html' /}
-#{set title:'Payments' /}
-
+#{set 'title'}
+	&{'views.Payments.show.Title'}
+#{/set}
 #{set 'moreScripts'}
 	#{script 'jquery.tablesorter.min.js' /}
 #{/set}
@@ -14,7 +15,7 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message #{if liabilities}error#{/if}">
 	    	<div>
-			    <h2>Liabilites</h2>
+			    <h2>&{'views.Payments.show.liabilities'}</h2>
 			    #{displayPayment payments:liabilities, action:'pay', outgoing:true, showDate:false /}
 			</div>
 
@@ -23,7 +24,7 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message #{if securities}error#{/if}">
 	    	<div>
-			    <h2>Debt securities</h2>
+			    <h2>&{'views.Payments.show.securities'}</h2>
 			    #{displayPayment payments:securities, action:'none', outgoing:false, showDate:false /}
 			</div>
 		</div>
@@ -33,7 +34,7 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message #{if pending}warning#{/if}">
 			<div>
-				<h3>Pending settlements</h3>
+				<h3>&{'views.Payments.show.pending'}</h3>
 				#{displayPayment payments:pending, action:'none', outgoing:true, showDate:true /}
 			</div>
 		</div>
@@ -41,24 +42,24 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message #{if accept}error#{/if}">		
 			<div>
-				<h3>Accept settlements</h3>
+				<h3>&{'views.Payments.show.accept'}</h3>
 				#{displayPayment payments:accept, action:'accept', outgoing:false, showDate:true /}
 			</div>
 		</div>
     </div><!-- /col -->
 </div> 
 
-<h3>Settled</h3>
+<h3>&{'views.Payments.show.Settled'}</h3>
 <table class="zebra-striped" id="sortTableExample">
     <thead>
       <tr>
-        <th class="header">Paid</th>
-        <th class="header">Accepted</th>
-        <th class="header">From</th>
-        <th class="header">To</th>
-        <th class="header">Amount</th>
-        <th class="header">Id</th>
-        <th class="header">Receipts</th>
+        <th class="header">&{'views.Payments.show.Paid'}</th>
+        <th class="header">&{'views.Payments.show.Accepted'}</th>
+        <th class="header">&{'views.Payments.show.From'}</th>
+        <th class="header">&{'views.Payments.show.To'}</th>
+        <th class="header">&{'views.Payments.show.Amount'}</th>
+        <th class="header">&{'views.Payments.show.Id'}</th>
+        <th class="header">&{'views.Payments.show.Receipts'}</th>
       </tr>
     </thead>
     <tbody>
