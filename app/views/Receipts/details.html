@@ -13,7 +13,7 @@
 		</div>
 		<div id="members">
 			#{list items:receipt.members, as:'member'}
-				${member.fullname}
+				<img src="@{Pictures.get(member.id)}" style="width: 60px">
 			#{/list}
 		</div>
 		<div class="alert-message block-message">
