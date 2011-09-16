@@ -1,0 +1,64 @@
+#{extends 'main.html' /}
+#{set title:receipt.title /}
+
+<h2>Edit receipt</h2>
+<div class="row">
+	<div class="span8 columns">
+		<h3>${receipt.title}</h3>
+		<div id="description">
+			${receipt.description.nl2br()}
+		</div>
+		<div id="date">
+			${receipt.created.format('yyyy-MM-dd')}
+		</div>
+		<div id="members">
+			#{list items:receipt.members, as:'member'}
+				${member.fullname}
+			#{/list}
+		</div>
+		<div class="alert-message block-message">
+			#{list items:receipt.comments, as:'comment'}
+				<div class="comment">
+					${comment.poster.fullname}: ${comment.content.nl2br()}
+				</div>
+			#{/list}
+		</div>
+	</div>
+	<div class="span8 columns">
+		<div class="well">
+			<h3>New item</h3>
+			#{form @add()}
+			<fieldset>
+				<div class="clearfix">
+					<label for="name">Name:</label>
+					<div class="input">
+						<input type="text" name="name" />
+					</div>
+				</div>
+				<div class="clearfix">
+					<label for="cost">Cost:</label>
+					<div class="input">
+						<input type="text" name="cost" />
+					</div>
+				</div>
+			</fieldset>
+			#{/form}
+			<div class="row">
+				<div class="span4 columns">
+					<div class="well">
+						Drop something, bitch.
+					</div>
+				</div>
+				<div class="span3 columns">
+					<div class="well">
+						<img src="@{'/public/images/troll-face.png'}" width="110">
+					</div>
+				</div>
+			</div>
+			<div class="actions">
+				<input class="btn primary" type="submit" id="register" value="Continue" />
+				<a href="@{Application.index()}" class="btn">Cancel</a>
+			</div>
+		</div>
+	</div>
+</div>

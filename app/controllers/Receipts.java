@@ -67,11 +67,19 @@ public class Receipts extends CRUD
 		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
 		receipt.save();
+		Receipts.details(receipt.id);
 		Application.index();
 	}
 	
 	
 	
+	public static void details(Long id) 
+	{
+		Receipt receipt = Receipt.findById(id);
+		render(receipt);
+	}
+
+
 	public static void register()
 	{
 		List<User> members = User.find("order by fullname asc").fetch();

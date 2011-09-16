@@ -12,6 +12,8 @@ public class Receipt extends Model
 	public String title;
 	public Date created;
 	public Date cleared;
+	
+	public boolean finished;
 
 	public int tip;
 
@@ -39,6 +41,7 @@ public class Receipt extends Model
 
 	public Receipt(String title, User owner, String description)
 	{
+		this.finished = false;
 		this.title = title;
 		this.owner = owner;
 		this.description = description;

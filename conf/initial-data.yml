@@ -26,6 +26,7 @@ Receipt(firstBobReceipt):
     created:        2011-04-23
     owner:          bob
     tip:            20
+    finished:       true
     description:    >
                     Out drinking and eating at hotel
                     I think Anne drank a bla
@@ -56,6 +57,7 @@ Receipt(secondBobReceipt):
     created:        2009-04-23
     owner:          bob
     tip:            20
+    finished:       true
     description:    Testing testing, bob paid for this.
     members:
                     - ann
@@ -66,6 +68,7 @@ Receipt(firstAnnReceipt):
     created:        2021-04-23
     owner:          ann
     tip:            120
+    finished:       true
     description:    Test 123 Test, Ann paid.        
     members:        
                     - bob
@@ -77,6 +80,7 @@ Receipt(firstFredReceipt):
     created:        2004-12-31
     owner:          fred
     tip:            50
+    finished:       true
     description:    Test test, fred paid here.    
     members:        
                     - bob
