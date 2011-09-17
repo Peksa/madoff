@@ -27,7 +27,7 @@ Details=Detaljer
 Comments=Kommentarer
 Search=Sök
 
-Language=<img src="/public/images/flags/se.png"> Svenska
+Language=<img src="/public/images/flags/se.png" style="margin-bottom: -3px;" /> Svenska
 
 emptyMsg=För närvarande finns det inget att se här.
 newComment=Lägg till en ny kommentar

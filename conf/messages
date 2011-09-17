@@ -27,7 +27,7 @@ Details=Details
 Comments=Comments
 Search=Search
 
-Language=<img src="/public/images/flags/gb.png"> English
+Language=<img src="/public/images/flags/gb.png" style="margin-bottom: -3px;" /> English
 
 emptyMsg=There is currently nothing to see here.
 newComment=Add new comment
