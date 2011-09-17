@@ -13,10 +13,13 @@
 		<div id="date">
 			${receipt.created.format('yyyy-MM-dd')}
 		</div>
-		<div id="members">
-			#{list items:receipt.members, as:'member'}
-				<img src="@{Pictures.get(member.id)}" style="width: 60px">
-			#{/list}
+		<div id="tip">
+			Tip: ${receipt.tip}
+		</div>
+		<div id="members" class="well"> 
+		#{list items:receipt.members, as:'member'}
+			<img rel="tipsy" title="${member.fullname}" class="draggable" src="@{Pictures.get(member.id)}" style="width: 60px" />
+		#{/list}
 		</div>
 		<div class="alert-message block-message">
 			#{list items:receipt.comments, as:'comment'}
@@ -45,22 +48,35 @@
 				</div>
 			</fieldset>
 			#{/form}
-			<div class="row">
-				<div class="span4 columns">
-					<div class="well">
-						&{'views.Receipts.details.dropText'}
-					</div>
-				</div>
-				<div class="span3 columns">
-					<div class="well">
-						&{'views.Receipts.details.pictureText'}
-					</div>
-				</div>
+			<div id="droppable" class="well" style="height: 60px;">
+				<img id="helper" src="/public/images/default.png" style="width: 60px; opacity: 0.3; display:none;" />
 			</div>
 			<div class="actions">
 				<input class="btn primary" type="submit" id="register" value="&{'Continue'}" />
-				<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
 			</div>
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+$(function () {
+    $(".draggable").draggable({
+        revert: function (event, ui) {
+            //overwrite original position
+            $(this).data("draggable").originalPosition = {
+                top: 0,
+                left: 0
+            };
+            $('#helper').fadeOut();
+            return !event;
+        },
+        start: function(event, ui) {
+        	$('#helper').fadeIn();
+        },
+    });
+    
+    $("#droppable").droppable();
+    
+    $('img[rel=tipsy]').tipsy({fade: true, gravity: 's'});
+   
+});
+</script>
