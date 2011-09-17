@@ -2,6 +2,8 @@ package controllers;
  
 import play.*;
 import play.mvc.*;
+
+import java.io.File;
 import java.util.*;
 import models.*;
  
@@ -10,8 +12,17 @@ public class Pictures extends CRUD
 {
 	public static void get(Long id)
 	{
-		Picture picture = Picture.findById(id);
-		response.setContentTypeIfNotSet(picture.image.type());
-		renderBinary(picture.image.get());
+
+		User u = User.findById(id);
+		if (u.picture == null)
+		{
+			response.setContentTypeIfNotSet("image/png");
+			renderBinary(new File("public/images/default.png"));
+		}
+		else
+		{
+			response.setContentTypeIfNotSet(u.picture.image.type());
+			renderBinary(u.picture.image.get());
+		}
 	}
 }
