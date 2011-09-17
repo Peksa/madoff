@@ -40,8 +40,13 @@
 					</ul>
 					<ul class="nav secondary-nav">
 						<form action="">
-							<input type="text" placeholder="Search" />
+							<input type="text" placeholder="&{'Search'}"} />
 						</form>
+						<li class="dropdown"><a href="#" class="dropdown-toggle">&{'Language'}</a>
+							<ul class="dropdown-menu">
+								<li><a href="@{Languages.set('english', request.url)}"><img src="/public/images/flags/gb.png"> English</a></li>
+								<li><a href="@{Languages.set('swedish', request.url)}"><img src="/public/images/flags/se.png"> Svenska</a></li>
+							</ul>
 						<li><a href="@{Secure.logout()}">&{'logout'}</a></li>
 					</ul>
 				</div>

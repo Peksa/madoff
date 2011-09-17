@@ -1,0 +1,104 @@
+# Default English language message file
+
+receipt=kvitto
+receipts=kvitton
+Receipt=Kvitto
+Receipts=Kvitton
+Payments=Betalningar
+Item=Sak
+item=sak
+Title=Titel
+Description=Beskrivning
+Date=Datum
+Tip=Dricks
+Total=Totalt
+Members=Medlemmar
+Home=Hem
+Name=Namn
+name=namn
+Cost=Kostnad
+cost=kostnad
+Rest=Rest
+rest=rest
+Post=Skriv
+Continue=Fortsätt
+Cancel=Avbryt
+Details=Detaljer
+Comments=Kommentarer
+Search=Sök
+
+Language=<img src="/public/images/flags/se.png"> Svenska
+
+emptyMsg=För närvarande finns det inget att se här.
+newComment=Lägg till en ny kommentar
+login=Logga in
+logout=Logga ut
+error=Åh nej!
+success=Fantastiskt!
+paramsFail=Parametrarna kunde inte valideras!
+
+errors.Parameters=&{'paramsFail'}
+errors.TakenUsername=Det användarnamnet är redan upptaget, var god välj ett annat.
+errors.TakenEmail=Den e-postadressen är redan upptagen, om det är din adress kanske du vill återställa ditt lösenord?
+
+controllers.Users.success=Du har nu registrerat dig på &{'madoff'}!
+
+controllers.Payments.validate.unauthorized=Du har inte behörighet att utföra denna aktion, Jultomten kommer att få reda på detta!
+
+controllers.Receipts.show.error=Ett id behövs.
+
+views.Application.index.loggedinMsg=Loggad in som
+views.Application.index.newReceipt=Skapa ett nytt kvitto
+
+views.errors.404.Title=Hittades ej
+views.errors.404.notFound=Hittades ej
+views.errors.500.Title=Applikationsfel
+views.errors.500.message=Ojdå, ett fel inträffade
+views.errors.500.logged=Det här felet har loggats med id <strong>%d</strong>
+
+views.Payments.show.Title=Betalningar
+views.Payments.show.liabilities=Inkommande
+views.Payments.show.securities=Utgående
+views.Payments.show.pending=Icke-verifierade betalningar
+views.Payments.show.accept=Betalningar att verifiera
+views.Payments.show.Settled=Avgjorda
+views.Payments.show.Paid=Betalade
+views.Payments.show.Accepted=Accepterade
+views.Payments.show.From=Från
+views.Payments.show.To=Till
+views.Payments.show.Amount=Mängd
+views.Payments.show.Id=Id
+views.Payments.show.Receipts=Kvitton
+
+views.Receipts.details.Title=Redigerar %s
+views.Receipts.details.title=Redigerar kvitto
+views.Receipts.details.newItem=Ny sak
+views.Receipts.details.dropText=Släpp något här...
+views.Receipts.details.pictureText=Bild här, bredd: 110px
+
+views.Receipts.register.Title=Lägg till ett nytt kvitto
+views.Receipts.register.addNew=Lägg till ett nytt kvitto
+views.Receipts.register.membersPlaceholder=Välj medlemmar att lägga till...
+
+views.Secure.login.noAccount=Inget konto?
+views.Secure.login.register=Registrera här!
+
+views.tags.displayPayment.empty=YAY Ingenting här!
+views.tags.displayPayment.send=Skicka
+views.tags.displayPayment.accept=Acceptera
+views.tags.displayPayment.unsourced=Ickesourcad
+
+views.tags.displayReceipt.receiptOwner=<span class="receipt-owner">av %s</span>
+views.tags.displayReceipt.specialCases=Specialfall
+views.tags.displayReceipt.says=säger
+views.tags.displayReceipt.posted=Skrivet
+views.tags.displayReceipt.from=från %s
+
+views.Users.register.Title=Registrera
+views.Users.register.fullName=Namn
+views.Users.register.email=E-postadress
+views.Users.register.username=Önskat användarnamn
+views.Users.register.password=Lösenord
+views.Users.register.picture=Bild
+
+views.main.madoff=madoff

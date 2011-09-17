@@ -1,3 +1,104 @@
-# You can specialize this file for each language.
-# For example, for French create a messages.fr file
-#
+# Default English language message file
+
+receipt=receipt
+receipts=receipts
+Receipt=Receipt
+Receipts=Receipts
+Payments=Payments
+Item=item
+item=item
+Title=Title
+Description=Description
+Date=Date
+Tip=Tip
+Total=Total
+Members=Members
+Home=Home
+Name=Name
+name=name
+Cost=Cost
+cost=cost
+Rest=Rest
+rest=rest
+Post=Post
+Continue=Continue
+Cancel=Cancel
+Details=Details
+Comments=Comments
+Search=Search
+
+Language=<img src="/public/images/flags/gb.png"> English
+
+emptyMsg=There is currently nothing to see here.
+newComment=Add new comment
+login=Login
+logout=Log out
+error=Oh no!
+success=Excellent!
+paramsFail=Parameters failed the validation.
+
+errors.Parameters=&{'paramsFail'}
+errors.TakenUsername=That username is already taken, please choose another one.
+errors.TakenEmail=That e-mail address is already in our systems, if that is your e-mail perhaps you want to reset your password instead.
+
+controllers.Users.success=You have now been added to &{'madoff'}!
+
+controllers.Payments.validate.unauthorized=You are not authorized for this action. This action has been reported to Santa.
+
+controllers.Receipts.show.error=An id is required.
+
+views.Application.index.loggedinMsg=Logged in as
+views.Application.index.newReceipt=Create a new receipt
+
+views.errors.404.Title=Not found
+views.errors.404.notFound=Not found
+views.errors.500.Title=Application error
+views.errors.500.message=Oops, an error occurred
+views.errors.500.logged=This exception has been logged with id <strong>%d</strong>
+
+views.Payments.show.Title=Payments
+views.Payments.show.liabilities=Liabilities
+views.Payments.show.securities=Debt securities
+views.Payments.show.pending=Pending settlements
+views.Payments.show.accept=Accept settlements
+views.Payments.show.Settled=Settled
+views.Payments.show.Paid=Paid
+views.Payments.show.Accepted=Accepted
+views.Payments.show.From=From
+views.Payments.show.To=To
+views.Payments.show.Amount=Amount
+views.Payments.show.Id=Id
+views.Payments.show.Receipts=Receipts
+
+views.Receipts.details.Title=Editing %s
+views.Receipts.details.title=Edit receipt
+views.Receipts.details.newItem=New item
+views.Receipts.details.dropText=Drop something here...
+views.Receipts.details.pictureText=Picture here. Width: 110px
+
+views.Receipts.register.Title=Add new receipt
+views.Receipts.register.addNew=Add new receipt
+views.Receipts.register.membersPlaceholder=Choose members to add...
+
+views.Secure.login.noAccount=Don't have an account?
+views.Secure.login.register=Register here!
+
+views.tags.displayPayment.empty=YAY nothing here!
+views.tags.displayPayment.send=Send
+views.tags.displayPayment.accept=Accept
+views.tags.displayPayment.unsourced=Unsourced
+
+views.tags.displayReceipt.receiptOwner=<span class="receipt-owner">by %s</span>
+views.tags.displayReceipt.specialCases=Special cases
+views.tags.displayReceipt.says=says
+views.tags.displayReceipt.posted=Posted
+views.tags.displayReceipt.from=from %s
+
+views.Users.register.Title=Register
+views.Users.register.fullName=Full name
+views.Users.register.email=E-mail address
+views.Users.register.username=Desired username
+views.Users.register.password=Password
+views.Users.register.picture=Picture
+
+views.main.madoff=madoff
