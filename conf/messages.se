@@ -102,3 +102,11 @@ views.Users.register.password=Lösenord
 views.Users.register.picture=Bild
 
 views.main.madoff=madoff
+
+secure.title=
+secure.username=Användarnamn:
+secure.password=Lösenord:
+secure.remember=Kom ihåg mig
+secure.signin=Logga in
+secure.error=Järnspikar, okänt användarnamn eller lösenord.
+secure.logout=Du har nu loggats ut.
