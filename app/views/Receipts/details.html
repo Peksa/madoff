@@ -18,7 +18,7 @@
 		</div>
 		<div id="members" class="well"> 
 		#{list items:receipt.members, as:'member'}
-			<img rel="tipsy" title="${member.fullname}" class="draggable" src="@{Pictures.get(member.id)}" style="width: 60px" />
+			<img rel="tipsy" id="${member.id}" title="${member.fullname}" class="draggable" src="@{Pictures.get(member.id)}" style="width: 60px" />
 		#{/list}
 		</div>
 		<div class="alert-message block-message">
@@ -30,20 +30,20 @@
 		</div>
 	</div>
 	<div class="span8 columns">
+		<h3>&{'views.Receipts.details.newItem'}</h3>
 		<div class="well">
-			<h3>&{'views.Receipts.details.newItem'}</h3>
-			#{form @add()}
+			#{form @add(), id:'form'}
 			<fieldset>
 				<div class="clearfix">
 					<label for="name">&{'Name'}:</label>
 					<div class="input">
-						<input type="text" name="name" />
+						<input data-bind="value: name, valueUpdate: 'afterkeydown'" type="text" />
 					</div>
 				</div>
 				<div class="clearfix">
 					<label for="cost">&{'Cost'}:</label>
 					<div class="input">
-						<input type="text" name="cost" />
+						<input data-bind="value: cost, valueUpdate: 'afterkeydown'" type="text" />
 					</div>
 				</div>
 			</fieldset>
@@ -52,12 +52,92 @@
 				<img id="helper" src="/public/images/default.png" style="width: 60px; opacity: 0.3; display:none;" />
 			</div>
 			<div class="actions">
-				<input class="btn primary" type="submit" id="register" value="&{'Continue'}" />
+				<button data-bind="click: addRound" class="btn primary">Add</button>
 			</div>
+		</div>
+		<hr/>
+		<h3>Existing items</h3>
+		<div id="subRoundList" data-bind='template: { name: "subRoundTemplate", 
+		                                              foreach: subRounds, 
+		                                              beforeRemove: function(elem) { $(elem).fadeOut() },
+                                                      afterAdd: function(elem) { $(elem).hide().slideDown() } }'></div>
+		<div class="actions">
+			<button data-bind="click: save" class="btn primary">Save all</button>
 		</div>
 	</div>
 </div>
+
+<!-- Sub round template -->
+<script type="text/html" id="subRoundTemplate">
+
+<div class="well">
+	<h3><span data-bind="text: name" /></h3>
+	Cost: <span data-bind="text: cost" /><br/>
+	Members:
+	<div data-bind='template: { name: "memberTemplate", foreach: members }'></div>
+	<a data-bind="click: function() { viewModel.removeRound($data); }" href="#">Delete</a>
+</div>
+
+</script>
+
+<!-- Member (in sub round) template -->
+<script type="text/html" id="memberTemplate">
+	<span data-bind="text: member" />, 
+</script>
+
+
+<!-- View Model -->
 <script type="text/javascript">
+
+var viewModel = {
+	
+	// Temporary fields
+	name: ko.observable(),
+	cost: ko.observable(),
+	members: ko.observableArray(),
+		
+	// Storage
+	subRounds: ko.observableArray(),
+	
+	addMember: function(member) {
+		viewModel.members.push(member);
+	},
+	
+	addRound: function() {
+		if (this.name().length > 0 && this.cost().length > 0) {
+			this.subRounds.push({"name": this.name(), "cost": this.cost(), "members": this.members.slice()});
+			this.name(""); 
+			this.cost("");
+			this.members(); // TODO: how to empty array?
+			
+		}
+	},
+	
+	removeRound: function(round) {
+		this.subRounds.remove(round);
+	},
+	
+	save: function(form) {
+		alert("Send to server: " + ko.utils.stringifyJson(this.subRounds));
+	},
+};
+		
+		/*
+ko.bindingHandlers.slideVisible = {
+    init: function (element, valueAccessor) {
+        // Initially set the element to be instantly visible/hidden depending on the value
+        var value = valueAccessor();
+        $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+    },
+    update: function (element, valueAccessor) {
+        // Whenever the value subsequently changes, slowly fade the element in or out
+        var value = valueAccessor();
+        ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+    }
+};*/
+		
+ko.applyBindings(viewModel);
+
 $(function () {
     $(".draggable").draggable({
         revert: function (event, ui) {
@@ -74,7 +154,12 @@ $(function () {
         },
     });
     
-    $("#droppable").droppable();
+    $("#droppable").droppable({
+    	
+    	drop: function(event, ui) {
+    		viewModel.addMember(ui.helper.attr("id"));
+    	},
+    });
     
     $('img[rel=tipsy]').tipsy({fade: true, gravity: 's'});
    
