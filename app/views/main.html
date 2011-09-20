@@ -11,13 +11,52 @@
 <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
 #{script 'jquery-1.6.2.min.js' /}
 #{script 'application.js' /}
-#{script 'live.js' /}
+<!-- #{script 'live.js' /}-->
 #{script 'jquery-ui-1.8.16.custom.min.js' /}
 #{script 'jquery.tipsy.js' /}
 #{script 'jquery.tmpl.min.js' /}
 #{script 'jquery.validate.min.js' /}
 #{script 'knockout-1.3.0beta.js' /}
 #{get 'moreScripts' /}
+
+#{if request.action != "Secure.login"}
+<script type="text/javascript" charset="utf-8">
+
+function addmsg(msg) {
+    $("#notification").text(msg);
+}
+
+function waitForMsg(){
+    /* This requests the url "msgsrv.php"
+    When it complete (or errors)*/
+    $.ajax({
+        type: "GET",
+        url: "@{Notifications.stream()}",
+
+        async: true, /* If set to non-async, browser shows page as "Loading.."*/
+        cache: false,
+        timeout:50000, /* Timeout in ms */
+
+        success: function(data){ /* called when request to barge.php completes */
+            addmsg(data); /* Add response to a .msg div (with the "new" class)*/
+            setTimeout('waitForMsg()', /* Request next message */
+                1000 /* ..after 1 seconds */
+            );
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown){
+            setTimeout(
+                'waitForMsg()', /* Try again after.. */
+                "15000"); /* milliseconds (15seconds) */
+        },
+    });
+};
+
+$(document).ready(function(){
+    waitForMsg(); /* Start the inital request */
+});
+
+</script>
+#{/if}
 <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
 </head>
 <body style="padding-top: 50px;">
@@ -31,17 +70,6 @@
 					<ul class="nav">
 						<li #{if request.action == "Application.index"} class="active" #{/if}><a href="@{Application.index()}">&{'Receipts'}</a></li>
 						<li #{if request.action == "Payments.show"} class="active" #{/if}><a href="@{Payments.index()}">&{'Payments'}</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle">Dropdown</a>
-							<ul class="dropdown-menu">
-								<li><a href="#">Secondary link</a></li>
-								<li><a href="#">Something else here</a></li>
-								<li class="divider"></li>
-								<li><a href="#">Another link</a></li>
-							</ul>
-						</li>
 					</ul>
 					<ul class="nav secondary-nav">
 						<form action="">
@@ -52,6 +80,8 @@
 								<li><a href="@{Languages.set('english', request.url)}"><img style="margin-bottom: -3px;" src="/public/images/flags/gb.png" /> English</a></li>
 								<li><a href="@{Languages.set('swedish', request.url)}"><img style="margin-bottom: -3px;" src="/public/images/flags/se.png" /> Svenska</a></li>
 							</ul>
+						</li>
+						<li style="width: 45px; text-align: center; background-color: #922; border: 1px solid #500;"><a href="#" id="notification">5</a></li>
 						<li><a href="@{Secure.logout()}">&{'logout'}</a></li>
 					</ul>
 				</div>
