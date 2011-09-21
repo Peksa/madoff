@@ -24,7 +24,7 @@
 		</h3>
 	    #{list items:_receipt.members, as:'member'}
             <li class="member">
-                ${member.fullname} (${_receipt.getTotal(member)} SEK)
+                ${member.fullname} (${_receipt.getTotal(member).format('0.00')} SEK)
             </li>
 	    #{/list}
 	</div>
@@ -38,7 +38,7 @@
 			#{list items:_receipt.subpots, as:'round'}
 				<tr>
 					<td>${round.description}</td>
-					<td>${round.total} SEK</td>
+					<td>${round.total.format('0.00')} SEK</td>
 					<td>
 						#{list items:round.members, as:'user'}
 							${user.fullname}
@@ -48,8 +48,8 @@
 				</tr>
 			#{/list}
 		</table>
-		<span class="total">&{'Total'}: ${_receipt.total} SEK</span>
-		<div class="tip">&{'Tip'}: ${_receipt.tip} SEK</div>
+		<span class="total">&{'Total'}: ${_receipt.total.format('0.00')} SEK</span>
+		<div class="tip">&{'Tip'}: ${_receipt.tip.format('0.00')} SEK</div>
 	</div>
 		
 	<div id="comments" class="comments">

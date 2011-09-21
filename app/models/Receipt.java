@@ -15,8 +15,8 @@ public class Receipt extends Model
 	
 	public boolean finished;
 
-	public int total;
-	public int tip;
+	public double total;
+	public double tip;
 
 	// Owning side
 	@ManyToOne
@@ -40,7 +40,7 @@ public class Receipt extends Model
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Payment> payments;
 
-	public Receipt(String title, User owner, String description, int total)
+	public Receipt(String title, User owner, String description, double total)
 	{
 		this.finished = false;
 		this.title = title;
@@ -56,7 +56,7 @@ public class Receipt extends Model
 	/**
 	 * @return Total amount of money on this receipt
 	 */
-	public int getTotal()
+	public double getTotal()
 	{
 		return total;
 	}
@@ -65,14 +65,12 @@ public class Receipt extends Model
 	 * @param user
 	 * @return The amount of money user should pay
 	 */
-	public int getTotal(User user)
+	public double getTotal(User user)
 	{
-		System.out.println("HERE" + user);
-		int amount = 0;
-		int subpotTotal = 0;
+		double amount = 0;
+		double subpotTotal = 0;
 		for (Subpot pot : subpots)
 		{
-			System.out.println("HERE2");
 			amount += pot.getTotal(user);
 			subpotTotal += pot.total;
 		}
@@ -86,7 +84,7 @@ public class Receipt extends Model
 		else 
 		{
 			//TODO fix rounding errors etc
-			double percentage = amount / (double) total;
+			double percentage = amount / total;
 			amount += tip * percentage + 0.5;
 		}
 		

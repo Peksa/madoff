@@ -22,7 +22,7 @@ import play.i18n.Messages;
 public class Payments extends CRUD
 {
 	// Helpers for show
-	static void increment(HashMap<User,Integer> map, User key, Integer value) {
+	static void increment(HashMap<User,Double> map, User key, double value) {
 		if(map.containsKey(key)) map.put(key, map.get(key) + value);
 		else map.put(key, value);
 	}
@@ -55,9 +55,9 @@ public class Payments extends CRUD
 		// Opt Idea 2: Cache result and date and only use new data to re-calculate (harder)
 		
 		User user = User.findById(userId);
-		HashMap<User, Integer> debt = new HashMap<User, Integer>();
+		HashMap<User, Double> debt = new HashMap<User, Double>();
 		// Track debt that is linked to fresh receipts - this is to enable user to verify debt correctness
-		HashMap<User, Integer> freshDebt = new HashMap<User, Integer>();
+		HashMap<User, Double> freshDebt = new HashMap<User, Double>();
 		HashMap<User, HashSet<Receipt>> freshReceipts = new HashMap<User, HashSet<Receipt>>();
 		
 		ArrayList<Payment> liabilities = new ArrayList<Payment>(); // Outgoing unpayed
@@ -68,7 +68,7 @@ public class Payments extends CRUD
 		
 		// Sum all receipts where you owe money, subtract sum of all receipts owned
 		for(Receipt r : user.incomingReceipts) {
-			int total = r.getTotal(user);
+			double total = r.getTotal(user);
 			increment(debt, r.owner, total);
 			if(!r.hasPayment(user)) {
 				increment(freshDebt, r.owner, total);
@@ -77,7 +77,7 @@ public class Payments extends CRUD
 		}
 		for(Receipt r : user.receipts) {
 			for(User u : r.members) {
-				int total = r.getTotal(u);
+				double total = r.getTotal(u);
 				increment(debt, u, -total);
 				if(!r.hasPayment(u)) { 
 					increment(freshDebt, u, -total);
@@ -96,11 +96,13 @@ public class Payments extends CRUD
 			addPayment(pending,settled,p);
 		}
 		
-		// TODO break up into payment objects
+		// Generate (non-persistent) payment objects to send to UI
 		for(User u : debt.keySet()) {
-			int userDebt = debt.get(u);
+			
+			int userDebt = (int)Math.round(debt.get(u));
+			int userFreshDebt = (int)Math.round(freshDebt.get(u));
 			if(userDebt != 0) {
-				int missing = Math.abs(userDebt - freshDebt.get(u));
+				int missing = Math.abs(userDebt - userFreshDebt);
 				
 				ArrayList<Receipt> receipts = new ArrayList<Receipt>();
 				if(freshReceipts.containsKey(u)) receipts.addAll(freshReceipts.get(u));

@@ -54,7 +54,7 @@ public class Receipts extends CRUD
 		}
 	}
 	
-	public static void add(String title, int tip, List<Long> members, String description, int total)
+	public static void add(String title, int tip, List<Long> members, String description, double total)
 	{
 		Set<User> membersSet = new HashSet<User>();
 		

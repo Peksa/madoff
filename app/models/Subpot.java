@@ -19,12 +19,12 @@ public class Subpot extends Model
 	public Receipt receipt;
 	public String description;
 	
-	public int total;
+	public double total;
 	
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	public Set<User> members;
 	
-	public Subpot(int total)
+	public Subpot(double total)
 	{
 		this.total = total;
 		this.members = new TreeSet<User>();
@@ -35,15 +35,14 @@ public class Subpot extends Model
 	 * 
 	 * @return total amount of money owed to receipt owner
 	 */
-	public int getTotal()
+	public double getTotal()
 	{
 		return total;
 	}
 	
-	public int getTotal(User user)
+	public double getTotal(User user)
 	{
 		//TODO fix rounding errors etc
-		System.out.println(user.toString() + " in " + description.toString() + " " + members.contains(user));
 		if(!members.contains(user)) return 0;
 		return total / members.size();
 	}
