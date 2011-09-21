@@ -68,20 +68,24 @@ public class Payments extends CRUD
 		
 		// Sum all receipts where you owe money, subtract sum of all receipts owned
 		for(Receipt r : user.incomingReceipts) {
-			double total = r.getTotal(user);
-			increment(debt, r.owner, total);
-			if(!r.hasPayment(user)) {
-				increment(freshDebt, r.owner, total);
-				addset(freshReceipts, r.owner, r);
+			if(r.finished) {
+				double total = r.getTotal(user);
+				increment(debt, r.owner, total);
+				if(!r.hasPayment(user)) {
+					increment(freshDebt, r.owner, total);
+					addset(freshReceipts, r.owner, r);
+				}
 			}
 		}
 		for(Receipt r : user.receipts) {
-			for(User u : r.members) {
-				double total = r.getTotal(u);
-				increment(debt, u, -total);
-				if(!r.hasPayment(u)) { 
-					increment(freshDebt, u, -total);
-					addset(freshReceipts, u, r);
+			if(r.finished) {
+				for(User u : r.members) {
+					double total = r.getTotal(u);
+					increment(debt, u, -total);
+					if(!r.hasPayment(u)) { 
+						increment(freshDebt, u, -total);
+						addset(freshReceipts, u, r);
+					}
 				}
 			}
 		}
