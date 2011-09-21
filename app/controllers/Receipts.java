@@ -54,7 +54,7 @@ public class Receipts extends CRUD
 		}
 	}
 	
-	public static void add(String title, int tip, List<Long> members, String description)
+	public static void add(String title, int tip, List<Long> members, String description, int total)
 	{
 		Set<User> membersSet = new HashSet<User>();
 		
@@ -64,15 +64,13 @@ public class Receipts extends CRUD
 			membersSet.add(u);
 		}
 		
-		Receipt receipt = new Receipt(title, Security.connectedUser(), description);
+		Receipt receipt = new Receipt(title, Security.connectedUser(), description, total);
 		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
 		receipt.save();
 		Receipts.details(receipt.id);
 		Application.index();
 	}
-	
-	
 	
 	public static void details(Long id) 
 	{

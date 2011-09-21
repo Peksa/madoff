@@ -7,24 +7,27 @@ import javax.persistence.*;
 
 import java.util.*;
 
+/**
+ * Represents a subpot to a receipt, an amount of money to be equally divided among the members
+ * @author David
+ *
+ */
 @Entity
 public class Subpot extends Model
 {
-
 	@ManyToOne
 	public Receipt receipt;
-
-	public int restAmount;
-
 	public String description;
-
-	@OneToMany(mappedBy = "subpot", cascade = CascadeType.ALL)
-	public List<IndebtAmount> cases;
-
-	public Subpot(int restAmount)
+	
+	public int total;
+	
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	public Set<User> members;
+	
+	public Subpot(int total)
 	{
-		this.restAmount = restAmount;
-		this.cases = new ArrayList<IndebtAmount>();
+		this.total = total;
+		this.members = new TreeSet<User>();
 	}
 
 	/**
@@ -34,19 +37,14 @@ public class Subpot extends Model
 	 */
 	public int getTotal()
 	{
-		int amount = 0;
-		for (IndebtAmount round : cases)
-			amount += round.amount;
-		return amount;
+		return total;
 	}
 	
 	public int getTotal(User user)
 	{
-		for (IndebtAmount round : cases)
-			if(round.user.equals(user))
-				return round.amount;
-		return restAmount;
+		//TODO fix rounding errors etc
+		System.out.println(user.toString() + " in " + description.toString() + " " + members.contains(user));
+		if(!members.contains(user)) return 0;
+		return total / members.size();
 	}
-
-	// TODO(peksa): Method for adding rounds here?
 }

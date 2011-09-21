@@ -15,6 +15,7 @@ public class Receipt extends Model
 	
 	public boolean finished;
 
+	public int total;
 	public int tip;
 
 	// Owning side
@@ -39,12 +40,13 @@ public class Receipt extends Model
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Payment> payments;
 
-	public Receipt(String title, User owner, String description)
+	public Receipt(String title, User owner, String description, int total)
 	{
 		this.finished = false;
 		this.title = title;
 		this.owner = owner;
 		this.description = description;
+		this.total = total;
 		this.created = new Date();
 		this.comments = new ArrayList<Comment>();
 		this.members = new TreeSet<User>();
@@ -56,15 +58,7 @@ public class Receipt extends Model
 	 */
 	public int getTotal()
 	{
-		int amount = 0;
-		for (Subpot pot : subpots)
-		{
-			amount += pot.getTotal();
-			// Add restAmount here, since Subpot does not know number of members
-			amount += (members.size() - pot.cases.size()) * pot.restAmount;
-		}
-		amount += tip;
-		return amount;
+		return total;
 	}
 	
 	/**
@@ -73,23 +67,27 @@ public class Receipt extends Model
 	 */
 	public int getTotal(User user)
 	{
+		System.out.println("HERE" + user);
 		int amount = 0;
+		int subpotTotal = 0;
 		for (Subpot pot : subpots)
 		{
+			System.out.println("HERE2");
 			amount += pot.getTotal(user);
+			subpotTotal += pot.total;
 		}
+		
+		//TODO fix rounding errors etc
+		amount += (total - subpotTotal) / members.size();
 		
 		// Calculate amount of tip user should pay
 		// if user has X% of non-tip debt, he should pay X% of the tip
-		int allUsers = getTotal() - tip;
-		if(allUsers == 0) 
-		{
-			amount += tip / members.size();
-		} 
+		if(total == 0) amount += tip / members.size(); // Special case of just tip
 		else 
 		{
-			double percentage = amount / (double) allUsers;
-			amount += tip * percentage;
+			//TODO fix rounding errors etc
+			double percentage = amount / (double) total;
+			amount += tip * percentage + 0.5;
 		}
 		
 		return amount;
@@ -116,27 +114,4 @@ public class Receipt extends Model
 	{
 		return "Receipt by " + owner + " for " + getTotal() + " SEK";
 	}
-	
-	/**
-	 * @param payer
-	 * @param receiver
-	 * @return all receipts from owner, where payer has made no payment
-	 */
-	public static List<Receipt> unpayedReceipts(User owner, User payer) {
-		List<Receipt> ret = new ArrayList<Receipt>();
-		
-		outer: for(Receipt r : owner.receipts) {
-			if(r.members.contains(payer)) {
-				for(Payment p : r.payments) {
-					if(p.payer == payer) continue outer;
-				}
-				ret.add(r);
-			}
-		}
-		
-		return ret;
-	}
-	
-
-
 }

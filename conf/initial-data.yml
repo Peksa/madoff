@@ -1,11 +1,11 @@
-
 User(bob):
     email:          bob@gmail.com
     username:       bob
     password:       kTtGl4u15hnHGEPhI92JlUHma5qTnoJyagd988sZX+7xdy5I++Mgpzg+Yts6EkQE8hMrNU3B095LeAvwB4f77A==
     fullname:       Bob
     accountNumber:  1234-123
-   
+    
+
 User(ann):
     email:          ann@ann.com
     username:       ann
@@ -25,6 +25,7 @@ Receipt(firstBobReceipt):
     title:          Dinner at hotel, 23/4
     created:        2011-04-23
     owner:          bob
+    total:          200
     tip:            20
     finished:       true
     description:    >
@@ -40,12 +41,11 @@ Receipt(firstBobReceipt):
 Subpot(firstBobReceipt_s1):
     receipt:        firstBobReceipt
     description:    Booze
-    restAmount:     100
-IndebtAmount(firstBobReceipt_s1_i1):
-    subpot:         firstBobReceipt_s1
-    user:           fred
-    amount:         200
-    
+    total:          100
+    members:        
+                    - bob
+                    - ann
+                    
 Comment(firstBobReceipt_c1):
     poster:         ann
     date:           2011-04-24
@@ -56,6 +56,7 @@ Receipt(secondBobReceipt):
     title:          Just a test
     created:        2009-04-23
     owner:          bob
+    total:          4711
     tip:            20
     finished:       true
     description:    Testing testing, bob paid for this.
@@ -67,6 +68,7 @@ Receipt(firstAnnReceipt):
     title:          Testing testing here.
     created:        2021-04-23
     owner:          ann
+    total:          400
     tip:            120
     finished:       true
     description:    Test 123 Test, Ann paid.        
@@ -79,6 +81,7 @@ Receipt(firstFredReceipt):
     title:          New Year's
     created:        2004-12-31
     owner:          fred
+    total:          1300
     tip:            50
     finished:       true
     description:    Test test, fred paid here.    
@@ -90,26 +93,26 @@ Receipt(firstFredReceipt):
 Subpot(s1):
     receipt:        firstFredReceipt
     description:    Champagne
-    restAmount:     126
-IndebtAmount(i1):
-    subpot:         s1
-    user:           bob
-    amount:         100
-
- 
+    total:          200
+    members:        
+                    - fred
+                    - bob
+                    - ann
+                    
 Subpot(s2):
     receipt:        firstFredReceipt
     description:    Beers
-    restAmount:     50
-IndebtAmount(i2):
-    subpot:         s2
-    user:           bob
-    amount:         76
+    total:          50
+    members:        
+                    - bob
 
 Subpot(s3):
     receipt:        firstFredReceipt
-    description:    Rest
-    restAmount:     200
+    description:    Kött fifan
+    total:          75
+    members:        
+                    - bob
+                    - ann
   
 Comment(c1):
     poster:         ann
@@ -145,3 +148,4 @@ Comment(c5):
     
    
 
+    

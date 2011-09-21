@@ -33,23 +33,23 @@
 		<h3>&{'Receipt'}</h3>
 		<table class="receipt" cellspacing="0">
 			<tr>
-				<th>&{'Item'}</th><th>&{'views.tags.displayReceipt.specialCases'}</th>
+				<th>&{'Item'}</th><th>&{'Total'}</th><th>&{'Users'}</th>
 			</tr>
 			#{list items:_receipt.subpots, as:'round'}
 				<tr>
 					<td>${round.description}</td>
+					<td>${round.total} SEK</td>
 					<td>
-						#{list items:round.cases, as:'special'}
-							${special.user.fullname}: ${special.amount} SEK
+						#{list items:round.members, as:'user'}
+							${user.fullname}
 							<br/>
 						#{/list}
-						&{'Rest'}: ${round.restAmount} SEK
 					</td>
 				</tr>
 			#{/list}
 		</table>
-		<div class="tip">&{'Tip'}: ${_receipt.tip} SEK</div>
 		<span class="total">&{'Total'}: ${_receipt.total} SEK</span>
+		<div class="tip">&{'Tip'}: ${_receipt.tip} SEK</div>
 	</div>
 		
 	<div id="comments" class="comments">
