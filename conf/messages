@@ -1,5 +1,7 @@
 # Default English language message file
 
+and=and
+
 receipt=receipt
 receipts=receipts
 Receipt=Receipt
@@ -13,6 +15,8 @@ Date=Date
 Tip=Tip
 Total=Total
 Members=Members
+member=member
+members=members
 Home=Home
 Name=Name
 name=name
@@ -102,3 +106,4 @@ views.Users.register.password=Password
 views.Users.register.picture=Picture
 
 views.main.madoff=madoff
+views.main.powered=Madoff powered by

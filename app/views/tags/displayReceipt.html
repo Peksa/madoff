@@ -20,7 +20,7 @@
 	<div class="members">
 		<h3>
 			${_receipt.members.size() ?: 'no'} 
-	        member${_receipt.members.size().pluralize()}
+	        ${_receipt.members.size().pluralize(messages.get('member'), messages.get('members'))}
 		</h3>
 	    #{list items:_receipt.members, as:'member'}
             <li class="member">
