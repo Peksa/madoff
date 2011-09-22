@@ -23,5 +23,4 @@ public class Notifications extends CRUD
     {
     	liveStream.publish(text);
     }
-
 }
