@@ -1,5 +1,7 @@
 # Default English language message file
 
+and=och
+
 receipt=kvitto
 receipts=kvitton
 Receipt=Kvitto
@@ -13,6 +15,8 @@ Date=Datum
 Tip=Dricks
 Total=Totalt
 Members=Medlemmar
+member=medlem
+members=medlemmar
 Home=Hem
 Name=Namn
 name=namn
@@ -47,7 +51,7 @@ controllers.Payments.validate.unauthorized=Du har inte behörighet att utföra d
 
 controllers.Receipts.show.error=Ett id behövs.
 
-views.Application.index.loggedinMsg=Loggad in som
+views.Application.index.loggedinMsg=Inloggad som
 views.Application.index.newReceipt=Skapa ett nytt kvitto
 
 views.errors.404.Title=Hittades ej
@@ -102,6 +106,7 @@ views.Users.register.password=Lösenord
 views.Users.register.picture=Bild
 
 views.main.madoff=madoff
+views.main.powered=Madoff drivs av
 
 secure.title=
 secure.username=Användarnamn:
