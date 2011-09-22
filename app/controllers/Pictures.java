@@ -17,7 +17,9 @@ public class Pictures extends CRUD
 		if (u.picture == null)
 		{
 			response.setContentTypeIfNotSet("image/png");
-			renderBinary(new File("public/images/default.png"));
+			File root = Play.applicationPath;
+			
+			renderBinary(new File(root.getAbsolutePath() + "/public/images/default.png"));
 		}
 		else
 		{
