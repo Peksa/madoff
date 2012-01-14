@@ -56,6 +56,7 @@ public class Receipts extends CRUD
 	
 	public static void add(String title, int tip, List<Long> members, String description, double total)
 	{
+		System.out.println(total);
 		Set<User> membersSet = new HashSet<User>();
 		
 		for (Long id : members) 
@@ -67,8 +68,9 @@ public class Receipts extends CRUD
 		Receipt receipt = new Receipt(title, Security.connectedUser(), description, total);
 		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
+		receipt.finished = true;
 		receipt.save();
-		Receipts.details(receipt.id);
+		//Receipts.details(receipt.id);
 		Application.index();
 	}
 	
@@ -82,7 +84,8 @@ public class Receipts extends CRUD
 	public static void register()
 	{
 		List<User> members = User.find("order by fullname asc").fetch();
-		render(members);
+		User currentUser = Security.connectedUser();
+		render(members, currentUser);
 	}
 	
 
