@@ -18,7 +18,7 @@
 		</div>
 		<div id="members" class="well"> 
 		#{list items:receipt.members, as:'member'}
-			<img rel="tipsy" id="${member.id}" title="${member.fullname}" class="draggable" src="@{Pictures.get(member.id)}" style="width: 60px" />
+			<img rel="tipsy" id="${member.id}" title="${member.fullname}" class="member" src="@{Pictures.get(member.id)}" style="width: 60px" />
 		#{/list}
 		</div>
 		<div class="alert-message block-message">
@@ -37,19 +37,19 @@
 				<div class="clearfix">
 					<label for="name">&{'Name'}:</label>
 					<div class="input">
-						<input data-bind="value: name, valueUpdate: 'afterkeydown'" type="text" />
+						<input data-bind="value: editingRound.name, valueUpdate: 'afterkeydown'" type="text" />
 					</div>
 				</div>
 				<div class="clearfix">
 					<label for="cost">&{'Cost'}:</label>
 					<div class="input">
-						<input data-bind="value: cost, valueUpdate: 'afterkeydown'" type="text" />
+						<input data-bind="value: editingRound.cost, valueUpdate: 'afterkeydown'" type="text" />
 					</div>
 				</div>
 			</fieldset>
 			#{/form}
-			<div id="droppable" class="well" style="height: 60px;">
-				<img id="helper" src="/public/images/default.png" style="width: 60px; opacity: 0.3; display:none;" />
+			<div id="round-members" class="well" style="height: 60px;">
+			
 			</div>
 			<div class="actions">
 				<button data-bind="click: addRound" class="btn primary">Add</button>
@@ -92,24 +92,34 @@
 var viewModel = {
 	
 	// Temporary fields
-	name: ko.observable(),
-	cost: ko.observable(),
-	members: ko.observableArray(),
+	editingRound: {
+		name: ko.observable(),
+		cost: ko.observable(),
+		members: ko.observableArray(),
+	}, 
+
 		
 	// Storage
 	subRounds: ko.observableArray(),
 	
-	addMember: function(member) {
-		viewModel.members.push(member);
+	addMember: function(id) {
+		this.editingRound.members.push(id);
 	},
 	
 	addRound: function() {
-		if (this.name().length > 0 && this.cost().length > 0) {
-			this.subRounds.push({"name": this.name(), "cost": this.cost(), "members": this.members.slice()});
-			this.name(""); 
-			this.cost("");
-			this.members(); // TODO: how to empty array?
+		if (this.editingRound.name().length > 0 && this.editingRound.cost().length > 0) {
+			var dataToSave = this.editingRound.members().slice(0);
+			alert(dataToSave);
+			var a = ko.observable("1");
+			var b = ko.observable("2");
 			
+			this.subRounds.push({ "name": this.editingRound.name(), "cost": this.editingRound.cost(), "members": [a, b] });
+			alert(this.subRounds);
+			this.editingRound.name(""); 
+			alert("wat1");
+			this.editingRound.cost("");
+			alert("wat2");
+			//this.editingRound.members([]);// = ko.observableArray(); // TODO: how to empty array?
 		}
 	},
 	
@@ -125,6 +135,13 @@ var viewModel = {
 ko.applyBindings(viewModel);
 
 $(function () {
+	
+	$(".member").click(function () {
+		viewModel.addMember($(this).attr("id"));	
+		
+	});
+	
+	/*
     $(".draggable").draggable({
         revert: function (event, ui) {
             //overwrite original position
@@ -146,6 +163,7 @@ $(function () {
     		viewModel.addMember(ui.helper.attr("id"));
     	},
     });
+    */
     
     $('img[rel=tipsy]').tipsy({fade: true, gravity: 's'});
    
