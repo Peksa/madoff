@@ -19,6 +19,9 @@
 	#{form @add()}
 	<fieldset>
 		<legend>&{'views.Receipts.register.addNew'}</legend>
+		<div class="page-header">
+    		<h1><small>&{'Required'}</small></h1>
+  		</div>
 		<div class="clearfix">
 			<label for="members">&{'Members'}:</label>
 			<div class="input">
@@ -56,14 +59,52 @@
 				<input type="text" name="total" id="total" value="${flash.total}" />
 			</div>
 		</div>
-		<!-- <div class="clearfix">
+		
+		<div class="page-header">
+    		<h1><small>&{'Optional'}</small></h1>
+  		</div>
+		<div class="clearfix">
 			<label for="username">&{'Tip'}:</label>
 			<div class="input">
 				<input type="text" name="tip" id="tip" value="${flash.tip}" />
 			</div>
-		</div>-->
+		</div>
+		
+		<!-- TODO this should be added dynamicly with javascript ofc -->
+		#{list items:0..5, as:'i'}
+		<div class="clearfix">
+			<label for="username">&{'Subround:'}:</label>
+			<div class="input">
+				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
+					style="width: 350px;" name="subrounds[${i}].members" multiple="yes">
+					<option value=""></option>
+					#{list items:members, as:'user'}
+						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
+						<option value="${user.id}"> ${user.fullname} (${user.username})</option> 
+					#{/list}
+				</select>
+			</div>
+		</div>
+		<div class="clearfix">
+			<div class="input">
+				&{'bought'}
+				<input class="span2" type="text" name="subrounds[${i}].description" id="herp" value="${flash.tip}" />
+				&{'for'}
+				<input class="span2" type="text" name="subrounds[${i}].amount" id="derp" value="${flash.tip}" />
+			</div>
+			
+			<div class="input">
+				
+			</div>
+			
+			<div class="input">
+				
+			</div>
+		</div>
+		#{/list}
+		
 		<div class="actions">
-			<input class="btn primary" type="submit" id="register" value="&{'Continue'}" />
+			<input class="btn primary" type="submit" id="register" value="&{'Add'}" />
 			<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
 		</div>
 	</fieldset>
