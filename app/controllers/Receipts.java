@@ -109,6 +109,7 @@ public class Receipts extends CRUD
 					for (Long id : input.members)
 					{
 						User u = User.findById(id);
+						if(!receipt.members.contains(u)) error(Messages.get("controllers.Receipts.add.subroundMemberNotMember"));
 						subpot.members.add(u);
 					}
 					subpot.receipt = receipt;

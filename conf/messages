@@ -50,6 +50,7 @@ controllers.Users.success=You have now been added to &{'madoff'}!
 controllers.Payments.validate.unauthorized=You are not authorized for this action. This action has been reported to Santa.
 
 controllers.Receipts.show.error=An id is required.
+controllers.Receipts.add.subroundMemberNotMember=Member in subround not member of receipt.
 
 views.Application.index.loggedinMsg=Logged in as
 views.Application.index.newReceipt=Create a new receipt
