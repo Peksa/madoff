@@ -61,7 +61,7 @@
 		</div>
 		
 		<div class="page-header">
-    		<h1><small>&{'Optional'}</small></h1>
+    		<h1><small>&{'Optional / Advanced'}</small></h1>
   		</div>
 		<div class="clearfix">
 			<label for="username">&{'Tip'}:</label>
@@ -69,38 +69,6 @@
 				<input type="text" name="tip" id="tip" value="${flash.tip}" />
 			</div>
 		</div>
-		
-		#{list items:0..1, as:'i'}
-		<div class="clearfix">
-			<label for="username">&{'Subround:'}:</label>
-			<div class="input">
-				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
-					style="width: 350px;" name="subrounds[${i}].members" multiple="yes">
-					<option value=""></option>
-					#{list items:members, as:'user'}
-						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
-						<option value="${user.id}"> ${user.fullname} (${user.username})</option> 
-					#{/list}
-				</select>
-			</div>
-		</div>
-		<div class="clearfix">
-			<div class="input">
-				&{'bought'}
-				<input placeholder="item" class="span2" type="text" name="subrounds[${i}].description" id="herp" value="${flash.tip}" />
-				&{'for'}
-				<input placeholder="money amount" class="span2" type="text" name="subrounds[${i}].amount" id="derp" value="${flash.tip}" />
-			</div>
-			
-			<div class="input">
-				
-			</div>
-			
-			<div class="input">
-				
-			</div>
-		</div>
-		#{/list}
 		
 		<div id="subrounds">
 		</div>
@@ -117,10 +85,33 @@
 		$(function() {
 			$("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
 		});
-
 	</script>
 	<script type="text/javascript">$(".chzn-select").chosen(); </script>
 </div>
+
+<script id="subround" type="text/html">
+	<div class="clearfix">
+		<label for="username">&{'Subround:'}:</label>
+		<div class="input">
+			<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
+				style="width: 350px;" name="subrounds[{{ subRoundNr }}].members" multiple="yes">
+				<option value=""></option>
+				#{list items:members, as:'user'}
+					<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
+					<option value="${user.id}"> ${user.fullname} (${user.username})</option> 
+				#{/list}
+			</select>
+		</div>
+	</div>
+	<div class="clearfix">
+		<div class="input">
+			&{'bought'}
+			<input placeholder="item" class="span2" type="text" name="subrounds[{{ subRoundNr }}].description" value="" />
+			&{'for'}
+			<input placeholder="money amount" class="span2" type="text" name="subrounds[{{ subRoundNr }}].amount" id="subroundMoney{{ subRoundNr }}" value="" />
+		</div>
+	</div>
+</script>
 
 <script type="text/javascript" charset="utf-8">
 var subroundCount = 0
@@ -131,12 +122,10 @@ $(document).ready(function() {
 
 function addSubround(initial)
 {
-	// TODO remove with X button
+	$("#subroundMoney" + (subroundCount-1)).unbind('keypress');
 	
-	
-	$("#subround" + (subroundCount-1)).unbind('keypress');
-	
-	var subround = getSubroundWithIndex(subroundCount);
+	var subRoundData = { subRoundNr: subroundCount };
+	var subround = ich.subround(subRoundData);
 	
 	if(initial) {
 		$(subround)
@@ -147,16 +136,13 @@ function addSubround(initial)
 		$(subround).appendTo('#subrounds');
 	}
 	
-	$('#subround' + subroundCount).keypress(function() {
+	$(".chzn-select").chosen();
+	
+	$('#subroundMoney' + subroundCount).keypress(function() {
 		addSubround(true);
 	});
 	
 	subroundCount++;
-}
-
-function getSubroundWithIndex(index)
-{
-	return '<input id="subround' + index + '" placeholder="money amount" class="span2" type="text">';
 }
 
 </script>
