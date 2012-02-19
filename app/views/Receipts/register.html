@@ -70,8 +70,7 @@
 			</div>
 		</div>
 		
-		<!-- TODO this should be added dynamicly with javascript ofc -->
-		#{list items:0..5, as:'i'}
+		#{list items:0..1, as:'i'}
 		<div class="clearfix">
 			<label for="username">&{'Subround:'}:</label>
 			<div class="input">
@@ -103,12 +102,15 @@
 		</div>
 		#{/list}
 		
+		<div id="subrounds">
+		</div>
+		
 		<div class="actions">
 			<input class="btn primary" type="submit" id="register" value="&{'Add'}" />
 			<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
 		</div>
 	</fieldset>
-
+	
 	#{/form}
 
 	<script type="text/javascript">
@@ -119,3 +121,42 @@
 	</script>
 	<script type="text/javascript">$(".chzn-select").chosen(); </script>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+var subroundCount = 0
+
+$(document).ready(function() {
+	addSubround(true);
+});
+
+function addSubround(initial)
+{
+	// TODO remove with X button
+	
+	
+	$("#subround" + (subroundCount-1)).unbind('keypress');
+	
+	var subround = getSubroundWithIndex(subroundCount);
+	
+	if(initial) {
+		$(subround)
+		.hide()
+		.appendTo('#subrounds')
+		.fadeIn();
+	} else {
+		$(subround).appendTo('#subrounds');
+	}
+	
+	$('#subround' + subroundCount).keypress(function() {
+		addSubround(true);
+	});
+	
+	subroundCount++;
+}
+
+function getSubroundWithIndex(index)
+{
+	return '<input id="subround' + index + '" placeholder="money amount" class="span2" type="text">';
+}
+
+</script>
