@@ -80,12 +80,49 @@ public class Receipts extends CRUD
 					System.out.println(amount);
 		}
 		
-		// TODO validate
+		public String validate(List<Long> members)
+		{
+			// Empty subrounds not counted
+			if(this.members == null) return null;
+			
+			for (Long id : this.members)
+			{
+				if(!members.contains(id))
+				{
+					return Messages.get("controllers.Receipts.add.subroundMemberNotMember");
+				}
+				if(description == null || description.length() == 0) return "Subround lacks description";
+				if(amount <= 1e-8) return "Subround amount requred (and must be positive)";
+			}
+			return null;
+		}
+		
 	}
 
 	public static void add(String title, int tip, List<Long> members, String description, double total, List<SubroundInput> subrounds)
 	{
-		// TODO validate
+		// validate
+		String errorStr = null;
+		if(title == null || title.length() == 0) errorStr = "Title requred";
+		else if(members.size() == 0) errorStr = "Members requred";
+		else if(total <= 1e-8) errorStr = "Total requred (and must be positive)";
+		else
+		{
+			double subTotal = 0;
+			for (SubroundInput subround : subrounds)
+			{
+				subTotal += subround.amount;
+				errorStr = subround.validate(members);
+				if(errorStr != null) break; // break on first error
+			}
+			if(subTotal > total) errorStr = "Subround amount grater than total";
+		}
+		if(errorStr != null)
+		{
+			// TODO return to old page with flash cache
+			error(errorStr);
+			return;
+		}
 		
 		Set<User> membersSet = new HashSet<User>();
 
@@ -113,11 +150,6 @@ public class Receipts extends CRUD
 					for (Long id : input.members)
 					{
 						User u = User.findById(id);
-						if(!receipt.members.contains(u))
-						{
-							error(Messages.get("controllers.Receipts.add.subroundMemberNotMember"));
-							return;
-						}
 						subpot.members.add(u);
 					}
 					subpot.receipt = receipt;
@@ -126,14 +158,7 @@ public class Receipts extends CRUD
 			}
 		}
 
-		System.out.println("Subpot testing!");
-		for(Subpot p : receipt.subpots)
-		{
-			System.out.println(p.total);
-			for(User u : p.members) System.out.println(u.username);
-		}
-		//Receipts.details(receipt.id);
-		Application.index();
+		Receipts.show(receipt.id);
 	}
 
 	public static void details(Long id) 
