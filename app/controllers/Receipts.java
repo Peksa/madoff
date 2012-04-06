@@ -7,6 +7,7 @@ import java.util.Set;
 
 import models.Comment;
 import models.Receipt;
+import models.ReceiptOwner;
 import models.Subpot;
 import models.User;
 import play.*;
@@ -53,7 +54,7 @@ public class Receipts extends CRUD
 
 
 		// Check that the user is owner of receipt.
-		if (Security.isAuthorized(receipt.owner))
+		if (Security.isAuthorized(receipt.creator))
 		{
 			receipt.delete();
 		}
@@ -99,9 +100,10 @@ public class Receipts extends CRUD
 		
 	}
 
-	public static void add(String title, int tip, List<Long> members, String description, double total, List<SubroundInput> subrounds)
+	public static void add(String title, int tip, List<Long> members, String description, double total, List<SubroundInput> subrounds, String payed)
 	{
 		// validate
+		// TODO validate on client first, to give better and faster feedback
 		String errorStr = null;
 		if(title == null || title.length() == 0) errorStr = "Title requred";
 		else if(members.size() == 0) errorStr = "Members requred";
@@ -136,6 +138,20 @@ public class Receipts extends CRUD
 		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
 		receipt.finished = true;
+		
+		if(payed.equals("split"))
+		{
+			double eachShare = total / receipt.members.size();
+			for(User u : receipt.members)
+			{
+				receipt.owners.add(new ReceiptOwner(receipt, u, eachShare));
+			}
+		}
+		else // Creator payed for everything
+		{
+			receipt.owners.add(new ReceiptOwner(receipt, receipt.creator, total));
+		}
+		
 		receipt.save();
 
 		if(subrounds != null)

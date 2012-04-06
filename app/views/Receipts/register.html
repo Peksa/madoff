@@ -6,8 +6,6 @@
 #{set 'moreStyles'} #{stylesheet 'chosen.css' /} #{/set}
 
 <div id="register">
-
-
 	#{if flash.error}
 	<div class="alert-message error">
 		<a class="close" href="#">&times;</a> 
@@ -64,9 +62,17 @@
     		<h1><small>&{'Optional / Advanced'}</small></h1>
   		</div>
 		<div class="clearfix">
-			<label for="username">&{'Tip'}:</label>
+			<label for="tip">&{'Tip'}:</label>
 			<div class="input">
 				<input type="text" name="tip" id="tip" value="${flash.tip}" />
+			</div>
+		</div>
+		
+		<div class="clearfix">
+			<label for="payer">&{'Who payed'}:</label>
+			<div class="input">
+				<input type="radio" name="payed" value="creator" checked> I payed for everything </input> <br>
+				<input type="radio" name="payed" value="split"> Payment split evenly between all members </input>
 			</div>
 		</div>
 		
@@ -90,27 +96,27 @@
 </div>
 
 <script id="subround" type="text/html">
-	<div class="clearfix">
-		<label for="username">&{'Subround:'}:</label>
-		<div class="input">
-			<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
-				style="width: 350px;" name="subrounds[{{ subRoundNr }}].members" multiple="yes">
-				<option value=""></option>
-				#{list items:members, as:'user'}
-					<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
-					<option value="${user.id}"> ${user.fullname} (${user.username})</option> 
-				#{/list}
-			</select>
+		<div class="clearfix">
+			<label for="username">&{'Subround'}:</label>
+			<div class="input">
+				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
+					style="width: 350px;" name="subrounds[{{ subRoundNr }}].members" multiple="yes">
+					<option value=""></option>
+					#{list items:members, as:'user'}
+						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
+						<option value="${user.id}"> ${user.fullname} (${user.username})</option> 
+					#{/list}
+				</select>
+			</div>
 		</div>
-	</div>
-	<div class="clearfix">
-		<div class="input">
-			&{'bought'}
-			<input placeholder="item" class="span4" type="text" name="subrounds[{{ subRoundNr }}].description" value="" />
-			&{'for'}
-			<input placeholder="money amount" class="span2" type="text" name="subrounds[{{ subRoundNr }}].amount" id="subroundMoney{{ subRoundNr }}" value="" />
+		<div class="clearfix">
+			<div class="input">
+				&{'bought'}
+				<input placeholder="item" class="span4" type="text" name="subrounds[{{ subRoundNr }}].description" value="" />
+				&{'for'}
+				<input placeholder="money amount" class="span2" type="text" name="subrounds[{{ subRoundNr }}].amount" id="subroundMoney{{ subRoundNr }}" value="" />
+			</div>
 		</div>
-	</div>
 </script>
 
 <script type="text/javascript" charset="utf-8">

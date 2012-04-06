@@ -5,7 +5,7 @@
 		<a href="@{Receipts.show(_receipt.id)}">${_receipt.title}</a>
 	</h2>
 	<div class="details">
-		&{'views.tags.displayReceipt.receiptOwner', _receipt.owner.fullname},
+		&{'views.tags.displayReceipt.receiptOwner', _receipt.creator.fullname},
 		<span class="receipt-created">${_receipt.created.format('yyyy-MM-dd')}</span>
 	</div>
 	#{if _as != 'teaser'}
@@ -17,6 +17,18 @@
 </div>
 
 #{if _as == 'full'}
+	<div class="payers">
+		<h3>
+			${_receipt.members.size() ?: 'no'} 
+	        ${_receipt.members.size().pluralize(messages.get('payer'), messages.get('payers'))}
+		</h3>
+	    #{list items:_receipt.owners, as:'ownerInfo'}
+            <li class="member">
+                ${ownerInfo.owner.fullname} (${ownerInfo.amount.format('0.00')} SEK)
+            </li>
+	    #{/list}
+	</div>
+
 	<div class="members">
 		<h3>
 			${_receipt.members.size() ?: 'no'} 

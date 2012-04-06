@@ -56,7 +56,7 @@ public class Comments extends CRUD
 		Receipt receipt = comment.receipt;
 		
 		// Check that the user is either owner of receipt or owner of the post.
-		if (Security.isAuthorized(comment.poster, receipt.owner))
+		if (Security.isAuthorized(comment.poster, receipt.creator))
 		{
 			comment.delete();
 		}

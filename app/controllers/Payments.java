@@ -70,10 +70,10 @@ public class Payments extends CRUD
 		for(Receipt r : user.incomingReceipts) {
 			if(r.finished) {
 				double total = r.getTotal(user);
-				increment(debt, r.owner, total);
+				increment(debt, r.creator, total);
 				if(!r.hasPayment(user)) {
-					increment(freshDebt, r.owner, total);
-					addset(freshReceipts, r.owner, r);
+					increment(freshDebt, r.creator, total);
+					addset(freshReceipts, r.creator, r);
 				}
 			}
 		}

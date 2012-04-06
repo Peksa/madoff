@@ -39,7 +39,7 @@ public class BasicTest extends UnitTest
 
 		assertEquals(1, Receipt.count());
 		assertNotNull(firstReceipt);
-		assertEquals(bob, firstReceipt.owner);
+		assertEquals(bob, firstReceipt.creator);
 		assertEquals("Hotel-bar 23/4", firstReceipt.title);
 		assertEquals("Can't remember, but found receipt", firstReceipt.description);
 		assertNotNull(firstReceipt.created);

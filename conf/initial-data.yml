@@ -24,7 +24,7 @@ User(fred):
 Receipt(firstBobReceipt):
     title:          Dinner at hotel, 23/4
     created:        2011-04-23
-    owner:          bob
+    creator:        bob
     total:          200
     tip:            20
     finished:       true
@@ -55,7 +55,7 @@ Comment(firstBobReceipt_c1):
 Receipt(secondBobReceipt):
     title:          Just a test
     created:        2009-04-23
-    owner:          bob
+    creator:          bob
     total:          4711
     tip:            20
     finished:       true
@@ -67,7 +67,7 @@ Receipt(secondBobReceipt):
 Receipt(firstAnnReceipt):
     title:          Testing testing here.
     created:        2021-04-23
-    owner:          ann
+    creator:          ann
     total:          400
     tip:            120
     finished:       true
@@ -80,7 +80,7 @@ Receipt(firstAnnReceipt):
 Receipt(firstFredReceipt):
     title:          New Year's
     created:        2004-12-31
-    owner:          fred
+    creator:        fred
     total:          1300
     tip:            50
     finished:       true

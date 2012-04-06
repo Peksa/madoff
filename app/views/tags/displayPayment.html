@@ -23,7 +23,7 @@
 		#{list items:payment.receipts, as:'receipt'}
 			<li>
 			<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a>
-			#{if receipt.owner.equals(payment.payer)}
+			#{if receipt.creator.equals(payment.payer)}
 				&#40;-${receipt.getTotal(payment.receiver).format('0.00')}&#41;
 			#{/if}
 			#{else}

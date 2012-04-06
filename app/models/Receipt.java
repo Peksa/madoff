@@ -20,7 +20,11 @@ public class Receipt extends Model
 
 	// Owning side
 	@ManyToOne
-	public User owner;
+	public User creator;
+	
+	// Inverse side
+	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
+	public List<ReceiptOwner> owners;
 
 	// Owning side
 	@ManyToMany(cascade = CascadeType.PERSIST)
@@ -40,17 +44,18 @@ public class Receipt extends Model
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Payment> payments;
 
-	public Receipt(String title, User owner, String description, double total)
+	public Receipt(String title, User creator, String description, double total)
 	{
 		this.finished = false;
 		this.title = title;
-		this.owner = owner;
+		this.creator = creator;
 		this.description = description;
 		this.total = total;
 		this.created = new Date();
 		this.comments = new ArrayList<Comment>();
 		this.members = new TreeSet<User>();
 		this.subpots = new ArrayList<Subpot>();
+		this.owners = new ArrayList<ReceiptOwner>();
 	}
 
 	/**
@@ -75,7 +80,6 @@ public class Receipt extends Model
 			subpotTotal += pot.total;
 		}
 		
-		//TODO fix rounding errors etc
 		amount += (total - subpotTotal) / members.size();
 		
 		// Calculate amount of tip user should pay
@@ -83,7 +87,6 @@ public class Receipt extends Model
 		if(total == 0) amount += tip / members.size(); // Special case of just tip
 		else 
 		{
-			//TODO fix rounding errors etc
 			double percentage = amount / total;
 			amount += tip * percentage + 0.5;
 		}
@@ -110,6 +113,6 @@ public class Receipt extends Model
 
 	public String toString()
 	{
-		return "Receipt by " + owner + " for " + getTotal() + " SEK";
+		return "Receipt by " + creator + " for " + getTotal() + " SEK";
 	}
 }

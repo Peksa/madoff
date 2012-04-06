@@ -25,7 +25,7 @@ import play.templates.JavaExtensions;
 		
 		JsonObject obj = new JsonObject();
 		obj.addProperty("id", comment.id);
-		obj.addProperty("own", (comment.poster == comment.receipt.owner));
+		obj.addProperty("own", (comment.poster == comment.receipt.creator));
 		obj.addProperty("poster", comment.poster.fullname);
 		obj.addProperty("content", comment.content);
 		obj.addProperty("date", p.format(comment.date));
