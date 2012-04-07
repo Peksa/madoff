@@ -19,13 +19,11 @@ User(fred):
     password:       PdSE4DjyPrl7mDjy/R40//yuMZhilKwKke6BqfVovYaaXMM1PRXKBDku4hy+YHlwHMFC4T46o0KhqHj0pjx6nw==
     fullname:       Fredrik
     accountNumber:  123534-12
-    
  
 Receipt(firstBobReceipt):
     title:          Dinner at hotel, 23/4
     created:        2011-04-23
     creator:        bob
-    total:          200
     tip:            20
     finished:       true
     description:    >
@@ -37,6 +35,11 @@ Receipt(firstBobReceipt):
                     - ann
                     - fred
                     - bob
+                    
+ReceiptOwner(firstBobReceiptOwner):
+    owner:          bob
+    receipt:        firstBobReceipt
+    amount:         200
                     
 Subpot(firstBobReceipt_s1):
     receipt:        firstBobReceipt
@@ -55,20 +58,23 @@ Comment(firstBobReceipt_c1):
 Receipt(secondBobReceipt):
     title:          Just a test
     created:        2009-04-23
-    creator:          bob
-    total:          4711
+    creator:        bob
     tip:            20
     finished:       true
     description:    Testing testing, bob paid for this.
     members:
                     - ann
                     - bob
+                    
+ReceiptOwner(secondBobReceiptOwner):
+    owner:          bob
+    receipt:        secondBobReceipt
+    amount:         4711
     
 Receipt(firstAnnReceipt):
     title:          Testing testing here.
     created:        2021-04-23
-    creator:          ann
-    total:          400
+    creator:        ann
     tip:            120
     finished:       true
     description:    Test 123 Test, Ann paid.        
@@ -77,11 +83,15 @@ Receipt(firstAnnReceipt):
                     - fred
                     - ann
     
+ReceiptOwner(firstAnnReceiptOwner):
+    owner:          ann
+    receipt:        firstAnnReceipt
+    amount:         400
+    
 Receipt(firstFredReceipt):
     title:          New Year's
     created:        2004-12-31
     creator:        fred
-    total:          1300
     tip:            50
     finished:       true
     description:    Test test, fred paid here.    
@@ -89,7 +99,12 @@ Receipt(firstFredReceipt):
                     - bob
                     - ann
                     - fred
-                   
+
+ReceiptOwner(firstFredReceiptOwner):
+    owner:          fred
+    receipt:        firstFredReceipt
+    amount:         1300
+
 Subpot(s1):
     receipt:        firstFredReceipt
     description:    Champagne

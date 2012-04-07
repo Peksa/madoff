@@ -15,42 +15,36 @@ public class Receipt extends Model
 	
 	public boolean finished;
 
-	public double total;
+	//public double total; // deprecated, use sum of owner amount
 	public double tip;
 
-	// Owning side
 	@ManyToOne
 	public User creator;
 	
-	// Inverse side
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<ReceiptOwner> owners;
 
-	// Owning side
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	public Set<User> members;
 
 	@Lob
 	public String description;
 
-	// Inverse side
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Comment> comments;
 
-	// Inverse side
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Subpot> subpots;
 
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Payment> payments;
 
-	public Receipt(String title, User creator, String description, double total)
+	public Receipt(String title, User creator, String description)
 	{
 		this.finished = false;
 		this.title = title;
 		this.creator = creator;
 		this.description = description;
-		this.total = total;
 		this.created = new Date();
 		this.comments = new ArrayList<Comment>();
 		this.members = new TreeSet<User>();
@@ -63,7 +57,9 @@ public class Receipt extends Model
 	 */
 	public double getTotal()
 	{
-		return total;
+		double ret = 0;
+		for(ReceiptOwner r : owners) ret += r.amount;
+		return ret;
 	}
 	
 	/**
@@ -72,6 +68,7 @@ public class Receipt extends Model
 	 */
 	public double getTotal(User user)
 	{
+		// Amount to pay from subpots
 		double amount = 0;
 		double subpotTotal = 0;
 		for (Subpot pot : subpots)
@@ -80,14 +77,17 @@ public class Receipt extends Model
 			subpotTotal += pot.total;
 		}
 		
-		amount += (total - subpotTotal) / members.size();
+		// Amount to pay outside of subrounds and tip
+		double total = getTotal();
+		amount += (total - subpotTotal - tip) / members.size();
 		
 		// Calculate amount of tip user should pay
 		// if user has X% of non-tip debt, he should pay X% of the tip
-		if(total == 0) amount += tip / members.size(); // Special case of just tip
+		double totalWithoutTip = total - tip;
+		if(totalWithoutTip == 0) amount += tip / members.size(); // Special case of just tip
 		else 
 		{
-			double percentage = amount / total;
+			double percentage = amount / totalWithoutTip;
 			amount += tip * percentage + 0.5;
 		}
 		

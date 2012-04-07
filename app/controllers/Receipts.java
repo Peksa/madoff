@@ -134,7 +134,7 @@ public class Receipts extends CRUD
 			membersSet.add(u);
 		}
 
-		Receipt receipt = new Receipt(title, Security.connectedUser(), description, total);
+		Receipt receipt = new Receipt(title, Security.connectedUser(), description);
 		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
 		receipt.finished = true;

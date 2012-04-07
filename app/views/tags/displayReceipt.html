@@ -19,8 +19,8 @@
 #{if _as == 'full'}
 	<div class="payers">
 		<h3>
-			${_receipt.members.size() ?: 'no'} 
-	        ${_receipt.members.size().pluralize(messages.get('payer'), messages.get('payers'))}
+			${_receipt.owners.size() ?: 'no'} 
+	        ${_receipt.owners.size().pluralize(messages.get('payer'), messages.get('payers'))}
 		</h3>
 	    #{list items:_receipt.owners, as:'ownerInfo'}
             <li class="member">
