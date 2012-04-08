@@ -34,13 +34,13 @@ public class Payments extends CRUD
 		if(payment.accepted == null) active.add(payment);
 		else settled.add(payment);
 	}
-	
+
 	public static void index() {
 		User connected = Security.connectedUser();
 		if (connected != null)
 			show(connected.id);
 	}
-	
+
 	/**
 	 * Provides a list of all the users debts per person, as well as incoming debts
 	 * This matches incoming and outgoing debts over time and settles any difference
@@ -49,47 +49,43 @@ public class Payments extends CRUD
 	public static void show(Long userId) {
 		validation.required(userId);
 		if(!validate(userId)) return;
-		
+
 		//TODO(dschlyter) This operation is pretty expensive, but premature optimization is the root of all evil etc
 		// Opt Idea 1: Cache result and invalidate on new receipt with user involved
 		// Opt Idea 2: Cache result and date and only use new data to re-calculate (harder)
-		
+
 		User user = User.findById(userId);
 		HashMap<User, Double> debt = new HashMap<User, Double>();
 		// Track debt that is linked to fresh receipts - this is to enable user to verify debt correctness
 		HashMap<User, Double> freshDebt = new HashMap<User, Double>();
 		HashMap<User, HashSet<Receipt>> freshReceipts = new HashMap<User, HashSet<Receipt>>();
-		
+
 		ArrayList<Payment> liabilities = new ArrayList<Payment>(); // Outgoing unpayed
 		ArrayList<Payment> pending = new ArrayList<Payment>(); // Outgoing payed, not accepted
 		ArrayList<Payment> securities = new ArrayList<Payment>(); // Incomming unpayed
 		ArrayList<Payment> accept = new ArrayList<Payment>(); // Incomming payed, not accepted
 		ArrayList<Payment> settled = new ArrayList<Payment>(); // All accepted payments
-		
+
 		// Sum all receipts where you owe money, subtract sum of all receipts owned
 		for(Receipt r : user.incomingReceipts) {
-			if(r.finished) {
-				double total = r.getTotal(user);
-				increment(debt, r.creator, total);
-				if(!r.hasPayment(user)) {
-					increment(freshDebt, r.creator, total);
-					addset(freshReceipts, r.creator, r);
-				}
+			double total = r.getTotal(user);
+			increment(debt, r.creator, total);
+			if(!r.hasPayment(user)) {
+				increment(freshDebt, r.creator, total);
+				addset(freshReceipts, r.creator, r);
 			}
 		}
 		for(Receipt r : user.receipts) {
-			if(r.finished) {
-				for(User u : r.members) {
-					double total = r.getTotal(u);
-					increment(debt, u, -total);
-					if(!r.hasPayment(u)) { 
-						increment(freshDebt, u, -total);
-						addset(freshReceipts, u, r);
-					}
+			for(User u : r.members) {
+				double total = r.getTotal(u);
+				increment(debt, u, -total);
+				if(!r.hasPayment(u)) { 
+					increment(freshDebt, u, -total);
+					addset(freshReceipts, u, r);
 				}
 			}
 		}
-		
+
 		// Sum all payments received, subtract sum of all payments made
 		for(Payment p : user.incomingPayments) {
 			increment(debt, p.payer, p.amount);
@@ -99,32 +95,32 @@ public class Payments extends CRUD
 			increment(debt, p.receiver, -p.amount);
 			addPayment(pending,settled,p);
 		}
-		
+
 		// Generate (non-persistent) payment objects to send to UI
 		for(User u : debt.keySet()) {
-			
+
 			int userDebt = (int)Math.round(debt.get(u));
 			int userFreshDebt = (int)Math.round(freshDebt.get(u));
 			if(userDebt != 0) {
 				int missing = Math.abs(userDebt - userFreshDebt);
-				
+
 				ArrayList<Receipt> receipts = new ArrayList<Receipt>();
 				if(freshReceipts.containsKey(u)) receipts.addAll(freshReceipts.get(u));
-				
+
 				if(userDebt > 0) {
 					int paymentCounter = Payment.find("payer = ? AND receiver = ?", user, u).fetch().size() % 9999 + 1;
 					String paymentId = user.username.substring(0,Math.min(6,user.username.length())) 
-						+ Integer.toString(paymentCounter);
+							+ Integer.toString(paymentCounter);
 					liabilities.add(new Payment(user, u, paymentId, userDebt, missing, receipts));
 				}
 				else if(userDebt < 0) securities.add(new Payment(u, user, "", -userDebt, missing, receipts));
 			}	
 		}
-		
+
 		render(liabilities, pending, securities, accept, settled, user);
 	}
 
-	
+
 	/**
 	 * Creates new payment
 	 * @param senderId
@@ -140,21 +136,21 @@ public class Payments extends CRUD
 		validation.required(receiverId);
 		validation.required(amount);
 		if(!validate(senderId)) return;
-		
+
 		List<Receipt> receipts = new ArrayList<Receipt>();
 		for (Long id : receiptId) 
 		{
 			Receipt r = Receipt.findById(id);
 			receipts.add(r);
 		}
-		
+
 		User receiver = User.findById(receiverId);
 		Payment payment = new Payment(Security.connectedUser(), receiver, identifier, amount, unsourced, receipts);
 		payment.save();
 
 		index();
 	}
-	
+
 	/**
 	 * Marks a payment as accepted
 	 * @param userId
@@ -164,13 +160,13 @@ public class Payments extends CRUD
 		validation.required(paymentId);
 		Payment payment = Payment.findById(paymentId);
 		if(!validate(payment.receiver.id)) return;
-		
+
 		payment.accepted = new Date();
 		payment.save();
-		
+
 		index();
 	}
-	
+
 	/**
 	 * Verify that user ID is same as authorized ID and input has no errors
 	 * @param userId Id of user
@@ -181,13 +177,13 @@ public class Payments extends CRUD
 			error(Messages.get("validateFail"));
 			return false;
 		}
-		
+
 		User user = User.findById(userId);
 		if (user == null || !Security.isAuthorized(user)) {
 			error(Messages.get("controllers.Payments.validate.unauthorized"));
 			return false;
 		}
-			
+
 		return true;
 	}
 }

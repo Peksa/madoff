@@ -16,7 +16,7 @@
 <!-- #{script 'live.js' /}-->
 #{script 'jquery-ui-1.8.16.custom.min.js' /}
 #{script 'jquery.tipsy.js' /}
-#{script 'jquery.tmpl.min.js' /}
+#{script 'jquery.tmpl.min.js' /}x
 #{script 'ICanHaz.min.js' /}
 <!--  #{script 'jquery.validate.min.js' /}-->
 #{script 'knockout-1.3.0beta.js' /}
@@ -88,9 +88,11 @@ $(document).ready(function(){
 						<li #{if request.action == "Payments.show"} class="active" #{/if}><a href="@{Payments.index()}">&{'Payments'}</a></li>
 					</ul>
 					<ul class="nav secondary-nav">
+						<!-- TODO
 						<form action="">
 							<input type="text" placeholder="&{'Search'}"} />
 						</form>
+						-->
 						<li class="dropdown"><a href="#" class="dropdown-toggle">&{'Language'}</a>
 							<ul class="dropdown-menu">
 								<li><a href="@{Languages.set('english', request.url)}"><img style="margin-bottom: -3px;" src="/public/images/flags/gb.png" /> English</a></li>

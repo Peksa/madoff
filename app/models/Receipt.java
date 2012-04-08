@@ -11,9 +11,6 @@ public class Receipt extends Model
 {
 	public String title;
 	public Date created;
-	public Date cleared;
-	
-	public boolean finished;
 
 	//public double total; // deprecated, use sum of owner amount
 	public double tip;
@@ -41,7 +38,6 @@ public class Receipt extends Model
 
 	public Receipt(String title, User creator, String description)
 	{
-		this.finished = false;
 		this.title = title;
 		this.creator = creator;
 		this.description = description;

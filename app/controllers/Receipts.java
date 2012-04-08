@@ -35,13 +35,6 @@ public class Receipts extends CRUD
 		Receipt receipt = Receipt.findById(id);
 		User connectedUser = Security.connectedUser();
 
-		System.out.println("Subpot testing!");
-		for(Subpot p : receipt.subpots)
-		{
-			System.out.println(p.total);
-			for(User u : p.members) System.out.println(u.username);
-		}
-
 		render(receipt, connectedUser);
 	}
 
@@ -137,7 +130,6 @@ public class Receipts extends CRUD
 		Receipt receipt = new Receipt(title, Security.connectedUser(), description);
 		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
-		receipt.finished = true;
 		
 		if(payed.equals("split"))
 		{

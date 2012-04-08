@@ -25,7 +25,6 @@ Receipt(firstBobReceipt):
     created:        2011-04-23
     creator:        bob
     tip:            20
-    finished:       true
     description:    >
                     Out drinking and eating at hotel
                     I think Anne drank a bla
@@ -38,6 +37,16 @@ Receipt(firstBobReceipt):
                     
 ReceiptOwner(firstBobReceiptOwner):
     owner:          bob
+    receipt:        firstBobReceipt
+    amount:         200
+    
+ReceiptOwner(firstBobReceiptOwner2):
+    owner:          ann
+    receipt:        firstBobReceipt
+    amount:         200
+    
+ReceiptOwner(firstBobReceiptOwner3):
+    owner:          fred
     receipt:        firstBobReceipt
     amount:         200
                     
@@ -60,7 +69,6 @@ Receipt(secondBobReceipt):
     created:        2009-04-23
     creator:        bob
     tip:            20
-    finished:       true
     description:    Testing testing, bob paid for this.
     members:
                     - ann
@@ -73,10 +81,9 @@ ReceiptOwner(secondBobReceiptOwner):
     
 Receipt(firstAnnReceipt):
     title:          Testing testing here.
-    created:        2021-04-23
+    created:        2012-04-23
     creator:        ann
     tip:            120
-    finished:       true
     description:    Test 123 Test, Ann paid.        
     members:        
                     - bob
@@ -93,7 +100,6 @@ Receipt(firstFredReceipt):
     created:        2004-12-31
     creator:        fred
     tip:            50
-    finished:       true
     description:    Test test, fred paid here.    
     members:        
                     - bob
