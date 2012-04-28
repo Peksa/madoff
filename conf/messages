@@ -44,6 +44,9 @@ paramsFail=Parameters failed the validation.
 errors.Parameters=&{'paramsFail'}
 errors.TakenUsername=That username is already taken, please choose another one.
 errors.TakenEmail=That e-mail address is already in our systems, if that is your e-mail perhaps you want to reset your password instead.
+errors.idiot=LOL you did not pass the idiot test! Try again
+errors.shortUsername=Username must be 5 chars or more
+errors.shortPass=Password must be 8 chars or more
 
 controllers.Users.success=You have now been added to &{'madoff'}!
 
@@ -105,6 +108,7 @@ views.Users.register.email=E-mail address
 views.Users.register.username=Desired username
 views.Users.register.password=Password
 views.Users.register.picture=Picture
+views.Users.register.idiot=Idiot/Bot test
 
 views.main.madoff=madoff
 views.main.powered=Madoff powered by

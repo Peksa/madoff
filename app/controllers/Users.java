@@ -19,12 +19,30 @@ public class Users extends CRUD
 		render();
 	}
 	
-	public static void add(String email, String username, String password, String fullname, Picture picture) throws Throwable
+	public static void add(String email, String username, String password, String fullname, Picture picture, int idiotTest) throws Throwable
 	{
 		// TODO(Peksa): why doesn't this work?
+		if(idiotTest != 4711)
+		{
+			flash.error(Messages.get("errors.idiot"));
+            params.flash();
+            register();
+		}
 		if(validation.hasErrors())
 		{
             flash.error(Messages.get("errors.Parameters"));
+            params.flash();
+            register();
+		}
+		if (username.length() < 5)
+		{
+            flash.error(Messages.get("errors.shortUsername"));
+            params.flash();
+            register();
+		}
+		if (password.length() < 8)
+		{
+            flash.error(Messages.get("errors.shortPass"));
             params.flash();
             register();
 		}

@@ -34,6 +34,11 @@ public class Receipts extends CRUD
 			error(Messages.get("controllers.Receipts.show.error"));
 		Receipt receipt = Receipt.findById(id);
 		User connectedUser = Security.connectedUser();
+		
+		if (!receipt.canBeViewedBy(connectedUser))
+		{
+			error(Messages.get("controllers.Payments.validate.unauthorized"));
+		}
 
 		render(receipt, connectedUser);
 	}

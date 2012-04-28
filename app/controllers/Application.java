@@ -16,8 +16,17 @@ public class Application extends Controller
 	 */
 	public static void index()
 	{
-		List<Receipt> receipts = Receipt.find("order by created asc").fetch();
+		List<Receipt> allReceipts = Receipt.find("order by created desc").fetch();
+		
 		User authed = Security.connectedUser();
+		
+		// Moar opt to do with DB query, but KISS
+		List<Receipt> receipts = new ArrayList<Receipt>();
+		for(Receipt r : allReceipts)
+		{
+			if(r.canBeViewedBy(authed)) receipts.add(r);
+		}
+		
 		render(receipts, authed);
 	}
 }

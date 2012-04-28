@@ -4,6 +4,9 @@ import play.*;
 import play.db.jpa.*;
 
 import javax.persistence.*;
+
+import org.eclipse.jdt.internal.core.util.MementoTokenizer;
+
 import java.util.*;
 
 @Entity
@@ -110,5 +113,16 @@ public class Receipt extends Model
 	public String toString()
 	{
 		return "Receipt by " + creator + " for " + getTotal() + " SEK";
+	}
+
+	public boolean canBeViewedBy(User user) {
+		if(user == null) return false;
+		if(members.contains(user)) return true;
+		for(ReceiptOwner owner : owners)
+		{
+			if(owner.owner.equals(user)) return true;
+		}
+		
+		return false;
 	}
 }
