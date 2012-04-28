@@ -75,19 +75,30 @@
     </thead>
     <tbody>
 	#{list items:settled, as:'payment'}
-	%{
-    	if(user == payment.payer) color = "red"
-    	else color = "green"
-    }%
-    <tr>
-        <td class="${color}">${payment.paid.format('yyyy-MM-dd')}</td>
-        <td class="${color}">${payment.accepted.format('yyyy-MM-dd')}</td>
-        <td class="${color}">${payment.payer}</td>
-        <td class="${color}">${payment.receiver}</td>
-        <td class="${color}">${payment.amount}</td>
-        <td class="${color}">${payment.identifier}</td>
-        <td class="${color}">${payment.receipts.size()}</td>
-     </tr>
+		%{
+	    	if(user == payment.payer) color = "red"
+	    	else color = "green"
+	    }%
+	    <tr>
+	        <td class="${color}">${payment.paid.format('yyyy-MM-dd')}</td>
+	        <td class="${color}">${payment.accepted.format('yyyy-MM-dd')}</td>
+	        <td class="${color}">${payment.payer}</td>
+	        <td class="${color}">${payment.receiver}</td>
+	        <td class="${color}">${payment.amount}</td>
+	        <td class="${color}">${payment.identifier}</td>
+	        <td class="${color}">
+	        <li class="dropdown" data-dropdown="dropdown" style="list-style:none">
+	          <a href="#" class="dropdown-toggle">${payment.receipts.size()} Receipts</a>
+	          <ul class="dropdown-menu">
+	          	#{list items:payment.receipts, as:'receipt'}
+		            <li><a href="@{Receipts.show(receipt.id)}">
+		            	${receipt.title}
+		            </a></li>
+	            #{/list}
+	          </ul>
+	        </li>
+	        </td>
+	     </tr>
      #{/list}
      </tbody>
   </table>
