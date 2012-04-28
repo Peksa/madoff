@@ -21,6 +21,7 @@ public class Receipt extends Model
 	@ManyToOne
 	public User creator;
 	
+	// TODO merge owner and member!
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<ReceiptOwner> owners;
 
@@ -63,10 +64,12 @@ public class Receipt extends Model
 	
 	/**
 	 * @param user
-	 * @return The amount of money user should pay
+	 * @return The amount of money user this user spent on this receipt
 	 */
 	public double getTotal(User user)
 	{
+		if(!members.contains(user)) return 0;
+		
 		// Amount to pay from subpots
 		double amount = 0;
 		double subpotTotal = 0;
@@ -83,46 +86,85 @@ public class Receipt extends Model
 		// Calculate amount of tip user should pay
 		// if user has X% of non-tip debt, he should pay X% of the tip
 		double totalWithoutTip = total - tip;
-		if(totalWithoutTip == 0) amount += tip / members.size(); // Special case of just tip
+		if(totalWithoutTip < 1e-8) amount += tip / members.size(); // Special case of just tip
 		else 
 		{
 			double percentage = amount / totalWithoutTip;
-			amount += tip * percentage + 0.5;
+			amount += tip * percentage;
 		}
 		
 		return amount;
 	}
 	
-	/**
-	 * Returns whether user has paid money for this receipt
-	 * @param user
-	 * @return True iff user has a payment associated with this receipt
-	 */
-	public boolean hasPayment(User user)
+	public double shouldPay(User payer)
 	{
-		//TODO(dschlyter) later - verify if payments are for correct amount (turns into graph problem)
-		if (!members.contains(user)) return true;
-		
-		for (Payment p : payments) {
-			if (p.payer.equals(user)) return true;
+		double pSpent = getTotal(payer);
+		double pPaid = 0;
+		for(ReceiptOwner o : owners)
+		{
+			if(o.user.equals(payer)) pPaid = o.amount;
 		}
 		
-		return false;
+		return pSpent - pPaid;
+	}
+	
+	/**
+	 * Payment algorithm:
+	 * Some members will have paid more than they spent (payers)
+	 * and others less than they spent (spenders)
+	 * 
+	 * Every spender should pay back the difference
+	 * payments from every spender will be split proportionately between payers
+	 * 
+	 * Eg. Peksa paid 200 kr more than he spent, gunde 100 kr more
+	 * other users paid less than they spent
+	 * from the difference they should pay 2/3 to peksa and 1/3 to gunde
+	 * Once the entire difference of 300 kr is payed by spenders, all debts are settled.
+	 */
+	public double shouldPay(User payer, User receiver)
+	{
+		if(!members.contains(payer) || !members.contains(receiver)) return 0;
+		
+		// Add spending
+		double pPayment = getTotal(payer);
+		double rPayment = getTotal(receiver);
+		double totalOverPaid = 0;
+		
+		for(ReceiptOwner o : owners)
+		{
+			// Subtract payment
+			if(o.user.equals(payer)) pPayment -= o.amount;
+			else if(o.user.equals(receiver)) rPayment -= o.amount;
+			
+			// Also keep track of total payment transfer
+			double ownerSpent = getTotal(o.user);
+			if(o.amount > ownerSpent) totalOverPaid += o.amount - ownerSpent;
+		}
+		
+		// Account for rounding errors, if close to zero count as zero
+		if(Math.abs(pPayment) <= 1e-8 || Math.abs(rPayment) <= 1e-8 ) return 0;
+		
+		boolean pShouldPay = pPayment > 0;
+		boolean rShouldPay = rPayment > 0;
+		// No payment between two payers, and no payment between two spenders
+		if(!(pShouldPay ^ rShouldPay)) return 0;
+		
+		// Only one of theese should be true
+		if(pShouldPay)
+		{
+			return pPayment * (-rPayment / totalOverPaid);
+		}
+		if(rShouldPay)
+		{
+			// Return negative, to indicate debt
+			return -(rPayment * (-pPayment / totalOverPaid));
+		}
+		
+		return 0;
 	}
 
 	public String toString()
 	{
 		return "Receipt by " + creator + " for " + getTotal() + " SEK";
-	}
-
-	public boolean canBeViewedBy(User user) {
-		if(user == null) return false;
-		if(members.contains(user)) return true;
-		for(ReceiptOwner owner : owners)
-		{
-			if(owner.owner.equals(user)) return true;
-		}
-		
-		return false;
 	}
 }

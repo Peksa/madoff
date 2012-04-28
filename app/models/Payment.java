@@ -18,6 +18,8 @@ import java.util.*;
 @Entity
 public class Payment extends Model
 {
+	public boolean deprecated = false;
+	
 	@ManyToOne
 	public User payer;
 
@@ -25,35 +27,58 @@ public class Payment extends Model
 	public User receiver;
 
 	// Date of payment and acceptance, accepted == null iff not accepted
+	public Date created;
 	public Date paid;
 	public Date accepted;
 
 	public String identifier; // 10-char bank transaction ID
 	
-	public int amount;
-	public int unsourced; // amount of debt not traceable to fresh receipts
+	public double amount;
 	
 	// Once payment covers the debt from one or more receipts
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Receipt> receipts;
 
 	/**
-	 * Creates new payment
-	 * @param payer
-	 * @param receiver
-	 * @param identifier a 10 char identifier for this payment
-	 * @param amount
-	 * @param unsourced money not trackable to related receipts
-	 * @param receipts List of receipts this payment is covering
+	 * Creates a payment from a receipt
 	 */
-	public Payment(User payer, User receiver, String identifier, int amount, int unsourced, List<Receipt> receipts)
+	public Payment(User payer, User receiver, String identifier, Receipt receipt)
 	{
+		this.created = new Date();
+		
 		this.payer = payer;
 		this.receiver = receiver;
-		this.identifier = identifier;
-		this.amount = amount;
-		this.paid = new Date();
-		this.receipts = receipts;
+		this.identifier = generateId(payer, receiver);
+		this.amount = receipt.shouldPay(payer, receiver);
+		
+		List<Receipt> list = new ArrayList<Receipt>();
+		list.add(receipt);
+		this.receipts = list;
+	}
+	
+	private String generateId(User payer, User receiver)
+	{
+		int paymentCounter = Payment.find("payer = ? AND receiver = ? AND deprecated = false", payer, receiver).fetch().size() % 9999 + 1;
+		return payer.username.substring(0,Math.min(6,payer.username.length())) 
+				+ Integer.toString(paymentCounter);
+	}
+	
+	/*
+	 * Adds a new receipt to a payment and 
+	 */
+	public Payment(Payment oldPayment, Receipt addedReceipt)
+	{
+		oldPayment.deprecated = true;
+		this.created = new Date();
+		
+		this.payer = oldPayment.payer;
+		this.receiver = oldPayment.receiver;
+		this.identifier = oldPayment.identifier;
+		this.amount = oldPayment.amount;
+		this.receipts = oldPayment.receipts;
+		
+		receipts.add(addedReceipt);
+		amount += addedReceipt.shouldPay(payer, receiver);
 	}
 
 	public String toString()

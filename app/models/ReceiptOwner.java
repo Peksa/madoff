@@ -13,7 +13,7 @@ public class ReceiptOwner extends Model
 	public ReceiptOwner(Receipt receipt, User owner, double amount) {
 		super();
 		this.receipt = receipt;
-		this.owner = owner;
+		this.user = owner;
 		this.amount = amount;
 	}
 
@@ -21,7 +21,7 @@ public class ReceiptOwner extends Model
 	public Receipt receipt;
 
 	@ManyToOne
-	public User owner;
+	public User user;
 	
 	public double amount;
 }

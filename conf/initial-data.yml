@@ -36,17 +36,17 @@ Receipt(firstBobReceipt):
                     - bob
                     
 ReceiptOwner(firstBobReceiptOwner):
-    owner:          bob
+    user:          bob
     receipt:        firstBobReceipt
     amount:         200
     
 ReceiptOwner(firstBobReceiptOwner2):
-    owner:          ann
+    user:          ann
     receipt:        firstBobReceipt
     amount:         200
     
 ReceiptOwner(firstBobReceiptOwner3):
-    owner:          fred
+    user:          fred
     receipt:        firstBobReceipt
     amount:         200
                     
@@ -75,7 +75,7 @@ Receipt(secondBobReceipt):
                     - bob
                     
 ReceiptOwner(secondBobReceiptOwner):
-    owner:          bob
+    user:          bob
     receipt:        secondBobReceipt
     amount:         4711
     
@@ -91,7 +91,7 @@ Receipt(firstAnnReceipt):
                     - ann
     
 ReceiptOwner(firstAnnReceiptOwner):
-    owner:          ann
+    user:          ann
     receipt:        firstAnnReceipt
     amount:         400
     
@@ -107,7 +107,7 @@ Receipt(firstFredReceipt):
                     - fred
 
 ReceiptOwner(firstFredReceiptOwner):
-    owner:          fred
+    user:          fred
     receipt:        firstFredReceipt
     amount:         1300
 

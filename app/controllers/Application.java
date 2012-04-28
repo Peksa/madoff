@@ -24,7 +24,7 @@ public class Application extends Controller
 		List<Receipt> receipts = new ArrayList<Receipt>();
 		for(Receipt r : allReceipts)
 		{
-			if(r.canBeViewedBy(authed)) receipts.add(r);
+			if(r.members.contains(authed)) receipts.add(r);
 		}
 		
 		render(receipts, authed);

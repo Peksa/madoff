@@ -8,15 +8,14 @@
 		&{'views.tags.displayReceipt.receiptOwner', _receipt.creator.fullname},
 		<span class="receipt-created">${_receipt.created.format('yyyy-MM-dd')}</span>
 	</div>
-	#{if _as != 'teaser'}
-		<div class="receipt-content">
-			<div class="about">&{'Details'}:</div>
-			${_receipt.description.nl2br()}
-		</div>
-	#{/if}
 </div>
 
 #{if _as == 'full'}
+	<div class="receipt-content">
+		<h3>&{'Description'}:</h3>
+		${_receipt.description.nl2br()}
+	</div>
+
 	<div class="payers">
 		<h3>
 			${_receipt.owners.size() ?: 'no'} 
@@ -24,7 +23,7 @@
 		</h3>
 	    #{list items:_receipt.owners, as:'ownerInfo'}
             <li class="member">
-                ${ownerInfo.owner.fullname} (${ownerInfo.amount.format('0.00')} SEK)
+                ${ownerInfo.user.fullname} (${ownerInfo.amount.format('0.00')} SEK)
             </li>
 	    #{/list}
 	</div>
@@ -37,6 +36,20 @@
 	    #{list items:_receipt.members, as:'member'}
             <li class="member">
                 ${member.fullname} (${_receipt.getTotal(member).format('0.00')} SEK)
+                
+                #{if _receipt.shouldPay(member) > 0}
+                	should pay ${_receipt.shouldPay(member).format('0.00')}
+                	#{if _receipt.owners.size() > 1}
+                	[
+	                	#{list items:_receipt.owners, as:'ownerInfo'}
+	                		#{if _receipt.shouldPay(member,ownerInfo.user) > 0}
+	                			${_receipt.shouldPay(member,ownerInfo.user).format('0.00')} 
+			                 	to ${ownerInfo.user.fullname},
+	                		#{/if}
+					    #{/list}
+					]
+				    #{/if}
+                #{/if}
             </li>
 	    #{/list}
 	</div>

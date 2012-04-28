@@ -35,7 +35,7 @@ public class Receipts extends CRUD
 		Receipt receipt = Receipt.findById(id);
 		User connectedUser = Security.connectedUser();
 		
-		if (!receipt.canBeViewedBy(connectedUser))
+		if (!receipt.members.contains(connectedUser))
 		{
 			error(Messages.get("controllers.Payments.validate.unauthorized"));
 		}
@@ -157,7 +157,6 @@ public class Receipts extends CRUD
 			{
 				if(input.members != null)
 				{
-					input.testPrint();
 					Subpot subpot = new Subpot(input.amount);
 					subpot.description = input.description;
 					for (Long id : input.members)

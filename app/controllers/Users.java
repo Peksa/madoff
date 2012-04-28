@@ -21,6 +21,10 @@ public class Users extends CRUD
 	
 	public static void add(String email, String username, String password, String fullname, Picture picture, int idiotTest) throws Throwable
 	{
+		// Quick fix
+		if(fullname == null || fullname.length() == 0) fullname = username;
+		if(email == null) email = "";
+		
 		// TODO(Peksa): why doesn't this work?
 		if(idiotTest != 4711)
 		{

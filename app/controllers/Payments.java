@@ -70,19 +70,19 @@ public class Payments extends CRUD
 		for(Receipt r : user.incomingReceipts) {
 			double total = r.getTotal(user);
 			increment(debt, r.creator, total);
-			if(!r.hasPayment(user)) {
+			//if(!r.hasPayment(user)) {
 				increment(freshDebt, r.creator, total);
 				addset(freshReceipts, r.creator, r);
-			}
+			//}
 		}
 		for(Receipt r : user.receipts) {
 			for(User u : r.members) {
 				double total = r.getTotal(u);
 				increment(debt, u, -total);
-				if(!r.hasPayment(u)) { 
+				//if(!r.hasPayment(u)) { 
 					increment(freshDebt, u, -total);
 					addset(freshReceipts, u, r);
-				}
+				//}
 			}
 		}
 
@@ -107,6 +107,7 @@ public class Payments extends CRUD
 				ArrayList<Receipt> receipts = new ArrayList<Receipt>();
 				if(freshReceipts.containsKey(u)) receipts.addAll(freshReceipts.get(u));
 
+				/*
 				if(userDebt > 0) {
 					int paymentCounter = Payment.find("payer = ? AND receiver = ?", user, u).fetch().size() % 9999 + 1;
 					String paymentId = user.username.substring(0,Math.min(6,user.username.length())) 
@@ -114,6 +115,7 @@ public class Payments extends CRUD
 					liabilities.add(new Payment(user, u, paymentId, userDebt, missing, receipts));
 				}
 				else if(userDebt < 0) securities.add(new Payment(u, user, "", -userDebt, missing, receipts));
+				*/
 			}	
 		}
 
@@ -145,8 +147,8 @@ public class Payments extends CRUD
 		}
 
 		User receiver = User.findById(receiverId);
-		Payment payment = new Payment(Security.connectedUser(), receiver, identifier, amount, unsourced, receipts);
-		payment.save();
+		//Payment payment = new Payment(Security.connectedUser(), receiver, identifier, amount, unsourced, receipts);
+		//payment.save();
 
 		index();
 	}

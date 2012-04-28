@@ -27,7 +27,7 @@ public class User extends Model implements Comparable<User>
 	@OneToMany(mappedBy = "creator", cascade = CascadeType.PERSIST)
 	public List<Receipt> receipts;
 	
-	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	public Set<ReceiptOwner> ownedReceipts;
 	
 	@ManyToMany(mappedBy = "members", cascade = CascadeType.PERSIST)
