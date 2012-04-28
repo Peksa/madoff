@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import models.Comment;
+import models.Payment;
 import models.Receipt;
 import models.ReceiptOwner;
 import models.Subpot;
@@ -40,6 +41,8 @@ public class Receipts extends CRUD
 			error(Messages.get("controllers.Payments.validate.unauthorized"));
 		}
 
+		//System.out.println(receipt.payments.size());
+		//for(Payment payment : receipt.payments) System.out.println(payment.deprecated);
 		render(receipt, connectedUser);
 	}
 
@@ -170,6 +173,7 @@ public class Receipts extends CRUD
 			}
 		}
 
+		Payment.generatePayments(receipt);
 		Receipts.show(receipt.id);
 	}
 

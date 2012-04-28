@@ -48,6 +48,8 @@ errors.idiot=LOL you did not pass the idiot test! Try again
 errors.shortUsername=Username must be 5 chars or more
 errors.shortPass=Password must be 8 chars or more
 
+error.deprecatedPayment=Your payment is no longer vaild! Add the extra amount to match the debt, or add a 'moneyback'-receipt if you paid too much.
+
 controllers.Users.success=You have now been added to &{'madoff'}!
 
 controllers.Payments.validate.unauthorized=You are not authorized for this action. This action has been reported to Santa.

@@ -21,147 +21,64 @@ import play.i18n.Messages;
 @With(Secure.class) // Require login for controller access
 public class Payments extends CRUD
 {
-	// Helpers for show
-	static void increment(HashMap<User,Double> map, User key, double value) {
-		if(map.containsKey(key)) map.put(key, map.get(key) + value);
-		else map.put(key, value);
-	}
-	static void addset(HashMap<User,HashSet<Receipt>> map, User key, Receipt receipt) {
-		if(!map.containsKey(key)) map.put(key, new HashSet<Receipt>());
-		map.get(key).add(receipt);
-	}
-	static void addPayment(ArrayList<Payment> active, ArrayList<Payment> settled, Payment payment) {
-		if(payment.accepted == null) active.add(payment);
-		else settled.add(payment);
-	}
-
 	public static void index() {
-		User connected = Security.connectedUser();
-		if (connected != null)
-			show(connected.id);
-	}
-
-	/**
-	 * Provides a list of all the users debts per person, as well as incoming debts
-	 * This matches incoming and outgoing debts over time and settles any difference
-	 * @param userId
-	 */
-	public static void show(Long userId) {
-		validation.required(userId);
-		if(!validate(userId)) return;
-
-		//TODO(dschlyter) This operation is pretty expensive, but premature optimization is the root of all evil etc
-		// Opt Idea 1: Cache result and invalidate on new receipt with user involved
-		// Opt Idea 2: Cache result and date and only use new data to re-calculate (harder)
-
-		User user = User.findById(userId);
-		HashMap<User, Double> debt = new HashMap<User, Double>();
-		// Track debt that is linked to fresh receipts - this is to enable user to verify debt correctness
-		HashMap<User, Double> freshDebt = new HashMap<User, Double>();
-		HashMap<User, HashSet<Receipt>> freshReceipts = new HashMap<User, HashSet<Receipt>>();
-
-		ArrayList<Payment> liabilities = new ArrayList<Payment>(); // Outgoing unpayed
-		ArrayList<Payment> pending = new ArrayList<Payment>(); // Outgoing payed, not accepted
-		ArrayList<Payment> securities = new ArrayList<Payment>(); // Incomming unpayed
-		ArrayList<Payment> accept = new ArrayList<Payment>(); // Incomming payed, not accepted
-		ArrayList<Payment> settled = new ArrayList<Payment>(); // All accepted payments
-
-		// Sum all receipts where you owe money, subtract sum of all receipts owned
-		for(Receipt r : user.incomingReceipts) {
-			double total = r.getTotal(user);
-			increment(debt, r.creator, total);
-			//if(!r.hasPayment(user)) {
-				increment(freshDebt, r.creator, total);
-				addset(freshReceipts, r.creator, r);
-			//}
-		}
-		for(Receipt r : user.receipts) {
-			for(User u : r.members) {
-				double total = r.getTotal(u);
-				increment(debt, u, -total);
-				//if(!r.hasPayment(u)) { 
-					increment(freshDebt, u, -total);
-					addset(freshReceipts, u, r);
-				//}
-			}
-		}
-
-		// Sum all payments received, subtract sum of all payments made
-		for(Payment p : user.incomingPayments) {
-			increment(debt, p.payer, p.amount);
-			addPayment(accept,settled,p);
-		}
-		for(Payment p : user.payments) {
-			increment(debt, p.receiver, -p.amount);
-			addPayment(pending,settled,p);
-		}
-
-		// Generate (non-persistent) payment objects to send to UI
-		for(User u : debt.keySet()) {
-
-			int userDebt = (int)Math.round(debt.get(u));
-			int userFreshDebt = (int)Math.round(freshDebt.get(u));
-			if(userDebt != 0) {
-				int missing = Math.abs(userDebt - userFreshDebt);
-
-				ArrayList<Receipt> receipts = new ArrayList<Receipt>();
-				if(freshReceipts.containsKey(u)) receipts.addAll(freshReceipts.get(u));
-
-				/*
-				if(userDebt > 0) {
-					int paymentCounter = Payment.find("payer = ? AND receiver = ?", user, u).fetch().size() % 9999 + 1;
-					String paymentId = user.username.substring(0,Math.min(6,user.username.length())) 
-							+ Integer.toString(paymentCounter);
-					liabilities.add(new Payment(user, u, paymentId, userDebt, missing, receipts));
-				}
-				else if(userDebt < 0) securities.add(new Payment(u, user, "", -userDebt, missing, receipts));
-				*/
-			}	
-		}
-
-		render(liabilities, pending, securities, accept, settled, user);
-	}
-
-
-	/**
-	 * Creates new payment
-	 * @param senderId
-	 * @param receiverId
-	 * @param identifier a 10 char identifier for this payment
-	 * @param amount
-	 * @param unsourced money not trackable to related receipts
-	 * @param receipts List of receipts this payment is covering
-	 */
-	public static void add(Long senderId, Long receiverId, String identifier, int amount, int unsourced, List<Long> receiptId)
-	{
-		validation.required(senderId);
-		validation.required(receiverId);
-		validation.required(amount);
-		if(!validate(senderId)) return;
-
-		List<Receipt> receipts = new ArrayList<Receipt>();
-		for (Long id : receiptId) 
+		User user = Security.connectedUser();
+		if (user != null)
 		{
-			Receipt r = Receipt.findById(id);
-			receipts.add(r);
+			// Semi-hack to generate payments for initial data
+			List<Receipt> list = Receipt.findAll();
+			for(Receipt r : list)
+			{
+				if(r.payments.size() == 0) Payment.generatePayments(r);
+			}
+			
+			List<Payment> settled = Payment.find("deprecated = false AND accepted != null").fetch();
+			
+			// Incomming
+			List<Payment> pending = Payment.find("deprecated = false AND payer = ? AND paid != null AND accepted = null", user).fetch();
+			List<Payment> liabilities = Payment.find("deprecated = false AND payer = ? AND paid = null", user).fetch();
+			
+			// Outgoing
+			List<Payment> accept = Payment.find("deprecated = false AND receiver = ? AND paid != null AND accepted = null", user).fetch();
+			List<Payment> securities = Payment.find("deprecated = false AND receiver = ? AND paid = null", user).fetch();
+			
+			render(liabilities, pending, securities, accept, settled, user);
 		}
-
-		User receiver = User.findById(receiverId);
-		//Payment payment = new Payment(Security.connectedUser(), receiver, identifier, amount, unsourced, receipts);
-		//payment.save();
-
+		else reportToSanta();
+	}
+	
+	public static void pay(Long id)
+	{
+		validation.required(id);
+		Payment payment = Payment.findById(id);
+		if(payment == null) reportToSanta();
+		if(!validate(payment.payer.id)) return;
+		if(payment.paid != null) reportToSanta();
+		
+		if(payment.deprecated)
+		{
+			flash.error(Messages.get("error.deprecatedPayment"));
+		}
+		else
+		{
+			payment.paid = new Date();
+			payment.save();
+		}
+		
 		index();
 	}
 
 	/**
 	 * Marks a payment as accepted
 	 * @param userId
-	 * @param paymentId
+	 * @param id
 	 */
-	public static void accept(Long paymentId) {
-		validation.required(paymentId);
-		Payment payment = Payment.findById(paymentId);
+	public static void accept(Long id) {
+		validation.required(id);
+		Payment payment = Payment.findById(id);
+		if(payment == null) reportToSanta();
 		if(!validate(payment.receiver.id)) return;
+		if(payment.paid == null || payment.accepted != null) reportToSanta();
 
 		payment.accepted = new Date();
 		payment.save();
@@ -182,10 +99,15 @@ public class Payments extends CRUD
 
 		User user = User.findById(userId);
 		if (user == null || !Security.isAuthorized(user)) {
-			error(Messages.get("controllers.Payments.validate.unauthorized"));
+			reportToSanta();
 			return false;
 		}
 
 		return true;
+	}
+	
+	static void reportToSanta()
+	{
+		error(Messages.get("controllers.Payments.validate.unauthorized"));
 	}
 }

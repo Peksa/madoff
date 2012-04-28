@@ -11,6 +11,17 @@
     $("table#sortTableExample").tablesorter({ sortList: [[1,1]] });
   });
 </script>
+
+#{if flash.error}
+	<div class="alert-message error">
+		<a class="close" href="#">&times;</a> 
+		<p>
+			<strong>&{'error'}</strong> 
+			&{flash.error}
+		</p>
+	</div>
+#{/if}
+
 <div class="row">
     <div class="span8 columns">
 	    <div class="alert-message block-message #{if liabilities}error#{/if}">

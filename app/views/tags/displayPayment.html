@@ -14,7 +14,7 @@
     	if(_outgoing) user = payment.receiver
     	else user = payment.payer
     }%
-	${user.fullname} (${user.username}): ${payment.amount} SEK 
+	${user.fullname} (${user.username}): ${payment.amount.format('0.00')} SEK 
 	#{if payment.identifier}
 		- <strong>${payment.identifier}</strong>
 	#{/if}
@@ -23,34 +23,19 @@
 		#{list items:payment.receipts, as:'receipt'}
 			<li>
 			<a href="@{Receipts.show(receipt.id)}">${receipt.title}</a>
-			#{if receipt.creator.equals(payment.payer)}
-				&#40;-${receipt.getTotal(payment.receiver).format('0.00')}&#41;
-			#{/if}
-			#{else}
-				&#40;${receipt.getTotal(payment.payer).format('0.00')}&#41;
-			#{/else}
+				&#40;${receipt.shouldPay(payment.payer,payment.receiver).format('0.00')}&#41;
 			</li>
 		#{/list}
-		#{if payment.unsourced}
-			<li>&{'views.tags.displayPayment.unsourced'} (${payment.unsourced})</li>
-		#{/if}
 		</ul>
 		#{if _action == 'pay'}
-			#{form @Payments.add()}
-				<input type="hidden" name="senderId" value="${payment.payer.id}"/>
-				<input type="hidden" name="receiverId" value="${payment.receiver.id}"/>
-				<input type="hidden" name="identifier" value="${payment.identifier}"/>
-				<input type="hidden" name="amount" value="${payment.amount}"/>
-				<input type="hidden" name="unsourced" value="${payment.unsourced}"/>
-				#{list items:payment.receipts, as:'receipt'}
-					<input type="hidden" name="receiptId" value="${receipt.id}"/>
-				#{/list}
+			#{form @Payments.pay()}
+				<input type="hidden" name="id" value="${payment.id}"/>
 				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.send'}"/>
 			#{/form}
 		#{/if}
 		#{if _action == 'accept'}
 			#{form @Payments.accept()}
-				<input type="hidden" name="paymentId" value="${payment.id}"/>
+				<input type="hidden" name="id" value="${payment.id}"/>
 				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.accept'}"/>
 			#{/form}
 		#{/if}

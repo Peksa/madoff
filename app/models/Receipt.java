@@ -37,7 +37,7 @@ public class Receipt extends Model
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Subpot> subpots;
 
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(mappedBy = "receipts", cascade=CascadeType.ALL)
 	public List<Payment> payments;
 
 	public Receipt(String title, User creator, String description)
