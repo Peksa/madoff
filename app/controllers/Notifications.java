@@ -7,12 +7,12 @@ import play.mvc.*;
 @With(Secure.class)
 public class Notifications extends CRUD
 {
-	public static EventStream liveStream = new EventStream();
+	//public static EventStream liveStream = new EventStream();
 	
     public static void stream()
     {
-    	String notification = await(liveStream.nextEvent());
-    	renderText(notification);
+    	//String notification = await(liveStream.nextEvent());
+    	//renderText(notification);
     }
     
     /**
@@ -21,6 +21,6 @@ public class Notifications extends CRUD
      */
     public static void add(String text)
     {
-    	liveStream.publish(text);
+    	//liveStream.publish(text);
     }
 }

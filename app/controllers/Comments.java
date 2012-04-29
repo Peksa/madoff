@@ -41,7 +41,6 @@ public class Comments extends CRUD
 		if(lastPost < 0) lastPost = 0L; // Avoid exception
 		Date date = new Date(lastPost);
 
-		// TODO add enterprise generalized code with generics and interfaces
 		List<Comment> comments = Comment.find("receipt.id = ? AND date > ? ORDER BY date asc", id, date).fetch();
 		renderJSON(comments, new CommentJsonSerializer());
 	}

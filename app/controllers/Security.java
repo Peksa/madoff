@@ -69,7 +69,6 @@ public class Security extends Secure.Security
 		}
 		catch (NoSuchAlgorithmException e)
 		{
-			// FIXME(Peksa): Yea whatever. :p Should throw exception or something, throw error..
 			error("Couldn't find SHA-512");
 			return false;
 		}

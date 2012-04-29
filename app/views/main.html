@@ -22,7 +22,8 @@
 #{script 'knockout-1.3.0beta.js' /}
 #{get 'moreScripts' /}
 
-#{if request.action != "Secure.login"}
+#{if false && request.action != "Secure.login"}
+// NOTE: This seems to crash server after a while
 <script type="text/javascript" charset="utf-8">
 
 function addmsg(msg) {
@@ -85,7 +86,7 @@ $(document).ready(function(){
 					</h3>
 					<ul class="nav">
 						<li #{if request.action == "Application.index"} class="active" #{/if}><a href="@{Application.index()}">&{'Receipts'}</a></li>
-						<li #{if request.action == "Payments.show"} class="active" #{/if}><a href="@{Payments.index()}">&{'Payments'}</a></li>
+						<li #{if request.action == "Payments.index"} class="active" #{/if}><a href="@{Payments.index()}">&{'Payments'}</a></li>
 					</ul>
 					<ul class="nav secondary-nav">
 						<!-- TODO search
@@ -121,15 +122,15 @@ $(document).ready(function(){
       <div class="container"> 
         <div style="margin-top: 50px; font-size:8pt;" class="footer">&{'views.main.powered'}: 
         <p> 
-			<a href="#">Play framework</a>,
-			<a href="#">knockout.js</a>,
-			<a href="#">Bootstrap</a>,
-			<a href="#">jQuery</a>,
-			<a href="#">jQuery UI</a>,
-			<a href="#">chosen</a>,
-			<a href="#">live.js</a>,
-			<a href="#">tipsy</a> &{'and'}
-			<a href="#">Amazon EC2</a>.
+			<a href="http://www.playframework.org/">Play framework</a>,
+			<a href="http://knockoutjs.com/">knockout.js</a>,
+			<a href="http://twitter.github.com/bootstrap/">Bootstrap</a>,
+			<a href="http://jquery.com/">jQuery</a>,
+			<a href="http://jqueryui.com/">jQuery UI</a>,
+			<a href="http://harvesthq.github.com/chosen/">chosen</a>,
+			<a href="http://livejs.com/">live.js</a>,
+			<a href="http://onehackoranother.com/projects/jquery/tipsy/">tipsy</a> &{'and'}
+			<a href="http://aws.amazon.com/ec2/">Amazon EC2</a>.
 		</p> 
 		</div>
       </div> 

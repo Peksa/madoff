@@ -25,7 +25,6 @@ public class Users extends CRUD
 		if(fullname == null || fullname.length() == 0) fullname = username;
 		if(email == null) email = "";
 		
-		// TODO(Peksa): why doesn't this work?
 		if(idiotTest != 4711)
 		{
 			flash.error(Messages.get("errors.idiot"));

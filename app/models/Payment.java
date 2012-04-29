@@ -35,7 +35,7 @@ public class Payment extends Model
 	
 	// Deprecated, use sum of receipts instead
 	@Deprecated
-	public double amount = Double.NaN;
+	public double amount = 0;
 	
 	// Once payment covers the debt from one or more receipts
 	@ManyToMany(cascade=CascadeType.ALL)

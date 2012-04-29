@@ -42,7 +42,6 @@ public class Subpot extends Model
 	
 	public double getTotal(User user)
 	{
-		//TODO fix rounding errors etc
 		if(!members.contains(user)) return 0;
 		return total / members.size();
 	}

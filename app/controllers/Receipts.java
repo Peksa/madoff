@@ -151,7 +151,6 @@ public class Receipts extends CRUD
 		}
 		if(errorStr != null)
 		{
-			// TODO return to old page with flash cache
 			error(errorStr);
 			return;
 		}
