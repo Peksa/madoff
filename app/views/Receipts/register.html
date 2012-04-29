@@ -14,6 +14,7 @@
 		</p>
 	</div>
 	#{/if}
+	
 	#{form @add()}
 	<fieldset>
 		<legend>&{'views.Receipts.register.addNew'}</legend>
@@ -73,14 +74,18 @@
 		<div class="clearfix">
 			<label for="payer">&{'Who payed'}:</label>
 			<div class="input">
-				<input type="radio" name="payed" value="creator" checked> I payed for everything </input> <br>
-				<input type="radio" name="payed" value="split"> Payment split evenly between all members </input>
+				<input type="radio" name="paid" value="creator" checked> I payed for everything </input> <br>
+				<input type="radio" name="paid" value="split"> Payment split evenly between all members </input>
 			</div>
 		</div>
 		
 		<div id="subrounds">
 		</div>
 		
+		<div class="alert-message warning">
+			<a class="close" href="#">&times;</a>
+			<p><strong>Beta warning!</strong> No validation before you submit, on failure you have to redo everything! Make sure title and total are there and that everything adds up! </p>
+	    </div>
 		<div class="actions">
 			<input class="btn primary" type="submit" id="register" value="&{'Add'}" />
 			<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>

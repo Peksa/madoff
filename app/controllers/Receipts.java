@@ -41,8 +41,6 @@ public class Receipts extends CRUD
 			error(Messages.get("controllers.Payments.validate.unauthorized"));
 		}
 
-		//System.out.println(receipt.payments.size());
-		//for(Payment payment : receipt.payments) System.out.println(payment.deprecated);
 		render(receipt, connectedUser);
 	}
 
@@ -66,7 +64,7 @@ public class Receipts extends CRUD
 	}
 
 	// Sort of ugly with public, but play breaks otherwise
-	public class SubroundInput
+	public static class SubroundInput
 	{
 		public ArrayList<Long> members;
 		public String description;
@@ -101,14 +99,44 @@ public class Receipts extends CRUD
 		
 	}
 
-	public static void add(String title, int tip, List<Long> members, String description, double total, List<SubroundInput> subrounds, String payed)
+	public static void add(String title, int tip, List<Long> members, String description, double total, List<SubroundInput> subrounds, String paid)
 	{
+		User creator = Security.connectedUser();
+		boolean creatorIsMember = false;
+		for(Long id : members)
+		{
+			if(id.equals(creator.id)) creatorIsMember = true;
+		}
+		
+		// Hack to make adding of debts where you spent nothing simpler
+		// this must be done in "i paid everything"-mode right now
+		if(paid.equals("creator") && !creatorIsMember)
+		{
+			double subTotal = 0;
+			for (SubroundInput subround : subrounds) subTotal += subround.amount;
+			
+			// Add everything to a subround with just the old members
+			if(subTotal < total)
+			{
+				SubroundInput restRound = new SubroundInput();
+				restRound.members = new ArrayList<Long>();
+				restRound.members.addAll(members);
+				restRound.amount = total - subTotal;
+				restRound.description = "Other";
+				subrounds.add(restRound);
+			}
+			
+			members.add(creator.id);
+			creatorIsMember = true;
+		}
+		
 		// validate
 		// TODO validate on client first, to give better and faster feedback
 		String errorStr = null;
 		if(title == null || title.length() == 0) errorStr = "Title requred";
 		else if(members.size() == 0) errorStr = "Members requred";
 		else if(total <= 1e-8) errorStr = "Total requred (and must be positive)";
+		else if(!creatorIsMember) errorStr = "Creator must also be a member";
 		else
 		{
 			double subTotal = 0;
@@ -119,6 +147,7 @@ public class Receipts extends CRUD
 				if(errorStr != null) break; // break on first error
 			}
 			if(subTotal > total) errorStr = "Subround amount grater than total";
+			
 		}
 		if(errorStr != null)
 		{
@@ -139,7 +168,7 @@ public class Receipts extends CRUD
 		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
 		
-		if(payed.equals("split"))
+		if(paid.equals("split"))
 		{
 			double eachShare = total / receipt.members.size();
 			for(User u : receipt.members)
@@ -172,7 +201,7 @@ public class Receipts extends CRUD
 				}
 			}
 		}
-
+		
 		Payment.generatePayments(receipt);
 		Receipts.show(receipt.id);
 	}

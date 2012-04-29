@@ -33,7 +33,9 @@ public class Payment extends Model
 
 	public String identifier; // 10-char bank transaction ID
 	
-	public double amount;
+	// Deprecated, use sum of receipts instead
+	@Deprecated
+	public double amount = Double.NaN;
 	
 	// Once payment covers the debt from one or more receipts
 	@ManyToMany(cascade=CascadeType.ALL)
@@ -49,7 +51,6 @@ public class Payment extends Model
 		this.payer = payer;
 		this.receiver = receiver;
 		this.identifier = generateId();
-		this.amount = receipt.shouldPay(payer, receiver);
 		
 		List<Receipt> list = new ArrayList<Receipt>();
 		list.add(receipt);
@@ -65,17 +66,27 @@ public class Payment extends Model
 				+ Integer.toString(paymentCounter);
 	}
 	
+	public double getAmount()
+	{
+		double amount = 0;
+		for(Receipt r : receipts)
+		{
+			amount += r.shouldPay(payer, receiver);
+		}
+		return amount;
+	}
+	
 	/**
 	 * Reverses the direction of the payment if it gets negative
 	 */
 	private void fixDirection()
 	{
-		if(amount < 0)
+		// If amount is negative, switch direction and generate new ID
+		if(getAmount() < 0)
 		{
 			User tmp = receiver;
 			receiver = payer;
 			payer = tmp;
-			amount = -amount;
 			
 			this.identifier = generateId();
 		}
@@ -87,26 +98,23 @@ public class Payment extends Model
 	public Payment(Payment oldPayment, Receipt addedReceipt)
 	{
 		oldPayment.deprecated = true;
+		oldPayment.paid = new Date(); // The old payment is payed for by the new one (for tracking)
 		oldPayment.save();
 		this.created = new Date();
 		
 		this.payer = oldPayment.payer;
 		this.receiver = oldPayment.receiver;
 		this.identifier = oldPayment.identifier;
-		this.amount = oldPayment.amount;
 		this.receipts = new ArrayList<Receipt>();
 		
 		receipts.addAll(oldPayment.receipts);
 		receipts.add(addedReceipt);
-		amount += addedReceipt.shouldPay(payer, receiver);
 		
 		fixDirection();
 	}
 	
 	public static void generatePayments(Receipt receipt)
 	{
-		System.out.println("GENERATE" + receipt.title);
-		
 		Set<User> iteratedOwners = new HashSet<User>();
 		
 		for(ReceiptOwner o : receipt.owners)
@@ -117,10 +125,8 @@ public class Payment extends Model
 			{
 				// Do not pay to yourself or previously iterated owners
 				if(iteratedOwners.contains(member)) continue;
-				System.out.println(owner.fullname + " " + member.fullname);
 				if(receipt.shouldPay(member, owner) != 0)
 				{
-					System.out.println("pay!");
 					// Find existing payments to extend
 					List<Object> list = Payment.find("deprecated = false AND paid = null AND ((payer = ? AND receiver = ?) OR (payer = ? AND receiver = ?))",
 							member, owner, owner, member).fetch();
