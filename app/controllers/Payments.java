@@ -32,7 +32,7 @@ public class Payments extends CRUD
 				if(r.payments.size() == 0) Payment.generatePayments(r);
 			}
 			
-			List<Payment> settled = Payment.find("deprecated = false AND accepted != null").fetch();
+			List<Payment> settled = Payment.find("deprecated = false AND accepted != null AND (payer = ? OR receiver = ?)", user, user).fetch();
 			
 			// Incomming
 			List<Payment> pending = Payment.find("deprecated = false AND payer = ? AND paid != null AND accepted = null", user).fetch();
