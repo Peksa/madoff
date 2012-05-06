@@ -148,6 +148,11 @@ table.receipt td, th
 
 */
 
+*.paymentDone
+{
+	text-decoration:line-through
+}
+
 div.alert-message.block-message
 {
 	 background-color: #eee;

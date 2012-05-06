@@ -20,7 +20,7 @@ public class Receipt extends Model
 
 	@ManyToOne
 	public User creator;
-	
+
 	// TODO merge owner and member!
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<ReceiptOwner> owners;
@@ -52,6 +52,58 @@ public class Receipt extends Model
 		this.owners = new ArrayList<ReceiptOwner>();
 	}
 
+	public boolean isFinished()
+	{
+		for(Payment p : payments)
+		{
+			if(!p.deprecated && p.paid == null) return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Return 0 (no payment), 1 (waiting for counter-payment) 2 (finished)
+	 * @param payer
+	 * @param receiver
+	 * @return
+	 */
+	public int isFinished(User payer)
+	{
+		boolean waitingForDebt = false;
+		for(Payment p : payments)
+		{
+			if(!p.deprecated)
+			{
+				if(p.payer.equals(payer) && p.paid == null) return 0;
+				if(p.receiver.equals(payer) && p.paid == null) waitingForDebt = true;
+			}
+		}
+
+		if(waitingForDebt) return 1;
+		return 2;
+	}
+
+	/**
+	 * Return 0 (no payment), 1 (waiting for counter-payment) 2 (finished)
+	 * @param payer
+	 * @param receiver
+	 * @return
+	 */
+	public int isFinished(User payer, User receiver)
+	{
+		for(Payment p : payments)
+		{
+			if(!p.deprecated)
+			{
+				if(p.payer.equals(payer) && p.receiver.equals(receiver) && p.paid == null) return 0;
+				if(p.payer.equals(receiver) && p.receiver.equals(payer) && p.paid == null) return 1;
+			}
+		}
+
+		return 2;
+	}
+
 	/**
 	 * @return Total amount of money on this receipt
 	 */
@@ -61,7 +113,7 @@ public class Receipt extends Model
 		for(ReceiptOwner r : owners) ret += r.amount;
 		return ret;
 	}
-	
+
 	/**
 	 * @param user
 	 * @return The amount of money user this user spent on this receipt
@@ -69,7 +121,7 @@ public class Receipt extends Model
 	public double getTotal(User user)
 	{
 		if(!members.contains(user)) return 0;
-		
+
 		// Amount to pay from subpots
 		double amount = 0;
 		double subpotTotal = 0;
@@ -78,11 +130,11 @@ public class Receipt extends Model
 			amount += pot.getTotal(user);
 			subpotTotal += pot.total;
 		}
-		
+
 		// Amount to pay outside of subrounds and tip
 		double total = getTotal();
 		amount += (total - subpotTotal - tip) / members.size();
-		
+
 		// Calculate amount of tip user should pay
 		// if user has X% of non-tip debt, he should pay X% of the tip
 		double totalWithoutTip = total - tip;
@@ -92,10 +144,10 @@ public class Receipt extends Model
 			double percentage = amount / totalWithoutTip;
 			amount += tip * percentage;
 		}
-		
+
 		return amount;
 	}
-	
+
 	public double shouldPay(User payer)
 	{
 		double pSpent = getTotal(payer);
@@ -104,10 +156,10 @@ public class Receipt extends Model
 		{
 			if(o.user.equals(payer)) pPaid = o.amount;
 		}
-		
+
 		return pSpent - pPaid;
 	}
-	
+
 	/**
 	 * Payment algorithm:
 	 * Some members will have paid more than they spent (payers)
@@ -124,31 +176,31 @@ public class Receipt extends Model
 	public double shouldPay(User payer, User receiver)
 	{
 		if(!members.contains(payer) || !members.contains(receiver)) return 0;
-		
+
 		// Add spending
 		double pPayment = getTotal(payer);
 		double rPayment = getTotal(receiver);
 		double totalOverPaid = 0;
-		
+
 		for(ReceiptOwner o : owners)
 		{
 			// Subtract payment
 			if(o.user.equals(payer)) pPayment -= o.amount;
 			else if(o.user.equals(receiver)) rPayment -= o.amount;
-			
+
 			// Also keep track of total payment transfer
 			double ownerSpent = getTotal(o.user);
 			if(o.amount > ownerSpent) totalOverPaid += o.amount - ownerSpent;
 		}
-		
+
 		// Account for rounding errors, if close to zero count as zero
 		if(Math.abs(pPayment) <= 1e-8 || Math.abs(rPayment) <= 1e-8 ) return 0;
-		
+
 		boolean pShouldPay = pPayment > 0;
 		boolean rShouldPay = rPayment > 0;
 		// No payment between two payers, and no payment between two spenders
 		if(!(pShouldPay ^ rShouldPay)) return 0;
-		
+
 		// Only one of theese should be true
 		if(pShouldPay)
 		{
@@ -159,7 +211,7 @@ public class Receipt extends Model
 			// Return negative, to indicate debt
 			return -(rPayment * (-pPayment / totalOverPaid));
 		}
-		
+
 		return 0;
 	}
 

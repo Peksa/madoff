@@ -2,7 +2,10 @@
 
 <div class="receipt ${_as == 'teaser' ? 'teaser' : ''}">
 	<h2 class="receipt title">
+		#{if _receipt.isFinished()} <span class="paymentDone"> #{/if}
+		#{else} <span> #{/else}
 		<a href="@{Receipts.show(_receipt.id)}">${_receipt.title}</a>
+		</span>
 	</h2>
 	<div class="details">
 		&{'views.tags.displayReceipt.receiptOwner', _receipt.creator.fullname},
@@ -35,21 +38,34 @@
 		</h3>
 	    #{list items:_receipt.members, as:'member'}
             <li class="member">
+            	#{if member.username.equals(_connectedUser.username)} <span style="font-weight: bold"> #{/if}
+				#{else} <span> #{/else}
+            
                 ${member.fullname} (${_receipt.getTotal(member).format('0.00')} SEK)
                 
                 #{if _receipt.shouldPay(member) > 0}
-                	should pay ${_receipt.shouldPay(member).format('0.00')}
+             		#{if _receipt.isFinished(member) > 0} <span class="paymentDone"> #{/if}
+					#{else} <span> #{/else}
+                	should pay ${_receipt.shouldPay(member).format('0.00')} 
+                	</span>
                 	#{if _receipt.owners.size() > 1}
                 	[
 	                	#{list items:_receipt.owners, as:'ownerInfo'}
 	                		#{if _receipt.shouldPay(member,ownerInfo.user) > 0}
+	                			#{if _receipt.isFinished(member,ownerInfo.user) == 2} <span class="paymentDone"> #{/if}
+								#{else} <span> #{/else}
 	                			${_receipt.shouldPay(member,ownerInfo.user).format('0.00')} 
 			                 	to ${ownerInfo.user.fullname},
+			                 	</span>
 	                		#{/if}
 					    #{/list}
 					]
 				    #{/if}
+				    #{if _receipt.isFinished(member) == 1} 
+                 	<span>&nbsp;(settled against debts, waiting for payback) </span> 
+                 	#{/if}
                 #{/if}
+                </span>
             </li>
 	    #{/list}
 	</div>
