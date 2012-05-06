@@ -23,7 +23,7 @@ public class Security extends Secure.Security
 	// To make fetching easier
 	public static User connectedUser()
 	{
-		return User.find("byUsername", Security.connected()).first();
+		return User.find("byUsernameIlike", Security.connected()).first();
 	}
 	
 	/**
@@ -57,13 +57,13 @@ public class Security extends Secure.Security
 	{
 		if (validation.hasErrors())
 			error(Messages.get("paramsFail"));
-		User user = User.find("byUsername", username).first();
+		User user = User.find("byUsernameIlike", username).first();
 		if (user == null || user.password == null)
 			return false;
 
 		try
 		{
-			String hash = sha512Hash(username, password);
+			String hash = sha512Hash(user.username, password);
 			if (hash.equals(user.password))
 				return true;
 		}

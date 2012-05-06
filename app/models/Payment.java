@@ -113,7 +113,10 @@ public class Payment extends Model
 		fixDirection();
 	}
 	
-	public static void generatePayments(Receipt receipt)
+	// TODO investigate potential fail from concurrent access to receipts and payments
+	// safe with play transactions?
+	// for now, just make this synchronized and cross our fingers (we don't have that much activity..)
+	public static synchronized void generatePayments(Receipt receipt)
 	{
 		Set<User> iteratedOwners = new HashSet<User>();
 		

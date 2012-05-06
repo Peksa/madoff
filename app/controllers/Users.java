@@ -49,7 +49,7 @@ public class Users extends CRUD
             params.flash();
             register();
 		}
-		if (User.count("username = ?", username) > 0)
+		if (User.count("byUsernameIlike", username) > 0)
 		{
             flash.error(Messages.get("errors.TakenUsername"));
             params.flash();
