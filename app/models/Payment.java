@@ -81,14 +81,24 @@ public class Payment extends Model
 	 */
 	private void fixDirection()
 	{
+		// If amount is zero (or very close, doubles..) the payment is auto-settled
+		double amount = getAmount();
+		
 		// If amount is negative, switch direction and generate new ID
-		if(getAmount() < 0)
+		if(amount < 0)
 		{
 			User tmp = receiver;
 			receiver = payer;
 			payer = tmp;
 			
 			this.identifier = generateId();
+		}
+		
+		if(Math.abs(amount) < 0.01)
+		{
+			paid = new Date();
+			accepted = new Date();
+			identifier = "auto-settled";
 		}
 	}
 	
@@ -118,8 +128,10 @@ public class Payment extends Model
 	// for now, just make this synchronized and cross our fingers (we don't have that much activity..)
 	public static synchronized void generatePayments(Receipt receipt)
 	{
+		System.out.println("derp");
 		Set<User> iteratedOwners = new HashSet<User>();
 		
+		boolean paymentsGenerated = false;
 		for(ReceiptOwner o : receipt.owners)
 		{
 			User owner = o.user;
@@ -144,14 +156,24 @@ public class Payment extends Model
 						Payment oldPayment = (Payment) list.get(0);
 						Payment payment = new Payment(oldPayment, receipt);
 						payment.save();
+						paymentsGenerated = true;
 					}
 					else
 					{
 						Payment payment = new Payment(member, owner, receipt);
 						payment.save();
+						paymentsGenerated = true;
 					}
 				}
 			}
+		}
+		
+		// Hack, generate dummy payment
+		if(!paymentsGenerated)
+		{
+			Payment dummy = new Payment(receipt.creator, receipt.creator, receipt);
+			dummy.deprecated = true;
+			dummy.save();
 		}
 	}
 

@@ -180,8 +180,7 @@ public class Receipts extends CRUD
 			receipt.owners.add(new ReceiptOwner(receipt, receipt.creator, total));
 		}
 		
-		receipt.save();
-
+		//receipt.save();
 		if(subrounds != null)
 		{
 			for(SubroundInput input : subrounds)
@@ -195,11 +194,13 @@ public class Receipts extends CRUD
 						User u = User.findById(id);
 						subpot.members.add(u);
 					}
+					// Why the fuck do i have to do both?
+					receipt.subpots.add(subpot);
 					subpot.receipt = receipt;
-					subpot.save();
 				}
 			}
 		}
+		receipt.save();
 		
 		Payment.generatePayments(receipt);
 		Receipts.show(receipt.id);
