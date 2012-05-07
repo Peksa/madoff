@@ -75,4 +75,9 @@ public class Security extends Secure.Security
 		return false;
 		
 	}
+	
+	static void reportToSanta()
+	{
+		error(Messages.get("controllers.Payments.validate.unauthorized"));
+	}
 }

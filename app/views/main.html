@@ -87,6 +87,7 @@ $(document).ready(function(){
 					<ul class="nav">
 						<li #{if request.action == "Application.index"} class="active" #{/if}><a href="@{Application.index()}">&{'Receipts'}</a></li>
 						<li #{if request.action == "Payments.index"} class="active" #{/if}><a href="@{Payments.index()}">&{'Payments'}</a></li>
+						<li #{if request.action == "Graph.index"} class="active" #{/if}><a href="@{Graph.index()}">&{'Graph'}</a></li>
 					</ul>
 					<ul class="nav secondary-nav">
 						<!-- TODO search

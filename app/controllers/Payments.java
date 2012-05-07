@@ -21,10 +21,25 @@ import play.i18n.Messages;
 @With(Secure.class) // Require login for controller access
 public class Payments extends CRUD
 {
+	public static boolean fulOptad = false;
+	
 	public static void index() {
 		User user = Security.connectedUser();
 		if (user != null)
 		{
+			// Hack (restore data for later use) TODO remove
+			if(!fulOptad)
+			{
+				List<Payment> pl = Payment.findAll();
+				for(Payment p : pl)
+				{
+					p.amount = 0;
+					p.save();
+				}
+				fulOptad = true;
+			}
+			
+			
 			// Semi-hack to generate payments for initial data
 			List<Receipt> list = Receipt.findAll();
 			for(Receipt r : list)
@@ -44,16 +59,16 @@ public class Payments extends CRUD
 			
 			render(liabilities, pending, securities, accept, settled, user);
 		}
-		else reportToSanta();
+		else Security.reportToSanta();
 	}
 	
 	public static void pay(Long id)
 	{
 		validation.required(id);
 		Payment payment = Payment.findById(id);
-		if(payment == null) reportToSanta();
+		if(payment == null) Security.reportToSanta();
 		if(!validate(payment.payer.id)) return;
-		if(payment.paid != null) reportToSanta();
+		if(payment.paid != null) Security.reportToSanta();
 		
 		if(payment.deprecated)
 		{
@@ -76,9 +91,9 @@ public class Payments extends CRUD
 	public static void accept(Long id) {
 		validation.required(id);
 		Payment payment = Payment.findById(id);
-		if(payment == null) reportToSanta();
+		if(payment == null) Security.reportToSanta();
 		if(!validate(payment.receiver.id)) return;
-		if(payment.paid == null || payment.accepted != null) reportToSanta();
+		if(payment.paid == null || payment.accepted != null) Security.reportToSanta();
 
 		payment.accepted = new Date();
 		payment.save();
@@ -99,15 +114,10 @@ public class Payments extends CRUD
 
 		User user = User.findById(userId);
 		if (user == null || !Security.isAuthorized(user)) {
-			reportToSanta();
+			Security.reportToSanta();
 			return false;
 		}
 
 		return true;
-	}
-	
-	static void reportToSanta()
-	{
-		error(Messages.get("controllers.Payments.validate.unauthorized"));
 	}
 }

@@ -128,7 +128,6 @@ public class Payment extends Model
 	// for now, just make this synchronized and cross our fingers (we don't have that much activity..)
 	public static synchronized void generatePayments(Receipt receipt)
 	{
-		System.out.println("derp");
 		Set<User> iteratedOwners = new HashSet<User>();
 		
 		boolean paymentsGenerated = false;

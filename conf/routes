@@ -12,6 +12,7 @@ GET     /                                       Application.index
 GET     /receipts/{<[0-9]+>id}					Receipts.show
 GET     /payments								Payments.index
 GET     /payments/{<\d+>userId}					Payments.show
+GET     /graph									Graph.index
 
 
 
