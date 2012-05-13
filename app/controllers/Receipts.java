@@ -22,7 +22,7 @@ import play.mvc.*;
  * @author Peksa
  */
 @With(Secure.class) // Require login for controller access
-public class Receipts extends CRUD
+public class Receipts extends Controller
 {
 	/**
 	 * Show a receipt

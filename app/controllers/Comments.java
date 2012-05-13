@@ -18,9 +18,8 @@ import java.util.List;
  * @author Peksa
  */
 @With(Secure.class) // Require login for controller access
-public class Comments extends CRUD
+public class Comments extends Controller
 {
-	
 	/**
 	 * Add a comment to a recept using ajax
 	 * @param id receipt to add the comment to

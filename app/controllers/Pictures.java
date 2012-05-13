@@ -8,7 +8,7 @@ import java.util.*;
 import models.*;
  
 @With(Secure.class)
-public class Pictures extends CRUD
+public class Pictures extends Controller
 {
 	public static void get(Long id)
 	{

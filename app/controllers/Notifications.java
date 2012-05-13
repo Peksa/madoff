@@ -5,7 +5,7 @@ import play.libs.F.EventStream;
 import play.mvc.*;
 
 @With(Secure.class)
-public class Notifications extends CRUD
+public class Notifications extends Controller
 {
 	//public static EventStream liveStream = new EventStream();
 	

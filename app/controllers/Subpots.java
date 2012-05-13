@@ -9,6 +9,6 @@ import play.mvc.*;
  * @author Peksa
  */
 @With(Secure.class) // Require login for controller access
-public class Subpots extends CRUD
+public class Subpots extends Controller
 {
 }

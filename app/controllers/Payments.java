@@ -19,7 +19,7 @@ import play.i18n.Messages;
  * @author Peksa
  */
 @With(Secure.class) // Require login for controller access
-public class Payments extends CRUD
+public class Payments extends Controller
 {
 	public static boolean fulOptad = false;
 	

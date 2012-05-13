@@ -4,7 +4,7 @@ import play.*;
 import play.mvc.*;
 import play.i18n.*;
 
-public class Languages extends CRUD
+public class Languages extends Controller
 {	
 	public static void set(String language, String url)
 	{

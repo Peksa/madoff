@@ -11,12 +11,14 @@ import play.i18n.Messages;
  * 
  * @author Peksa
  */
-public class Users extends CRUD
+public class Users extends Controller
 {
 	
 	public static void register()
 	{
-		render();
+		//render(); // no new users while gunde is being griefed :D TODO remove
+		flash.error("Sorry, we are not taking new users at this time!");
+		Application.index();
 	}
 	
 	public static void add(String email, String username, String password, String fullname, Picture picture, int idiotTest) throws Throwable
