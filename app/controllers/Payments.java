@@ -39,7 +39,6 @@ public class Payments extends CRUD
 				fulOptad = true;
 			}
 			
-			
 			// Semi-hack to generate payments for initial data
 			List<Receipt> list = Receipt.findAll();
 			for(Receipt r : list)

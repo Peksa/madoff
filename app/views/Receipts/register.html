@@ -27,9 +27,9 @@
 				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
 					style="width: 350px;" id="members" name="members" multiple="yes">
 					<option value=""></option> 
-					#{list items:members, as:'user'}
+					#{list items:members, as:'u'}
 						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
-						<option value="${user.id}" #{if currentUser.username == user.username}  selected="selected" #{/if}> ${user.fullname} (${user.username})</option> 
+						<option value="${u.id}" #{if user.username == u.username}  selected="selected" #{/if}> ${u.fullname} (${u.username})</option> 
 					#{/list}
 				</select>
 			</div>
@@ -109,9 +109,9 @@
 				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
 					style="width: 350px;" name="subrounds[{{ subRoundNr }}].members" multiple="yes">
 					<option value=""></option>
-					#{list items:members, as:'user'}
+					#{list items:members, as:'u'}
 						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
-						<option value="${user.id}"> ${user.fullname} (${user.username})</option> 
+						<option value="${u.id}"> ${u.fullname} (${u.username})</option> 
 					#{/list}
 				</select>
 			</div>

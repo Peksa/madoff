@@ -76,7 +76,25 @@ $(document).ready(function(){
 
 </script>
 </head>
+
 <body style="padding-top: 50px;">
+	#{if user != null && user.username.toLowerCase().equals("gunde")}
+	<div class="container" style="display: none;">
+		<audio controls="controls" autoplay="yes">
+		  <source src="http://net1.madringtones.org/data/13/451546/files/451546.mp3" type="audio/mp3" />
+		  Your browser does not support the audio tag.
+		</audio>
+	</div>
+	<marquee>
+	
+	<div class="alert-message success" style="width: 100%">
+		<a class="close" href="#">&times;</a> 
+		<p>
+			Congratulations! Because of your creative use of this platform, you have been chosen to try our new amazing User UX Experience! Ho Ho Ho!
+		</p>
+	</div>
+	#{/if}
+	
 	<div class="topbar-wrapper" style="z-index: 5;">
 		<div class="topbar">
 			<div class="topbar-inner">
@@ -112,12 +130,13 @@ $(document).ready(function(){
 		</div>
 		<!-- /topbar -->
 	</div>
-	<!-- /topbar-wrapper -->
 	
-
+	<!-- /topbar-wrapper -->	
+	
 	<div class="container" style="height: 100%">
 		#{doLayout /}
 	</div>
+	</marquee>
 			
 	<footer class="footer" style="margin-top: 140px"> 
       <div class="container"> 
@@ -130,8 +149,10 @@ $(document).ready(function(){
 			<a href="http://jqueryui.com/">jQuery UI</a>,
 			<a href="http://harvesthq.github.com/chosen/">chosen</a>,
 			<a href="http://livejs.com/">live.js</a>,
-			<a href="http://onehackoranother.com/projects/jquery/tipsy/">tipsy</a> &{'and'}
+			<a href="http://onehackoranother.com/projects/jquery/tipsy/">tipsy</a>,
+			<a href="http://arborjs.org/">arbor.js</a> &{'and'}
 			<a href="http://aws.amazon.com/ec2/">Amazon EC2</a>.
+			
 		</p> 
 		</div>
       </div> 

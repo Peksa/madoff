@@ -18,15 +18,15 @@ public class Application extends Controller
 	{
 		List<Receipt> allReceipts = Receipt.find("order by created desc").fetch();
 		
-		User authed = Security.connectedUser();
+		User user = Security.connectedUser();
 		
 		// Moar opt to do with DB query, but KISS
 		List<Receipt> receipts = new ArrayList<Receipt>();
 		for(Receipt r : allReceipts)
 		{
-			if(r.members.contains(authed)) receipts.add(r);
+			if(r.members.contains(user)) receipts.add(r);
 		}
 		
-		render(receipts, authed);
+		render(receipts, user);
 	}
 }

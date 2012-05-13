@@ -34,14 +34,14 @@ public class Receipts extends CRUD
 		if (validation.hasErrors())
 			error(Messages.get("controllers.Receipts.show.error"));
 		Receipt receipt = Receipt.findById(id);
-		User connectedUser = Security.connectedUser();
+		User user = Security.connectedUser();
 		
-		if (!receipt.members.contains(connectedUser))
+		if (!receipt.members.contains(user))
 		{
 			error(Messages.get("controllers.Payments.validate.unauthorized"));
 		}
 
-		render(receipt, connectedUser);
+		render(receipt, user);
 	}
 
 
@@ -216,8 +216,8 @@ public class Receipts extends CRUD
 	public static void register()
 	{
 		List<User> members = User.find("order by fullname asc").fetch();
-		User currentUser = Security.connectedUser();
-		render(members, currentUser);
+		User user = Security.connectedUser();
+		render(members, user);
 	}
 
 
