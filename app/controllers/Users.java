@@ -18,7 +18,7 @@ public class Users extends Controller
 	{
 		//render(); // no new users while gunde is being griefed :D TODO remove
 		flash.error("Sorry, we are not taking new users at this time!");
-		Application.index();
+		Application.index(false);
 	}
 	
 	public static void add(String email, String username, String password, String fullname, Picture picture, int idiotTest) throws Throwable

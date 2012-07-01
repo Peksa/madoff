@@ -12,10 +12,15 @@
         #{/list}
     </div>
 #{/if}
- 
 #{else}
     <div class="empty">
         &{'emptyMsg'}
 	</div>
 #{/else}<br/>
+
+
+   #{if receiptHidden > 0}
+   	<a href="@{index(true)}">View all receipts</a><br/><br/>
+   #{/if}
+
 <a href="@{Receipts.register()}">&{'views.Application.index.newReceipt'}</a><br/><br/>

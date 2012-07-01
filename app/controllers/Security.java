@@ -46,10 +46,7 @@ public class Security extends Secure.Security
 	
 	public static String sha512Hash(String username, String password) throws NoSuchAlgorithmException
 	{
-		// FIXME(Peksa): Play only has support for shitty md5, patch at:
-		// https://github.com/hhandoko/play/commit/51622677ca9cd8312cd994ae5a3b03524eb3fdc0
-		// but it's not yet in an official version of play.
-		// String hash = Crypto.passwordHash(password);
+		// TODO use bcrypt or something
 		return new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-512").digest((username + password).getBytes())));
 	}
 	

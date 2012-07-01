@@ -14,19 +14,25 @@ public class Application extends Controller
 	/**
 	 * Show index-page
 	 */
-	public static void index()
+	public static void index(boolean all)
 	{
 		List<Receipt> allReceipts = Receipt.find("order by created desc").fetch();
-		
+
 		User user = Security.connectedUser();
-		
+
+		int receiptHidden = 0;
+
 		// Moar opt to do with DB query, but KISS
 		List<Receipt> receipts = new ArrayList<Receipt>();
 		for(Receipt r : allReceipts)
 		{
-			if(r.members.contains(user)) receipts.add(r);
+			if(r.members.contains(user))
+			{
+				if(all == false && r.isFinished()) receiptHidden++;
+				else receipts.add(r);
+			}
 		}
-		
-		render(receipts, user);
+
+		render(receipts, user, receiptHidden);
 	}
 }
