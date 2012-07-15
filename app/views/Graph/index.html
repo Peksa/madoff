@@ -251,12 +251,12 @@ var graphIndex = graphEvents.length - 1;
 	  var rlink = "";
 	  if(currentId > 0)
 	  {
-		  rlink = ' (<a href="receipts/' + currentId + '">'+ currentEvent.name +'</a>)'
+		  rlink = ' (<a href="/receipts/' + currentId + '">'+ currentEvent.name +'</a>)'
 	  }
 	  
 	  var currentTime = currentEvent.time;
 	  var d = new Date(currentTime);
-	  $("#graphDate").html(d.getFullYear() +"-"+ pad(d.getMonth()) +"-"+ pad(d.getDate())
+	  $("#graphDate").html(d.getFullYear() +"-"+ pad(d.getMonth()+1) +"-"+ pad(d.getDate())
 			  + " " + pad(d.getHours()) +":"+ pad(d.getMinutes()) +":"+ pad(d.getSeconds()) + "<br/>" + rlink);
 	  
 	  graphSys.eachEdge(function(edge, pt1, pt2){

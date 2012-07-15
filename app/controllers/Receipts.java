@@ -37,7 +37,13 @@ public class Receipts extends Controller
 		User user = Security.connectedUser();
 		
 		if (!receipt.members.contains(user))
-		{
+		unauthorized: {
+			// (hack) A user could also have removed himself, and left a comment
+			// check comment authors for access
+			for(Comment c : receipt.comments) {
+				if(c.poster.equals(user)) break unauthorized;
+			}
+			
 			error(Messages.get("controllers.Payments.validate.unauthorized"));
 		}
 
@@ -80,8 +86,14 @@ public class Receipts extends Controller
 		for(Subpot pot : receipt.subpots) {
 			pot.members.remove(user);
 		}
-		receipt.owners.remove(user);
+		for(ReceiptOwner owner : receipt.owners) {
+			if(owner.user.equals(user)) {
+				owner.receipt = null;
+				owner.save();
+			}
+		}
 		receipt.members.remove(user);
+		new Comment(receipt, user, user.username +" removed h(im|er)self from the receipt").save();
 		receipt.save();
 	}
 
