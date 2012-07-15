@@ -44,6 +44,46 @@ public class Receipts extends Controller
 		render(receipt, user);
 	}
 
+	/**
+	 * Removes the current user from the receipt
+	 * @param id
+	 */
+	public static void removeMe(Long id)
+	{
+		if (validation.hasErrors())
+			error(Messages.get("controllers.Receipts.show.error"));
+		
+		Receipt receipt = Receipt.findById(id);
+		User user = Security.connectedUser();
+		if (!receipt.members.contains(Security.connectedUser())) {
+			error(Messages.get("You are not a member of this receipt"));
+		} else if (receipt.hasPaymentsDone()){
+			error(Messages.get("Payments has been done on this recipt, cannot edit"));
+		} else {
+			removeUser(receipt, user);
+			Application.index(false);
+		}
+		
+	}
+	
+	private static void removeUser(Receipt receipt, User user) {
+		// Remove receipt from all active payments
+		for(Payment payment : receipt.payments) {
+			if(!payment.deprecated && 
+				(payment.payer.equals(user) || payment.receiver.equals(user))) {
+				Payment fixedPayment = new Payment(payment, receipt, false);
+				fixedPayment.save();
+			}
+		}
+		
+		// Remove user from all subrounds
+		for(Subpot pot : receipt.subpots) {
+			pot.members.remove(user);
+		}
+		receipt.owners.remove(user);
+		receipt.members.remove(user);
+		receipt.save();
+	}
 
 	public static void delete(Long id)
 	{
@@ -51,15 +91,31 @@ public class Receipts extends Controller
 			error(Messages.get("controllers.Receipts.show.error"));
 		Receipt receipt = Receipt.findById(id);
 
-
-		// Check that the user is owner of receipt.
-		if (Security.isAuthorized(receipt.creator))
-		{
-			receipt.delete();
+		if (!Security.isAuthorized(receipt.creator)) {
+			error(Messages.get("Must be owner"));
+		} else if (receipt.hasPaymentsDone()){
+			error(Messages.get("Payments has been done on this recipt, cannot delete"));
+		} else {
+			Set<User> remove = new HashSet<>(receipt.members);
+			for(User user : remove) removeUser(receipt, user);
+			receipt.flagAsDeleted();
+			receipt.save();
+			Application.index(false);
 		}
-		else
-		{
-			error(Messages.get("error"));
+	}
+	
+	public static void edit(Long id)
+	{
+		if (validation.hasErrors())
+			error(Messages.get("controllers.Receipts.show.error"));
+		
+		Receipt receipt = Receipt.findById(id);
+		if (!Security.isAuthorized(receipt.creator)) {
+			error(Messages.get("Must be owner"));
+		} else if (receipt.hasPaymentsDone()){
+			error(Messages.get("Payments has been done on this recipt, cannot edit"));
+		} else {
+			render();
 		}
 	}
 
@@ -131,7 +187,6 @@ public class Receipts extends Controller
 		}
 		
 		// validate
-		// TODO validate on client first, to give better and faster feedback
 		String errorStr = null;
 		if(title == null || title.length() == 0) errorStr = "Title requred";
 		else if(members.size() == 0) errorStr = "Members requred";
@@ -219,6 +274,4 @@ public class Receipts extends Controller
 		User user = Security.connectedUser();
 		render(members, user);
 	}
-
-
 }

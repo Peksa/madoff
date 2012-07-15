@@ -14,15 +14,16 @@ public class Receipt extends Model
 {
 	public String title;
 	public Date created;
+	public boolean deleted = false;
 
 	//public double total; // deprecated, use sum of owner amount
 	public double tip;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	public User creator;
 
 	// TODO merge owner and member!
-	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "receipt", cascade = CascadeType.PERSIST)
 	public List<ReceiptOwner> owners;
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
@@ -37,7 +38,7 @@ public class Receipt extends Model
 	@OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
 	public List<Subpot> subpots;
 
-	@ManyToMany(mappedBy = "receipts", cascade=CascadeType.ALL)
+	@ManyToMany(mappedBy = "receipts", cascade=CascadeType.PERSIST)
 	public List<Payment> payments;
 
 	public Receipt(String title, User creator, String description)
@@ -218,5 +219,18 @@ public class Receipt extends Model
 	public String toString()
 	{
 		return "Receipt by " + creator + " for " + getTotal() + " SEK";
+	}
+
+	public boolean hasPaymentsDone() {
+		for(Payment payment : payments) {
+			if(!payment.deprecated && payment.paid != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void flagAsDeleted() {
+		deleted = true;
 	}
 }

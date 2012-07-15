@@ -37,6 +37,7 @@ public class Graph extends Controller {
 			List<Payment> list = Payment.findAll();
 			for(Payment p : list)
 			{
+				if(p.receipts.size() == 0) continue; // Skip payments for totally deleted receipts
 				if(users.contains(p.payer) && users.contains(p.receiver))
 				{
 					payments.add(p);

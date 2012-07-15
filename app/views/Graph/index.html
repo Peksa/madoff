@@ -158,8 +158,8 @@ var graphIndex = graphEvents.length - 1;
 			if(debt)
 			{
 				var w = Math.max(20, 20+gfx.textWidth(debt) )
-				var x = (pt1.x + pt2.x)/2
-				var y = (pt1.y + pt2.y)/2
+				var x = (pt1.x*2 + pt2.x)/3
+				var y = (pt1.y*2 + pt2.y)/3
 				gfx.rect(x-w/2, y-8, w, 20, 4, {fill:"green"})
 				gfx.text(debt, x, y+9, {color:"white", align:"center", font:"Arial", size:12})
 			}
@@ -257,7 +257,7 @@ var graphIndex = graphEvents.length - 1;
 	  var currentTime = currentEvent.time;
 	  var d = new Date(currentTime);
 	  $("#graphDate").html(d.getFullYear() +"-"+ pad(d.getMonth()) +"-"+ pad(d.getDate())
-			  + " " + pad(d.getHours()) +":"+ pad(d.getMinutes()) +":"+ pad(d.getSeconds()) + rlink);
+			  + " " + pad(d.getHours()) +":"+ pad(d.getMinutes()) +":"+ pad(d.getSeconds()) + "<br/>" + rlink);
 	  
 	  graphSys.eachEdge(function(edge, pt1, pt2){
 		  graphSys.pruneEdge(edge);
@@ -282,30 +282,12 @@ var graphIndex = graphEvents.length - 1;
     sys.parameters({gravity:true}) // use center-gravity to make the graph settle nicely (ymmv)
     sys.renderer = Renderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
     graphSys = sys;
-    
-    // add some nodes to the graph and watch it go...
-    /*
-    sys.addEdge('a','b')
-    sys.addEdge('a','c')
-    sys.addEdge('a','d')
-    sys.addEdge('a','e')
-    sys.addNode('f', {alone:true, mass:.25})
-    */
-    
-    // TODO remove data except color
-    // TODO link to profile?
     		
     #{list items:users, as:'u'}
     	sys.addNode("${u.username}", {color: #{if u.equals(user)}"#C23412"#{/if}#{else}"#123456"#{/else}})
     #{/list}
-    
-    //sys.addNode("Derp", {color:"#A23456"})
-    
+    	
     updateGraph(0);
-    
-    #{list items:payments, as:'payment'}
-    	sys.addEdge("${payment.payer}","${payment.receiver}", {debt:${payment.getAmount().format('0.00')}})
-    #{/list}
     
   })
 

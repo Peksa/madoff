@@ -22,6 +22,7 @@ import play.i18n.Messages;
 public class Payments extends Controller
 {
 	public static boolean fulOptad = false;
+	public static boolean initialDataLoaded = false;
 	
 	public static void index() {
 		User user = Security.connectedUser();
@@ -39,11 +40,14 @@ public class Payments extends Controller
 				fulOptad = true;
 			}
 			
-			// Semi-hack to generate payments for initial data
-			List<Receipt> list = Receipt.findAll();
-			for(Receipt r : list)
-			{
-				if(r.payments.size() == 0) Payment.generatePayments(r);
+			// Semi-hack to generate payments for initial data (YML data for development)
+			if(!initialDataLoaded) {
+				List<Receipt> list = Receipt.findAll();
+				for(Receipt r : list)
+				{
+					if(r.payments.size() == 0) Payment.generatePayments(r);
+				}
+				initialDataLoaded = true;
 			}
 			
 			List<Payment> settled = Payment.find("deprecated = false AND accepted != null AND (payer = ? OR receiver = ?)", user, user).fetch();

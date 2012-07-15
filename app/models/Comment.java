@@ -15,7 +15,7 @@ public class Comment extends Model
 	public Receipt receipt;
 
 	// Owning side
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	public User poster;
 
 	public Date date;

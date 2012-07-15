@@ -16,7 +16,7 @@ public class Application extends Controller
 	 */
 	public static void index(boolean all)
 	{
-		List<Receipt> allReceipts = Receipt.find("order by created desc").fetch();
+		List<Receipt> allReceipts = Receipt.find("deleted != true order by created desc").fetch();
 
 		User user = Security.connectedUser();
 

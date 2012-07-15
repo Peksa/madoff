@@ -81,6 +81,12 @@ public class Payment extends Model
 	 */
 	private void fixDirection()
 	{
+		if(receipts.size() == 0) {
+			this.deprecated = true;
+			this.paid = new Date();
+			return;
+		}
+		
 		// If amount is zero (or very close, doubles..) the payment is auto-settled
 		double amount = getAmount();
 		
@@ -96,17 +102,36 @@ public class Payment extends Model
 		
 		if(Math.abs(amount) < 0.01)
 		{
+			// TODO should flag the payment as optimized or something to enable resurrection
 			paid = new Date();
 			accepted = new Date();
 			identifier = "auto-settled";
 		}
 	}
 	
-	/*
-	 * Adds a new receipt to a payment and includes all old payments
+	/**
+	 * Changes an existing payment by adding or removing a receipt
 	 */
-	public Payment(Payment oldPayment, Receipt addedReceipt)
+	public Payment(Payment oldPayment, Receipt changeReceipt, boolean addReceiptToPayment)
 	{
+		copyAttributes(oldPayment);
+		if(addReceiptToPayment) {
+			receipts.addAll(oldPayment.receipts);
+			receipts.add(changeReceipt);
+		}
+		else {
+			for(Receipt receipt : oldPayment.receipts) {
+				if(!receipt.equals(changeReceipt)) receipts.add(receipt);
+			}
+		}
+		
+		fixDirection();
+	}
+	
+	/**
+	 * Copys all attributes of an older payment, except the list of receipts!!
+	 */
+	private void copyAttributes(Payment oldPayment) {
 		oldPayment.deprecated = true;
 		oldPayment.paid = new Date(); // The old payment is payed for by the new one (for tracking)
 		oldPayment.save();
@@ -116,16 +141,21 @@ public class Payment extends Model
 		this.receiver = oldPayment.receiver;
 		this.identifier = oldPayment.identifier;
 		this.receipts = new ArrayList<Receipt>();
-		
-		receipts.addAll(oldPayment.receipts);
-		receipts.add(addedReceipt);
-		
-		fixDirection();
 	}
 	
-	// TODO investigate potential fail from concurrent access to receipts and payments
-	// safe with play transactions?
-	// for now, just make this synchronized and cross our fingers (we don't have that much activity..)
+	/**
+	 * Creates a new payment from an old one, use to refresh when editing a receipt included
+	 * A new receipt with a brand new ID is created to avoid users paying on depricated information
+	 * @param oldPayment
+	 */
+	public Payment(Payment oldPayment) {
+		copyAttributes(oldPayment);
+		this.receipts.addAll(oldPayment.receipts);
+		fixDirection();
+	}
+
+	// Potential concurrency fail, but play is supposed to run single threaded?
+	// Make it synchronized and cross our fingers in any case
 	public static synchronized void generatePayments(Receipt receipt)
 	{
 		Set<User> iteratedOwners = new HashSet<User>();
@@ -153,7 +183,7 @@ public class Payment extends Model
 					else if(list.size() > 0)
 					{
 						Payment oldPayment = (Payment) list.get(0);
-						Payment payment = new Payment(oldPayment, receipt);
+						Payment payment = new Payment(oldPayment, receipt, true);
 						payment.save();
 						paymentsGenerated = true;
 					}
@@ -167,7 +197,7 @@ public class Payment extends Model
 			}
 		}
 		
-		// Hack, generate dummy payment
+		// Hack, generate dummy payment TODO remove?
 		if(!paymentsGenerated)
 		{
 			Payment dummy = new Payment(receipt.creator, receipt.creator, receipt);

@@ -14,21 +14,58 @@
 </div>
 
 #{if _as == 'full'}
-	<div class="receipt-content">
-		<h3>&{'Description'}:</h3>
-		${_receipt.description.nl2br()}
-	</div>
-
-	<div class="payers">
-		<h3>
-			${_receipt.owners.size() ?: 'no'} 
-	        ${_receipt.owners.size().pluralize(messages.get('payer'), messages.get('payers'))}
-		</h3>
-	    #{list items:_receipt.owners, as:'ownerInfo'}
-            <li class="member">
-                ${ownerInfo.user.fullname} (${ownerInfo.amount.format('0.00')} SEK)
-            </li>
-	    #{/list}
+	#{if _receipt.deleted} 
+	<div class="alert-message warning">
+		<a class="close" href="#">&times;</a>
+		<p> This receipt has been deleted by the creator! </p>
+    </div>
+	#{/if}
+	
+	<div class="row">
+		<div class="span14">
+			<div class="receipt-content">
+				<h3>&{'Description'}:</h3>
+				${_receipt.description.nl2br()}
+			</div>
+		
+			<div class="payers">
+				<h3>
+					${_receipt.owners.size() ?: 'no'} 
+			        ${_receipt.owners.size().pluralize(messages.get('payer'), messages.get('payers'))}
+				</h3>
+			    #{list items:_receipt.owners, as:'ownerInfo'}
+		            <li class="member">
+		                ${ownerInfo.user.fullname} (${ownerInfo.amount.format('0.00')} SEK)
+		            </li>
+			    #{/list}
+			</div>
+		</div>
+		<div class="span2">
+			#{if !_receipt.hasPaymentsDone()}
+				#{if _receipt.creator.username.equals(_connectedUser.username)}
+					#{form @Receipts.edit()}
+						<!-- Not ready for prime time just yet 
+						<input type="hidden" name="id" value="${_receipt.id}"/>
+						<input type="submit" class="btn error small" value="Edit"/>
+						-->
+					#{/form}
+					<div class="needsconfirm">
+					#{form @Receipts.delete()}
+						<input type="hidden" name="id" value="${_receipt.id}"/>
+						<input type="submit" class="btn error small" value="Delete"/>
+					#{/form}
+					</div>
+				#{/if}
+				#{else}
+					<div class="needsconfirm">
+					#{form @Receipts.removeMe()}
+						<input type="hidden" name="id" value="${_receipt.id}"/>
+						<input type="submit" class="btn error small" value="Remove me"/>
+					#{/form}
+					</div>
+				#{/else}
+			#{/if}
+		</div>
 	</div>
 
 	<div class="members">
@@ -123,6 +160,10 @@ var lastTimestamp = 0
 var virgin = true;
 
 $(document).ready(function() {
+	// A hack to apply confirmation to submissions on play generated forms
+	$(".needsconfirm").children().submit(function() {
+		return confirm('This action is irreversable, are you sure?');
+	});
 	getPosts();
 	setInterval(getPosts, 2000);
 });
