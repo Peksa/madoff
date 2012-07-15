@@ -1,5 +1,7 @@
 package controllers;
 
+import java.security.NoSuchAlgorithmException;
+
 import models.Picture;
 import models.User;
 import play.*;
@@ -13,12 +15,23 @@ import play.i18n.Messages;
  */
 public class Users extends Controller
 {
-	
-	public static void register()
+	//render(); // no new users while gunde is being griefed :D TODO remove
+	public static void register(String code)
 	{
-		//render(); // no new users while gunde is being griefed :D TODO remove
+		try {
+			if(Security.sha512Hash(code, "").equals("F9V0TzyyMCylO/dS2AVngHYFbcvSayL37oI+hn+3liQAhmIr3sSaHJMd+vGxNgD6s5X2DHN0tD9OMQnFjdn31g==")) {
+				render();
+			}
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 		flash.error("Sorry, we are not taking new users at this time!");
 		Application.index(false);
+	}
+
+	public static void register()
+	{
+		//render();
 	}
 	
 	public static void add(String email, String username, String password, String fullname, Picture picture, int idiotTest) throws Throwable

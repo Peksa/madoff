@@ -23,15 +23,15 @@ var graphDebts =
 		#{/list}
 	];
 	
-var graphDates = 
+var graphEvents = 
 	[
 	%{ firstDate = true }%
-	#{list items:dates, as:'date'}
-		#{if firstDate == false },#{/if} %{ firstDate = false }% ${date}
+	#{list items:events, as:'event'}
+		#{if firstDate == false },#{/if} %{ firstDate = false }% {"time":${event.time},"id":${event.receiptId},"name":"${event.name}"}
 	#{/list}
 	 ];
 
-var graphIndex = graphDates.length - 1;
+var graphIndex = graphEvents.length - 1;
 
 (function($){
   var Renderer = function(canvas){
@@ -243,14 +243,21 @@ var graphIndex = graphDates.length - 1;
   var updateGraph = function(delta)
 	{
 	  graphIndex += delta;
-	  // TODO skip over dates that are very close!
 	  if(graphIndex < 0) graphIndex = 0;
-	  if(graphIndex >= graphDates.length) graphIndex = graphDates.length - 1;
+	  if(graphIndex >= graphEvents.length) graphIndex = graphEvents.length - 1;
 	  
-	  var currentTime = graphDates[graphIndex];
+	  var currentEvent =  graphEvents[graphIndex];
+	  var currentId = currentEvent.id;
+	  var rlink = "";
+	  if(currentId > 0)
+	  {
+		  rlink = ' (<a href="receipts/' + currentId + '">'+ currentEvent.name +'</a>)'
+	  }
+	  
+	  var currentTime = currentEvent.time;
 	  var d = new Date(currentTime);
 	  $("#graphDate").html(d.getFullYear() +"-"+ pad(d.getMonth()) +"-"+ pad(d.getDate())
-			  + " " + d.getHours() +":"+ d.getMinutes() +":"+ d.getSeconds());
+			  + " " + pad(d.getHours()) +":"+ pad(d.getMinutes()) +":"+ pad(d.getSeconds()) + rlink);
 	  
 	  graphSys.eachEdge(function(edge, pt1, pt2){
 		  graphSys.pruneEdge(edge);
@@ -267,7 +274,7 @@ var graphIndex = graphDates.length - 1;
   
   $('#graphView').bind('mousewheel', function(event, delta) {
 	  event.preventDefault();	
-	  updateGraph(delta);
+	  updateGraph(-delta);
 	});
 
   $(document).ready(function(){
@@ -294,7 +301,7 @@ var graphIndex = graphDates.length - 1;
     
     //sys.addNode("Derp", {color:"#A23456"})
     
-    //updateGraph(0);
+    updateGraph(0);
     
     #{list items:payments, as:'payment'}
     	sys.addEdge("${payment.payer}","${payment.receiver}", {debt:${payment.getAmount().format('0.00')}})

@@ -78,7 +78,7 @@ $(document).ready(function(){
 </head>
 
 <body style="padding-top: 50px;">
-	#{if user != null && user.username.toLowerCase().equals("gunde")}
+	#{if user != null && user.username.toLowerCase().equals("gunde") || params.get("grief") != null}
 	<div class="container" style="display: none;">
 		<audio controls="controls" autoplay="yes">
 		  <source src="http://net1.madringtones.org/data/13/451546/files/451546.mp3" type="audio/mp3" />
@@ -90,7 +90,7 @@ $(document).ready(function(){
 	<div class="alert-message success" style="width: 100%">
 		<a class="close" href="#">&times;</a> 
 		<p>
-			Congratulations! Because of your creative use of this platform, you have been chosen to try our new amazing User UX Experience! Ho Ho Ho!
+			Congratulations! Because of your creative use of this platform, you have been chosen to try our new Friendly-to-the-user UX Experience! Ho Ho Ho!
 		</p>
 	</div>
 	#{/if}

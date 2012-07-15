@@ -12,3 +12,5 @@
 /secure
 /crud
 /data
+
+*.log
