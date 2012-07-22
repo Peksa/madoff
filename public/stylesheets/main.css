@@ -47,10 +47,10 @@ div.comment-metadata-own
 {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
-	background-color: #95ad10;
+	background-color: #4fad10;
 	position: absolute;
 	top: -7px;
-	left: 420px;
+	right: 15px;
 	padding: 0 5px 0 5px;
 	color: white;
 	z-index: 2;

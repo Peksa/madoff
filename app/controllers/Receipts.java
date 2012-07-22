@@ -64,6 +64,7 @@ public class Receipts extends Controller
 		if (!receipt.members.contains(Security.connectedUser())) {
 			error(Messages.get("You are not a member of this receipt"));
 		} else if (receipt.hasPaymentsDone()){
+			// Might be good to pay after editing, but will screw up old payments
 			error(Messages.get("Payments has been done on this recipt, cannot edit"));
 		} else {
 			removeUser(receipt, user);
@@ -108,7 +109,7 @@ public class Receipts extends Controller
 		} else if (receipt.hasPaymentsDone()){
 			error(Messages.get("Payments has been done on this recipt, cannot delete"));
 		} else {
-			Set<User> remove = new HashSet<>(receipt.members);
+			Set<User> remove = new HashSet<User>(receipt.members);
 			for(User user : remove) removeUser(receipt, user);
 			receipt.flagAsDeleted();
 			receipt.save();

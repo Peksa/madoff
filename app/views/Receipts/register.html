@@ -106,13 +106,9 @@
 		<div class="clearfix">
 			<label for="username">&{'Subround'}:</label>
 			<div class="input">
-				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select"
+				<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select subroundMembers"
 					style="width: 350px;" name="subrounds[{{ subRoundNr }}].members" multiple="yes">
 					<option value=""></option>
-					#{list items:members, as:'u'}
-						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
-						<option value="${u.id}"> ${u.fullname} (${u.username})</option> 
-					#{/list}
 				</select>
 			</div>
 		</div>
@@ -131,7 +127,41 @@ var subroundCount = 0
 
 $(document).ready(function() {
 	addSubround(true);
+	updateMemberSelection();
 });
+
+$("#members").chosen().change(function() {
+	updateMemberSelection();
+});
+
+function updateMemberSelection()
+{
+	/// Get selected members, values and text
+	members = $('#members');
+	memberValues = members.val();
+	memberText = new Array();
+	for(i in memberValues) {
+		memberText[i] = $("#members option[value='"+ memberValues[i] + "']").text();
+	}
+	
+	/// Set subround members to the same, while keeping selected subround members
+	$('.subroundMembers').each(function(index) {
+		roundValues = $(this).val();
+		$(this).empty();
+		for(i in memberValues) {
+			selected = false;
+			value = memberValues[i];
+			if(roundValues != null && $.inArray(value, roundValues) != -1) {
+				selected = true;
+			}
+			$('.subroundMembers').append(new Option(memberText[i], value, false, selected));
+		}
+	});
+	
+	/// Update chosen fields
+	$(".subroundMembers").trigger("liszt:updated");
+}
+
 
 function addSubround(initial)
 {

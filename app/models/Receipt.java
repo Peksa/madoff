@@ -40,7 +40,7 @@ public class Receipt extends Model
 
 	@ManyToMany(mappedBy = "receipts", cascade=CascadeType.PERSIST)
 	public List<Payment> payments;
-
+	
 	public Receipt(String title, User creator, String description)
 	{
 		this.title = title;
@@ -229,8 +229,9 @@ public class Receipt extends Model
 		}
 		return false;
 	}
-
+	
 	public void flagAsDeleted() {
 		deleted = true;
 	}
+
 }
