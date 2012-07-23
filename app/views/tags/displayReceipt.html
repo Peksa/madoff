@@ -2,10 +2,8 @@
 
 <div class="receipt ${_as == 'teaser' ? 'teaser' : ''}">
 	<h2 class="receipt title">
-		#{if _receipt.isFinished()} <span class="paymentDone"> #{/if}
-		#{else} <span> #{/else}
 		<a href="@{Receipts.show(_receipt.id)}">${_receipt.title}</a>
-		</span>
+		#{if _receipt.isFinished()} <span class="label success">Finished!</span> #{/if}
 	</h2>
 	<div class="details">
 		&{'views.tags.displayReceipt.receiptOwner', _receipt.creator.fullname},
@@ -44,10 +42,8 @@
 			#{if !_receipt.hasPaymentsDone()}
 				#{if _receipt.creator.username.equals(_connectedUser.username)}
 					#{form @Receipts.edit()}
-						<!-- Not ready for prime time just yet 
 						<input type="hidden" name="id" value="${_receipt.id}"/>
 						<input type="submit" class="btn error small" value="Edit"/>
-						-->
 					#{/form}
 					<div class="needsconfirm">
 					#{form @Receipts.delete()}

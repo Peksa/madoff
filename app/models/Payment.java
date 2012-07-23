@@ -117,7 +117,8 @@ public class Payment extends Model
 		copyAttributes(oldPayment);
 		if(addReceiptToPayment) {
 			receipts.addAll(oldPayment.receipts);
-			receipts.add(changeReceipt);
+			// Add the receipt if it is new, otherwise leave it unchanged and update metadata
+			if(!receipts.contains(changeReceipt)) receipts.add(changeReceipt);
 		}
 		else {
 			for(Receipt receipt : oldPayment.receipts) {
@@ -158,9 +159,10 @@ public class Payment extends Model
 	// Make it synchronized and cross our fingers in any case
 	public static synchronized void generatePayments(Receipt receipt)
 	{
+		List<Payment> oldPayments = new ArrayList<Payment>();
+		if(receipt.payments != null) oldPayments.addAll(receipt.payments);
 		Set<User> iteratedOwners = new HashSet<User>();
 		
-		boolean paymentsGenerated = false;
 		for(ReceiptOwner o : receipt.owners)
 		{
 			User owner = o.user;
@@ -185,24 +187,24 @@ public class Payment extends Model
 						Payment oldPayment = (Payment) list.get(0);
 						Payment payment = new Payment(oldPayment, receipt, true);
 						payment.save();
-						paymentsGenerated = true;
 					}
 					else
 					{
 						Payment payment = new Payment(member, owner, receipt);
 						payment.save();
-						paymentsGenerated = true;
 					}
 				}
 			}
 		}
 		
-		// Hack, generate dummy payment TODO remove?
-		if(!paymentsGenerated)
-		{
-			Payment dummy = new Payment(receipt.creator, receipt.creator, receipt);
-			dummy.deprecated = true;
-			dummy.save();
+		for(Payment old : oldPayments) {
+			// This payment has not been depricated by payment adding above
+			// This means it is no longer part of the receipt, remove the receipt
+			if(!old.deprecated) {
+				System.out.println(""+old.payer + old.receiver);
+				Payment payment = new Payment(old, receipt, false);
+				payment.save();
+			}
 		}
 	}
 

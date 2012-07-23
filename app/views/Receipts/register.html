@@ -6,17 +6,20 @@
 #{set 'moreStyles'} #{stylesheet 'chosen.css' /} #{/set}
 
 <div id="register">
-	#{if flash.error}
+	#{if error}
 	<div class="alert-message error">
 		<a class="close" href="#">&times;</a> 
 		<p>
-			<strong>&{'error'}</strong> &{flash.error}
+			<strong>&{'error'}</strong> ${error}
 		</p>
 	</div>
 	#{/if}
 	
 	#{form @add()}
 	<fieldset>
+		#{if existingData && existingData.id}
+		<input type="hidden" name="receiptId" value="${existingData.id}"/>
+		#{/if}
 		<legend>&{'views.Receipts.register.addNew'}</legend>
 		<div class="page-header">
     		<h1><small>&{'Required'}</small></h1>
@@ -28,8 +31,17 @@
 					style="width: 350px;" id="members" name="members" multiple="yes">
 					<option value=""></option> 
 					#{list items:members, as:'u'}
+						%{
+							selectedHtml = ""
+							selected = "selected=\"selected\""
+							if(!existingData) {
+								if(user.username == u.username) selectedHtml = selected
+							} else {
+								if(existingData.members.contains(u.id)) selectedHtml = selected
+							}
+					    }%
 						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
-						<option value="${u.id}" #{if user.username == u.username}  selected="selected" #{/if}> ${u.fullname} (${u.username})</option> 
+						<option value="${u.id}" ${selectedHtml}> ${u.fullname} (${u.username})</option> 
 					#{/list}
 				</select>
 			</div>
@@ -37,13 +49,13 @@
 		<div class="clearfix">
 			<label for="title">&{'Title'}:</label>
 			<div class="input">
-				<input type="text" name="title" id="title" value="${flash.title}" />
+				<input type="text" name="title" id="title" value="#{if existingData}${existingData.title}#{/if}" />
 			</div>
 		</div>
 		<div class="clearfix">
 			<label for="description">&{'Description'}:</label>
 			<div class="input">
-				<textarea name="description" id="description" rows="4">${flash.description}</textarea>
+				<textarea name="description" id="description" rows="4">#{if existingData}${existingData.description}#{/if}</textarea>
 			</div>
 		</div>
 		<!--  No support for date backendside - fix later
@@ -57,35 +69,69 @@
 		<div class="clearfix">
 			<label for="total">&{'Total'}:</label>
 			<div class="input">
-				<input type="text" name="total" id="total" value="${flash.total}" />
+				<input type="text" name="total" id="total" value="#{if existingData}${existingData.total}#{/if}" />
 			</div>
 		</div>
 		
 		<div class="page-header">
     		<h1><small>&{'Optional / Advanced'}</small></h1>
   		</div>
+  		<div class="alert-message warning">
+			<a class="close" href="#">&times;</a>
+			<p><strong>Pro tip!</strong> You can do basic math (+-*/) in subround amount fields, and use the keyword total. ie. "total/2" or "3*125" </p>
+	    </div>
 		<div class="clearfix">
 			<label for="tip">&{'Tip'}:</label>
 			<div class="input">
-				<input type="text" name="tip" id="tip" value="${flash.tip}" />
+				<input type="text" name="tip" id="tip" value="#{if existingData}${existingData.tip}#{/if}" />
 			</div>
 		</div>
 		
 		<div class="clearfix">
 			<label for="payer">&{'Who paid'}:</label>
 			<div class="input">
-				<input type="radio" name="paid" value="creator" checked> I paid for everything </input> <br>
-				<input type="radio" name="paid" value="split"> Payment split evenly between all members </input>
+				<input type="radio" name="paid" value="creator" #{if !existingData || existingData.paid.equals("creator")} checked #{/if}> I paid for everything </input> <br>
+				<input type="radio" name="paid" value="split" #{if existingData && existingData.paid.equals("split")} checked #{/if}> Payment split evenly between all members </input>
 			</div>
 		</div>
 		
 		<div id="subrounds">
+		
+		#{if existingData}
+		%{subroundCount = 0 }%
+		#{list items:existingData.subrounds, as:'sr'}
+			<div class="clearfix">
+				<label for="username">&{'Subround'}:</label>
+				<div class="input">
+					<select data-placeholder="&{'views.Receipts.register.membersPlaceholder'}" class="chzn-select subroundMembers"
+						style="width: 350px;" name="subrounds[${subroundCount}].members" multiple="yes">
+						<option value=""></option>
+						#{list items:members, as:'u'}
+							%{
+								include = false;
+								if(sr.members.contains(u.id)) include = true;
+						    }%
+						    #{if include}
+								<option value="${u.id}" selected="selected"> ${u.fullname} (${u.username})</option> 
+							#{/if}
+						#{/list}
+					</select>
+				</div>
+			</div>
+			<div class="clearfix">
+				<div class="input">
+					&{'bought'}
+					<input placeholder="item" class="span4" type="text" name="subrounds[${subroundCount}].description" value="${sr.description}" />
+					&{'for'}
+					<input placeholder="money amount" class="span2" type="text" name="subrounds[${subroundCount}].amount" id="subroundMoney${subroundCount}" value="${sr.amount}" />
+				</div>
+			</div>
+			%{subroundCount++ }%
+		#{/list}
+
+		#{/if}
 		</div>
 		
-		<div class="alert-message warning">
-			<a class="close" href="#">&times;</a>
-			<p><strong>Beta warning!</strong> No validation before you submit, on failure you have to redo everything! Make sure title and total are there and that everything adds up! </p>
-	    </div>
 		<div class="actions">
 			<input class="btn primary" type="submit" id="register" value="&{'Add'}" />
 			<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
@@ -123,16 +169,32 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">
+#{if existingData}
+var subroundCount = ${existingData.subrounds.size()}
+#{/if}
+#{else}
 var subroundCount = 0
+#{/else}
+
 
 $(document).ready(function() {
-	addSubround(true);
+	if(subroundCount == 0) addSubround(true);
+	else {
+		$('#subroundMoney' + subroundCount).keypress(function() {
+			addSubround(true);
+		});
+	}
 	updateMemberSelection();
 });
 
 $("#members").chosen().change(function() {
 	updateMemberSelection();
 });
+
+// Somewhat of a hack
+function populateSubrounds() {
+	
+}
 
 function updateMemberSelection()
 {
@@ -154,14 +216,13 @@ function updateMemberSelection()
 			if(roundValues != null && $.inArray(value, roundValues) != -1) {
 				selected = true;
 			}
-			$('.subroundMembers').append(new Option(memberText[i], value, false, selected));
+			$(this).append(new Option(memberText[i], value, false, selected));
 		}
 	});
 	
 	/// Update chosen fields
 	$(".subroundMembers").trigger("liszt:updated");
 }
-
 
 function addSubround(initial)
 {
@@ -178,8 +239,10 @@ function addSubround(initial)
 	} else {
 		$(subround).appendTo('#subrounds');
 	}
+	updateMemberSelection();
 	
 	$(".chzn-select").chosen();
+	
 	
 	$('#subroundMoney' + subroundCount).keypress(function() {
 		addSubround(true);
