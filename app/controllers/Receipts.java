@@ -143,7 +143,8 @@ public class Receipts extends Controller
 				
 				input.members = new ArrayList<Long>();
 				for(User user : pot.members) input.members.add(user.id);
-				input.amount = ""+ pot.total;
+				if(pot.calculation != null) input.amount = pot.calculation;
+				else input.amount = ""+ pot.total;
 				input.description = pot.description;
 			}	
 			
@@ -192,6 +193,7 @@ public class Receipts extends Controller
 		public ArrayList<Long> members = new ArrayList<Long>();
 		public String description;
 		public String amount;
+		public String calculation;
 		public double parsedAmount;
 		// public boolean everyoneExcept;
 		// public boolean together;
@@ -241,6 +243,10 @@ public class Receipts extends Controller
 				if(parts.size() != 1) throw new NumberFormatException();
 				
 				this.parsedAmount = Double.parseDouble(parts.get(0));
+				// If these are not equal, a calculation has been made, save it!
+				if(!this.amount.equals(""+ this.parsedAmount)) {
+					this.calculation = this.amount;
+				}
 				
 			} catch(NumberFormatException e) {
 				e.printStackTrace();
@@ -380,6 +386,7 @@ public class Receipts extends Controller
 				if(input.members != null)
 				{
 					Subpot subpot = new Subpot(input.parsedAmount);
+					subpot.calculation = input.calculation;
 					subpot.description = input.description;
 					for (Long id : input.members)
 					{

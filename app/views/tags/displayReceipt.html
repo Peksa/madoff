@@ -112,7 +112,7 @@
 			#{list items:_receipt.subpots, as:'round'}
 				<tr>
 					<td>${round.description}</td>
-					<td>${round.total.format('0.00')} SEK</td>
+					<td>${round.total.format('0.00')} SEK #{if round.calculation} [${round.calculation}] #{/if} </td>
 					<td>
 						#{list items:round.members, as:'user'}
 							${user.fullname}

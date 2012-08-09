@@ -27,19 +27,7 @@ public class Payments extends Controller
 	public static void index() {
 		User user = Security.connectedUser();
 		if (user != null)
-		{
-			// Hack (restore data for later use) TODO remove
-			if(!fulOptad)
-			{
-				List<Payment> pl = Payment.findAll();
-				for(Payment p : pl)
-				{
-					p.amount = 0;
-					p.save();
-				}
-				fulOptad = true;
-			}
-			
+		{	
 			// Semi-hack to generate payments for initial data (YML data for development)
 			if(!initialDataLoaded) {
 				List<Receipt> list = Receipt.findAll();

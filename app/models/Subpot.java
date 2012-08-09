@@ -19,6 +19,7 @@ public class Subpot extends Model
 	public Receipt receipt;
 	public String description;
 	
+	public String calculation = null; // ie. 2x123
 	public double total;
 	
 	@ManyToMany(cascade = CascadeType.PERSIST)
