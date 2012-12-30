@@ -56,6 +56,13 @@ div.comment-metadata-own
 	z-index: 2;
 }
 
+textarea#comment-value
+{
+	position: relative;
+	width: 500px;
+	height: 100px;
+}
+
 span.comment-date
 {
 	font-size: 8pt;
