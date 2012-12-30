@@ -2,7 +2,7 @@
 
 <div class="receipt ${_as == 'teaser' ? 'teaser' : ''}">
 	<h2 class="receipt title">
-		<a href="@{Receipts.show(_receipt.id)}">${_receipt.title}</a>
+		<a href="@{Receipts.show(_receipt.id)}">${_receipt.title} #{if _receipt.comments.size()} (${_receipt.comments.size()}) #{/if}</a>
 		#{if _receipt.isFinished()} <span class="label success">Finished!</span> #{/if}
 	</h2>
 	<div class="details">
