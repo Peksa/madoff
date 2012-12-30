@@ -208,7 +208,7 @@ public class Receipts extends Controller
 		}
 
 		public String parseAmount(double totalAmount, int subroundIndex) {
-			if(this.amount.length() == 0) return null; // Empty subrounds
+			if(this.amount == null || this.amount.length() == 0) return null; // Empty subrounds
 			
 			String work = amount;
 			work = work.replaceAll("[+]", " + ");
@@ -276,7 +276,11 @@ public class Receipts extends Controller
 
 	public static void add(Long receiptId, String title, Double tip, List<Long> members, String description, Double total, List<SubroundInput> subrounds, String paid)
 	{
+		
+		
+		
 		// Scrub away any empty subrounds
+		if(subrounds == null) subrounds = new ArrayList<SubroundInput>();
 		Iterator<SubroundInput> it = subrounds.iterator();
 		while(it.hasNext()) {
 			SubroundInput data = it.next();
@@ -291,7 +295,6 @@ public class Receipts extends Controller
 		
 		// Init with some default values
 		if(members == null) members = new ArrayList<Long>();
-		if(subrounds == null) subrounds = new ArrayList<SubroundInput>();
 		if(tip == null) tip = 0.0;
 		if(total == null) total = 0.0;
 		
