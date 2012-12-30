@@ -1,6 +1,11 @@
 #{extends 'main.html' /}
 #{set 'title'}
+	#{if existingData}
+	Edit receipt
+	#{/if}
+	#{else}
 	&{'views.Receipts.register.Title'}
+	#{/else}
 #{/set}
 #{set 'moreScripts'} #{script 'chosen.jquery.min.js' /} #{/set}
 #{set 'moreStyles'} #{stylesheet 'chosen.css' /} #{/set}
@@ -20,7 +25,13 @@
 		#{if existingData && existingData.id}
 		<input type="hidden" name="receiptId" value="${existingData.id}"/>
 		#{/if}
+		#{if existingData}
+		<legend>Edit receipt</legend>
+		#{/if}
+		#{else}
 		<legend>&{'views.Receipts.register.addNew'}</legend>
+		#{/else}
+		
 		<div class="page-header">
     		<h1><small>&{'Required'}</small></h1>
   		</div>
@@ -133,7 +144,7 @@
 		</div>
 		
 		<div class="actions">
-			<input class="btn primary" type="submit" id="register" value="&{'Add'}" />
+			<input class="btn primary" type="submit" id="register" value="&{'Save'}" />
 			<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
 		</div>
 	</fieldset>
@@ -178,23 +189,13 @@ var subroundCount = 0
 
 
 $(document).ready(function() {
-	if(subroundCount == 0) addSubround(true);
-	else {
-		$('#subroundMoney' + subroundCount).keypress(function() {
-			addSubround(true);
-		});
-	}
+	addSubround(true);
 	updateMemberSelection();
 });
 
 $("#members").chosen().change(function() {
 	updateMemberSelection();
-});
-
-// Somewhat of a hack
-function populateSubrounds() {
-	
-}
+});W
 
 function updateMemberSelection()
 {

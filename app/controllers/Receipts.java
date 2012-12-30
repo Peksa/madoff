@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -256,26 +257,35 @@ public class Receipts extends Controller
 			return null;
 		}
 
-		public String validate(List<Long> members)
+		public String validate(List<Long> receiptGlobalMembers)
 		{
-			// Empty subrounds not counted
-			if(this.members == null) return null;
-
+			if(this.members == null || this.members.size() == 0) return "Subround has no members (empty all fields to discard a subround)";
+			if(description == null || description.length() == 0) return "Subround lacks description (empty all fields to discard a subround)";
+			if(parsedAmount <= 1e-8) return "Positive subround amount requred (empty all fields to discard a subround)";
 			for (Long id : this.members)
 			{
-				if(!members.contains(id))
+				if(!receiptGlobalMembers.contains(id))
 				{
 					return Messages.get("controllers.Receipts.add.subroundMemberNotMember");
 				}
-				if(description == null || description.length() == 0) return "Subround lacks description";
-				if(parsedAmount <= 1e-8) return "Subround amount requred (and must be positive)";
 			}
+			
 			return null;
 		}
 	}
 
 	public static void add(Long receiptId, String title, Double tip, List<Long> members, String description, Double total, List<SubroundInput> subrounds, String paid)
 	{
+		// Scrub away any empty subrounds
+		Iterator<SubroundInput> it = subrounds.iterator();
+		while(it.hasNext()) {
+			SubroundInput data = it.next();
+			boolean noMembers = data.members == null || data.members.size() == 0;
+			boolean noItem = data.description == null || data.description.length() == 0;
+			boolean noAmount = data.amount == null || data.amount.length() == 0;
+			if(noMembers && noItem && noAmount) it.remove();
+		}
+		
 		// Save the data in a handy object to be able to pass it back to render() on failure
 		ReceiptData data = new ReceiptData(receiptId, title, tip, members, description, total, paid, subrounds);
 		

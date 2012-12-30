@@ -201,7 +201,7 @@ public class Payment extends Model
 			// This payment has not been depricated by payment adding above
 			// This means it is no longer part of the receipt, remove the receipt
 			if(!old.deprecated) {
-				System.out.println(""+old.payer + old.receiver);
+				//System.out.println(""+old.payer + old.receiver);
 				Payment payment = new Payment(old, receipt, false);
 				payment.save();
 			}
