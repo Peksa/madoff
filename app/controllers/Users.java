@@ -18,15 +18,7 @@ public class Users extends Controller
 	//render(); // no new users while gunde is being griefed :D TODO remove
 	public static void register(String code)
 	{
-		try {
-			if(Security.sha512Hash(code, "").equals("F9V0TzyyMCylO/dS2AVngHYFbcvSayL37oI+hn+3liQAhmIr3sSaHJMd+vGxNgD6s5X2DHN0tD9OMQnFjdn31g==")) {
-				render();
-			}
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		flash.error("Sorry, we are not taking new users at this time!");
-		Application.index(false);
+		render();
 	}
 
 	public static void register()

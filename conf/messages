@@ -44,7 +44,7 @@ paramsFail=Parameters failed the validation.
 errors.Parameters=&{'paramsFail'}
 errors.TakenUsername=That username is already taken, please choose another one.
 errors.TakenEmail=That e-mail address is already in our systems, if that is your e-mail perhaps you want to reset your password instead.
-errors.idiot=LOL you did not pass the idiot test! Try again
+errors.idiot=LOL you did not pass the bot/idiot math test! Try again
 errors.shortUsername=Username must be 5 chars or more
 errors.shortPass=Password must be 8 chars or more
 
