@@ -7,6 +7,7 @@ import models.User;
 import play.*;
 import play.mvc.*;
 import play.i18n.Messages;
+import util.BCrypt;
 
 /**
  * For CRUD-interface
@@ -15,15 +16,9 @@ import play.i18n.Messages;
  */
 public class Users extends Controller
 {
-	//render(); // no new users while gunde is being griefed :D TODO remove
-	public static void register(String code)
-	{
-		render();
-	}
-
 	public static void register()
 	{
-		//render();
+		render();
 	}
 	
 	public static void add(String email, String username, String password, String fullname, Picture picture, int idiotTest) throws Throwable
@@ -70,7 +65,7 @@ public class Users extends Controller
 		}
 		else
 		{
-			String hash = Security.sha512Hash(username, password);
+			String hash = Security.hash(password);
 			User user = new User(email, username, hash);
 			picture.save();
 			user.fullname = fullname;

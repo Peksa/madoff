@@ -9,6 +9,7 @@ import com.sun.corba.se.spi.orbutil.fsm.Input;
 
 import play.libs.Crypto;
 import play.i18n.Messages;
+import util.BCrypt;
 import models.User;
 
 /**
@@ -44,10 +45,17 @@ public class Security extends Secure.Security
 		return false;
 	}
 	
-	public static String sha512Hash(String username, String password) throws NoSuchAlgorithmException
+	protected static String legacyHash(String username, String password) throws NoSuchAlgorithmException
 	{
-		// TODO use bcrypt or something
 		return new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-512").digest((username + password).getBytes())));
+	}
+	
+	protected static String hash(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt(12));
+	}
+	
+	protected static boolean authenticateHash(String password, String savedHash) {
+		return BCrypt.checkpw(password, savedHash);
 	}
 	
 	static boolean authenticate(String username, String password)
@@ -60,9 +68,19 @@ public class Security extends Secure.Security
 
 		try
 		{
-			String hash = sha512Hash(user.username, password);
-			if (hash.equals(user.password))
+			String legacyHash = legacyHash(user.username, password);
+			
+			// Check against legacy hashed password, and upgrade to bcrypt on match
+			if (legacyHash.equals(user.password)) {
+				user.password = hash(password);
+				user.save();
+				System.out.println("Upgraded!");
 				return true;
+			} 
+			// Check password with new hash
+			else if(authenticateHash(password, user.password)) {
+				return true;
+			}
 		}
 		catch (NoSuchAlgorithmException e)
 		{
