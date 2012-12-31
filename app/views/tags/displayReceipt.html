@@ -41,8 +41,7 @@
 		<div class="span2">
 			#{if !_receipt.hasPaymentsDone()}
 				#{if _receipt.creator.username.equals(_connectedUser.username)}
-					#{form @Receipts.edit()}
-						<input type="hidden" name="id" value="${_receipt.id}"/>
+					#{form @Receipts.edit(_receipt.id)}
 						<input type="submit" class="btn error small" value="Edit"/>
 					#{/form}
 					<div class="needsconfirm">
