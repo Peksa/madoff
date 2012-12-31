@@ -378,7 +378,7 @@ public class Receipts extends Controller
 				errorStr = subround.validate(members);
 				if(errorStr != null) break; // break on first error
 			}
-			if(subTotal > total) errorStr = "Subround amount grater than total";
+			if(subTotal + tip > total + 1e-8) errorStr = "Subround + tip > total";
 			
 			if(paid.equals("custom")) {
 				double paysplitTotal = 0;
