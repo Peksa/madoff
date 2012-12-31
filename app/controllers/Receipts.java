@@ -297,7 +297,7 @@ public class Receipts extends Controller
 		{
 			if(this.members == null || this.members.size() == 0) return "Subround has no members (empty all fields to discard a subround)";
 			if(description == null || description.length() == 0) return "Subround lacks description (empty all fields to discard a subround)";
-			if(parsedAmount <= 1e-8) return "Positive subround amount requred (empty all fields to discard a subround)";
+			if(parsedAmount <= 1e-8 || Double.isInfinite(parsedAmount) || Double.isNaN(parsedAmount)) return "Positive subround amount requred (empty all fields to discard a subround)";
 			for (Long id : this.members)
 			{
 				if(!receiptGlobalMembers.contains(id))
@@ -364,7 +364,8 @@ public class Receipts extends Controller
 		String errorStr = null;
 		if(title == null || title.length() == 0) errorStr = "Title requred";
 		else if(members.size() == 0) errorStr = "Members requred";
-		else if(total == null || total <= 1e-8) errorStr = "Total requred (and must be positive)";
+		else if(total == null || total <= 1e-8 || total.isInfinite() || total.isNaN()) errorStr = "Total requred (and must be positive)";
+		else if(tip == null || tip <= 1e-8 || tip.isInfinite() || tip.isNaN()) errorStr = "Tip requred (and must be positive)";
 		else if(!creatorIsMember) errorStr = "Creator must also be a member";
 		else
 		{
