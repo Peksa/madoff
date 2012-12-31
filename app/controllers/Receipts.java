@@ -136,7 +136,7 @@ public class Receipts extends Controller
 			error(Messages.get("Payments has been done on this recipt, cannot edit"));
 		} else {
 			String paid;
-			if(receipt.owners.size() == 1 && receipt.owners.get(0).id == receipt.creator.id) paid = "creator";
+			if(receipt.owners.size() == 1 && receipt.owners.get(0).user.id.equals(receipt.creator.id)) paid = "creator";
 			else {
 				boolean equalSplit = true;
 				if(receipt.owners.size() != receipt.members.size()) equalSplit = false;
