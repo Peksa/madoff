@@ -13,8 +13,9 @@ GET     /receipts/{<[0-9]+>id}					Receipts.show
 GET     /payments								Payments.index
 GET     /payments/{<\d+>userId}					Payments.show
 GET     /graph									Graph.index
-
-
+GET     /user									Users.index
+GET     /user/{username}						Users.show
+GET     /users/edit/{username}					Users.edit
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

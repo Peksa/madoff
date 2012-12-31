@@ -23,7 +23,7 @@
 	#{form @add()}
 	<fieldset>
 		#{if existingData && existingData.id}
-		<input type="hidden" name="receiptId" value="${existingData.id}"/>
+			<input type="hidden" name="receiptId" value="${existingData.id}"/>
 		#{/if}
 		#{if existingData}
 		<legend>Edit receipt</legend>

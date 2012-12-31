@@ -1,0 +1,48 @@
+#{extends 'main.html' /}
+#{set 'title'}
+	${user.username} (${user.fullname})
+#{/set}
+
+<div class="row">
+	<div class="span14">
+		<div class="page-header">
+		  	<span> <h3>User info</h3> </span>
+		</div>
+		
+		<p> <strong>Username:</strong> ${user.username} </p>
+		<p> <strong>Full name:</strong> ${user.fullname} </p>
+		#{if showEmail}
+			<p> <strong>Email:</strong> ${user.email} </p>
+		#{/if}
+	</div>
+	<div class="span2">
+		#{if showEdit}
+	 		#{form @Users.edit(user.username)}
+				<input type="submit" class="btn primary small" value="Edit"/>
+			#{/form}
+		#{/if}
+	</div>
+</div>
+
+<div class="row">
+	<div class="span14">
+		<div class="page-header">
+			<h3>Account info</h3>
+		</div>
+		
+		#{if showBankAccount}
+		  	<div>
+			 	<p> <strong>Bank:</strong> ${user.bankName} </p>
+			 	<p> <strong>Account no:</strong> ${user.accountNo} </p>
+			 	<p> <strong>Clearning no:</strong> ${user.clearingNo} </p>
+			</div>
+		#{/if}
+		#{else}
+			<p> You cannot view this account information since you have no payments to ${user.username} </p>
+		#{/else}
+	</div>
+</div>
+
+
+
+

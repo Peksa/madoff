@@ -85,6 +85,11 @@ public class Security extends Secure.Security
 			error("Couldn't find SHA-512");
 			return false;
 		}
+		// Bcrypt throws this error when password hash is in old format, and password is wrong
+		catch (IllegalArgumentException e) 
+		{
+			return false;
+		}
 		return false;
 		
 	}

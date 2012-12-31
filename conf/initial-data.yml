@@ -4,7 +4,10 @@ User(bob):
     password:       kTtGl4u15hnHGEPhI92JlUHma5qTnoJyagd988sZX+7xdy5I++Mgpzg+Yts6EkQE8hMrNU3B095LeAvwB4f77A==
     fullname:       Bob
     accountNumber:  1234-123
-    
+    admin:          true
+    bankName:       Swedbank
+    accountNo:      1234567890       
+    clearingNo:     12345
 
 User(ann):
     email:          ann@ann.com

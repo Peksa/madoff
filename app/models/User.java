@@ -20,6 +20,12 @@ public class User extends Model implements Comparable<User>
 	public String fullname;
 	public String accountNumber;
 	
+	public String bankName;
+	public String accountNo;
+	public String clearingNo;
+	
+	public boolean admin = false;
+	
 	@OneToOne
 	public Picture picture;
 

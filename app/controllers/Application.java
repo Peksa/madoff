@@ -16,23 +16,28 @@ public class Application extends Controller
 	 */
 	public static void index(boolean all)
 	{
-		List<Receipt> allReceipts = Receipt.find("deleted != true order by created desc").fetch();
-
 		User user = Security.connectedUser();
+		
+		if(user.bankName == null) { 
+			flash.put("info", "<strong>Nag screen!</strong> Before you continue, please update your profile.");
+			Users.edit(user.username);
+		} else {
+			List<Receipt> allReceipts = Receipt.find("deleted != true order by created desc").fetch();
 
-		int receiptHidden = 0;
+			int receiptHidden = 0;
 
-		// Moar opt to do with DB query, but KISS
-		List<Receipt> receipts = new ArrayList<Receipt>();
-		for(Receipt r : allReceipts)
-		{
-			if(r.members.contains(user))
+			// Moar opt to do with DB query, but KISS
+			List<Receipt> receipts = new ArrayList<Receipt>();
+			for(Receipt r : allReceipts)
 			{
-				if(all == false && r.isFinished()) receiptHidden++;
-				else receipts.add(r);
+				if(r.members.contains(user))
+				{
+					if(all == false && r.isFinished()) receiptHidden++;
+					else receipts.add(r);
+				}
 			}
-		}
 
-		render(receipts, user, receiptHidden);
+			render(receipts, user, receiptHidden);
+		}
 	}
 }

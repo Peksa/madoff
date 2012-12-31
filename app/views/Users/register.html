@@ -1,12 +1,12 @@
 #{extends 'main.html' /}
 #{set 'title'}
-	&{'views.Users.register.Title'}
+	${title}
 #{/set}
 
 
 <div id="register">
 	
-	<h1>&{'views.Users.register.Title'}</h1>
+	<h1>${title}</h1>
 	#{if flash.error}
 		<div class="alert-message error">
 			<a class="close" href="#">&times;</a> 
@@ -16,9 +16,26 @@
 			</p>
 		</div>
 	#{/if}
-	#{form @add(), enctype:'multipart/form-data'}
+	#{if flash.info}
+		<div class="alert-message warning">
+			<a class="close" href="#">&times;</a>
+			<p> &{flash.info} </p>
+	    </div>
+	#{/if}
+	#{form destination, enctype:'multipart/form-data'}
 		<fieldset>
-		<legend>&{'views.Users.register.Title'}</legend>
+		<legend>${title}</legend>
+			<fieldset>
+			
+			#{if register}
+			<div class="clearfix">
+				<label for="username">&{'views.Users.register.username'}</label>
+				<div class="input">
+					<input type="text" name="username" id="username" value="${flash.username}" />
+				</div>
+			</div>
+			#{/if}
+		
 			<div class="clearfix">
 				<label for="fullname">&{'views.Users.register.fullName'}</label>
 				<div class="input">
@@ -33,12 +50,10 @@
 				</div>
 			</div>
 			
-			<div class="clearfix">
-				<label for="username">&{'views.Users.register.username'}</label>
-				<div class="input">
-					<input type="text" name="username" id="username" value="${flash.username}" />
-				</div>
-			</div>
+			</fieldset>
+			
+			<fieldset>
+			
 			<div class="clearfix">
 				<label for="password">&{'views.Users.register.password'}</label>
 				<div class="input">
@@ -46,21 +61,75 @@
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="picture">&{'views.Users.register.picture'}</label>
+				<label for="password">Repeat password</label>
 				<div class="input">
-					<input type="file" name="picture.image" id="picture" value="" />
+					<input type="password" name="repeatPassword" id="repeatPassword" value="" />
+					<div> <p> Leave fields blank to keep current password </p> </div>
+				</div>
+				
+			</div>
+			
+			</fieldset>
+			
+			<fieldset>
+			
+			<div class="clearfix">
+				<label for="idiotTest">Bank name</label>
+				<div class="input">
+					<input type="text" name="bankName" id="bankName" value="${flash.bankName}" />
 				</div>
 			</div>
+			<div class="clearfix">
+				<label for="idiotTest">Account no</label>
+				<div class="input">
+					<input type="text" name="accountNo" id="accountNo" value="${flash.accountNo}" />
+				</div>
+			</div>
+			<div class="clearfix">
+				<label for="idiotTest">Clearing no</label>
+				<div class="input">
+					<input type="text" name="clearingNo" id="clearingNo" value="${flash.clearingNo}" />
+				</div>
+			</div>
+			
+			</fieldset>
+			
+			<fieldset>
+			
+			#{if register}
 			<div class="clearfix">
 				<label for="idiotTest">4700 + 9! * 0 + 11</label>
 				<div class="input">
 					<input type="text" name="idiotTest" id="idiotTest" value="${flash.idiotTest}" />
 				</div>
 			</div>
-			 <div class="actions"> 
-				<input type="submit" class="btn primary" id="register" value="&{'views.Users.register.Title'}" />
-				&nbsp;<button type="reset" class="btn">&{'Cancel'}</button> 
+			#{/if}
+			#{else}
+			<div class="clearfix">
+				<label for="password">Your current password</label>
+				<div class="input">
+					<input type="password" name="ownPassword" id="ownPassword" value="" />
+					
+				</div>
 			</div>
+			#{/else}
+			
+			</fieldset>
+			
+			#{if register}
+			<div class="actions"> 
+				<input type="submit" class="btn primary" id="Register" value="&{'views.Users.register.Title'}" />
+				&nbsp;<a href="@{Application.index()}" class="btn">&{'Cancel'}</a>
+			</div>
+			#{/if}
+			#{else}
+			<div class="actions"> 
+				<input type="submit" class="btn primary" id="Save" value="Save" />
+				&nbsp;<a href="@{Users.index()}" class="btn">&{'Cancel'}</a>
+			</div>
+			#{/else}
+			
+			
 			
 		</fieldset>
 	#{/form}

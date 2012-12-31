@@ -14,7 +14,7 @@
     	if(_outgoing) user = payment.receiver
     	else user = payment.payer
     }%
-	${user.fullname} (${user.username}): ${payment.amount.format('0.00')} SEK 
+	<a href="@{Users.show(user.username)}">${user.fullname} (${user.username})</a> : ${payment.amount.format('0.00')} SEK 
 	#{if payment.identifier}
 		- <strong>${payment.identifier}</strong>
 	#{/if}

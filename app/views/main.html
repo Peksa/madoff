@@ -122,6 +122,7 @@ $(document).ready(function(){
 						</li>
 						-->
 						<!-- <li style="width: 45px; text-align: center; background-color: #922; border: 1px solid #500;"><a href="#" id="notification">5</a></li> -->
+						<li #{if request.action == "Users.index"} class="active" #{/if}><a href="@{Users.index()}">&{'Account'}</a></li>
 						<li><a href="@{Secure.logout()}">&{'logout'}</a></li>
 					</ul>
 				</div>
