@@ -142,7 +142,7 @@ public class Receipt extends Model
 		if(totalWithoutTip < 1e-8) amount += tip / members.size(); // Special case of just tip
 		else 
 		{
-			double percentage = amount / totalWithoutTip;
+			double percentage = amount / totalWithoutTip; // - 0.25, 1
 			amount += tip * percentage;
 		}
 

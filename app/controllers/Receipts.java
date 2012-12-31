@@ -3,10 +3,13 @@ package controllers;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import models.Comment;
@@ -132,7 +135,18 @@ public class Receipts extends Controller
 		} else if (receipt.hasPaymentsDone()){
 			error(Messages.get("Payments has been done on this recipt, cannot edit"));
 		} else {
-			String paid = receipt.owners.size() == 1 ? "creator" : "split";
+			String paid;
+			if(receipt.owners.size() == 1 && receipt.owners.get(0).id == receipt.creator.id) paid = "creator";
+			else {
+				boolean equalSplit = true;
+				if(receipt.owners.size() != receipt.members.size()) equalSplit = false;
+				else {
+					for(ReceiptOwner owner : receipt.owners) {
+						if(owner.amount != receipt.owners.get(0).amount) equalSplit = false;
+					}
+				}
+				paid = equalSplit ? "split" : "custom";
+			}
 			
 			ArrayList<Long> members = new ArrayList<Long>();
 			for(User user : receipt.members) members.add(user.id);
@@ -149,6 +163,13 @@ public class Receipts extends Controller
 				input.description = pot.description;
 			}	
 			
+			Map<Long,Double> payment = new HashMap<Long, Double>();
+			if(paid == "custom") {
+				for(ReceiptOwner owner : receipt.owners) {
+					payment.put(owner.user.id, owner.amount);
+				}
+			}
+			
 			ReceiptData data = new ReceiptData(receipt.id, 
 					receipt.title, 
 					receipt.tip, 
@@ -156,7 +177,8 @@ public class Receipts extends Controller
 					receipt.description, 
 					receipt.getTotal(), 
 					paid,
-					subrounds);
+					subrounds,
+					payment);
 			
 			registerCommon(null, data);
 		}
@@ -166,7 +188,7 @@ public class Receipts extends Controller
 	public static class ReceiptData {
 		public ReceiptData(Long id, String title, Double tip,
 				List<Long> members, String description, Double total,
-				String paid, List<SubroundInput> subrounds) {
+				String paid, List<SubroundInput> subrounds, Map<Long,Double> payment) {
 			super();
 			this.id = id;
 			this.title = title;
@@ -176,6 +198,7 @@ public class Receipts extends Controller
 			this.total = total;
 			this.paid = paid;
 			this.subrounds = subrounds;
+			this.payment = payment;
 		}
 		
 		public Long id;
@@ -186,6 +209,19 @@ public class Receipts extends Controller
 		public Double total;
 		public String paid;
 		public List<SubroundInput> subrounds;
+		public Map<Long,Double> payment;
+	}
+	
+	public static class PaymentSplitInput
+	{
+		public long id;
+		public double amount;
+		
+		public PaymentSplitInput(long id, double amount) {
+			super();
+			this.id = id;
+			this.amount = amount;
+		}
 	}
 
 	// Sort of ugly with public, but play breaks otherwise
@@ -274,11 +310,8 @@ public class Receipts extends Controller
 		}
 	}
 
-	public static void add(Long receiptId, String title, Double tip, List<Long> members, String description, Double total, List<SubroundInput> subrounds, String paid)
+	public static void add(Long receiptId, String title, Double tip, List<Long> members, String description, Double total, List<SubroundInput> subrounds, String paid, Map<Long,Double> payment)
 	{
-		
-		
-		
 		// Scrub away any empty subrounds
 		if(subrounds == null) subrounds = new ArrayList<SubroundInput>();
 		Iterator<SubroundInput> it = subrounds.iterator();
@@ -291,10 +324,11 @@ public class Receipts extends Controller
 		}
 		
 		// Save the data in a handy object to be able to pass it back to render() on failure
-		ReceiptData data = new ReceiptData(receiptId, title, tip, members, description, total, paid, subrounds);
+		ReceiptData data = new ReceiptData(receiptId, title, tip, members, description, total, paid, subrounds, payment);
 		
 		// Init with some default values
 		if(members == null) members = new ArrayList<Long>();
+		if(payment == null) payment = new HashMap<Long, Double>();
 		if(tip == null) tip = 0.0;
 		if(total == null) total = 0.0;
 		
@@ -344,7 +378,15 @@ public class Receipts extends Controller
 				if(errorStr != null) break; // break on first error
 			}
 			if(subTotal > total) errorStr = "Subround amount grater than total";
-
+			
+			if(paid.equals("custom")) {
+				double paysplitTotal = 0;
+				for(Entry<Long, Double> split : payment.entrySet()){
+					if(!members.contains(split.getKey())) errorStr = "Member in payment split not in receipt members";
+					paysplitTotal += split.getValue();
+				}
+				if(Math.abs(paysplitTotal - total) > (0.01 + 1e-8) * members.size()) errorStr = "Payment split sum does not equal total";
+			}
 		}
 		if(errorStr != null) {
 			registerCommon(errorStr, data);
@@ -385,6 +427,17 @@ public class Receipts extends Controller
 			for(User u : receipt.members)
 			{
 				receipt.owners.add(new ReceiptOwner(receipt, u, eachShare));
+			}
+		}
+		else if(paid.equals("custom")) {
+			for(Entry<Long, Double> split : payment.entrySet()) {
+				if(split.getValue() > 1e-8) {
+					for(User u : receipt.members) {
+						if(u.id == split.getKey()) {
+							receipt.owners.add(new ReceiptOwner(receipt, u, split.getValue()));
+						}
+					}
+				}
 			}
 		}
 		else // Creator payed for everything

@@ -48,7 +48,7 @@
 							if(!existingData) {
 								if(user.username == u.username) selectedHtml = selected
 							} else {
-								if(existingData.members.contains(u.id)) selectedHtml = selected
+								if(existingData.members && existingData.members.contains(u.id)) selectedHtml = selected 
 							}
 					    }%
 						<!-- Dividing line below into multiple lines breaks chosen autocomplete -->
@@ -101,8 +101,11 @@
 		<div class="clearfix">
 			<label for="payer">&{'Who paid'}:</label>
 			<div class="input">
-				<input type="radio" name="paid" value="creator" #{if !existingData || existingData.paid.equals("creator")} checked #{/if}> I paid for everything </input> <br>
-				<input type="radio" name="paid" value="split" #{if existingData && existingData.paid.equals("split")} checked #{/if}> Payment split evenly between all members </input>
+				<input type="radio" class="paidButton" name="paid" value="creator" #{if !existingData || existingData.paid.equals("creator")} checked #{/if}> I paid for everything </input> <br/>
+				<input type="radio" class="paidButton" name="paid" value="split" #{if existingData && existingData.paid.equals("split")} checked #{/if}> Payment split evenly between all members </input> <br/>
+				<input type="radio" class="paidButton" name="paid" value="custom" #{if existingData && existingData.paid.equals("custom")} checked #{/if}> Custom </input>
+			</div>
+			<div id="customPayment">
 			</div>
 		</div>
 		
@@ -179,23 +182,57 @@
 		</div>
 </script>
 
+<script id="templatePaymentBase" type="text/html">
+	<div class="clearfix">
+		<label for="split">&{'Pay split'}:</label>
+		<fieldset>
+			<div id="paymentMembers">		
+							
+			</div>
+		</fieldset>
+	</div>
+</script>
+
+<script id="templatePaymentMember" type="text/html">
+	<div class="paymentMember" id="payment{{ userId }}">
+		<label for="payment">{{ username }}</label>
+		<div class="input">
+			<input placeholder="item" class="span2 paidAmount" type="text" name="payment[{{ userId }}]" id="paymentInput{{ userId }}" value="{{ amount }}" />
+			<a class="close" style="float:none; cursor: pointer;" onclick="clearPaidInput({{ userId }})">X</a>
+		</div>
+	</div>
+</script>
+
 <script type="text/javascript" charset="utf-8">
 #{if existingData}
-var subroundCount = ${existingData.subrounds.size()}
+	var subroundCount = ${existingData.subrounds.size()};
 #{/if}
 #{else}
-var subroundCount = 0
+	var subroundCount = 0;
 #{/else}
 
 
 $(document).ready(function() {
 	addSubround(true);
 	updateMemberSelection();
+	
+	$('.paidButton').change(function() {
+		togglePaid(this);
+	});
+	
+	$('#total').change(function() {
+		updatePaidFromTotal();
+	});
+	
+	#{if existingData && existingData.paid.equals("custom")}
+		// Init payment amounts with JS
+		updatePaidMembers(true);
+	#{/if}
 });
 
 $("#members").chosen().change(function() {
 	updateMemberSelection();
-});W
+});
 
 function updateMemberSelection()
 {
@@ -223,6 +260,11 @@ function updateMemberSelection()
 	
 	/// Update chosen fields
 	$(".subroundMembers").trigger("liszt:updated");
+	
+	// If custom payment is on, update field
+	if ($('input:radio[name=paid]:checked').val() === 'custom') {
+		updatePaidMembers(false);
+	}
 }
 
 function addSubround(initial)
@@ -244,12 +286,146 @@ function addSubround(initial)
 	
 	$(".chzn-select").chosen();
 	
-	
 	$('#subroundMoney' + subroundCount).keypress(function() {
 		addSubround(true);
 	});
 	
 	subroundCount++;
 }
+
+function togglePaid() { 
+	  if ($('input:radio[name=paid]:checked').val() === 'custom') {
+		  updatePaidMembers(true);
+	  } else {
+		  $('#customPayment').empty();
+	  } 
+}
+
+// Default data for paid split
+var initalPayAmount = {};
+#{if existingData && existingData.members && existingData.paid.equals("custom")}
+#{list existingData.payment.keySet(), as:'userId'} 
+initalPayAmount[${userId}] = ${existingData.payment.get(userId)};
+#{/list}
+#{/if}
+
+function updatePaidMembers(inital) {  
+	// Setup base html on inital creation
+	if(inital) {
+		var base = ich.templatePaymentBase({});
+		$("#customPayment").html(base);
+	}
+	
+	var members = $('#members');
+	memberValues = members.val();
+	memberText = new Array();
+	for(i in memberValues) {
+		memberText[i] = $("#members option[value='"+ memberValues[i] + "']").text();
+	}
+	
+	var memberCount = memberValues ? memberValues.length : 0;
+	
+	if(memberCount > 0) {		
+		// Add any non existing members
+		for(i in memberValues) {
+			var userId = memberValues[i];
+			var selector = "#payment" + userId;
+			if($(selector).length == 0) {
+				var defaultAmount = 0;
+				if(inital && initalPayAmount[userId]) {
+					defaultAmount = initalPayAmount[userId];
+					initalPayAmount[userId] = null;
+				}
+				
+				var data = {
+					userId: memberValues[i],
+					username: memberText[i],
+					amount: defaultAmount
+				}
+				
+				var html = ich.templatePaymentMember(data);
+				$(html).appendTo('#paymentMembers');
+				
+				$(selector).change(function() {
+					updateTotalFromPaid();
+				});
+			}
+		}
+	}
+	
+	// Remove all members not that are no longer in the receipt
+	$(".paymentMember").each(function() { 
+		var elem = $(this);
+		var id = elem.attr('id');
+		var idNumber = id.replace('payment','');
+		if($.inArray(idNumber, memberValues) == -1) {
+			elem.remove();
+		}
+	});
+	
+	updatePaidFromTotal();
+}
+
+function sumPaidTotal() {
+	var total = 0;
+	$('.paidAmount').each(function() { 
+		total += parseFloat($(this).val());
+	});
+	return total;
+}
+
+function isNumber(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function initTotal() {
+	if(!isNumber($('#total').val())) {
+		$('#total').val("0.0")
+	}
+}
+
+function updatePaidFromTotal(inital) {
+	if(inital) {
+		initTotal();
+	}
+	
+	var total = parseFloat($('#total').val()).toFixed(2);
+	
+	if(isNumber(total)) {
+		var memberValues = $('#members').val();
+		var memberCount = memberValues ? memberValues.length : 0;
+		
+		var paidSum = sumPaidTotal();
+		
+		
+		// Scale each amount proportional to size
+		if(paidSum > 0 && total > 0) {
+			var scale = total / paidSum;
+			$('.paidAmount').each(function() { 
+				$(this).val(($(this).val() * scale).toFixed(2));
+			});
+		} 
+		// Or just apply the result evenly
+		else if(memberCount > 0){
+			$('.paidAmount').each(function() { 
+				$(this).val((total / memberCount).toFixed(2));
+			});
+		}
+	}
+}
+
+function updateTotalFromPaid() {
+	$('.paidAmount').each(function() { 
+		$(this).val(parseFloat($(this).val()).toFixed(2));
+	});
+	$('#total').val(sumPaidTotal()).toFixed(2);
+}
+
+function clearPaidInput(userId) {
+	$('#paymentInput' + userId).val('0.0');
+	updatePaidFromTotal();
+}
+
+
 
 </script>
