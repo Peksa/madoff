@@ -154,3 +154,10 @@ div.alert-message.block-message
 	 border-color: #ddd;
 }
 
+/* bootstrap tweaks */
+input.btn-mini {
+    padding: 3px 8px;
+    font-size: 11px;
+    line-height: 20px;
+}
+

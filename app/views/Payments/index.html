@@ -59,12 +59,12 @@
     </div><!-- /col -->
 </div> 
 
-<h3>&{'views.Payments.show.Settled'}</h3>
+<h3>&{'Finished'}</h3>
 <table class="zebra-striped" id="sortTableExample">
     <thead>
       <tr>
         <th class="header">&{'views.Payments.show.Paid'}</th>
-        <th class="header">&{'views.Payments.show.Accepted'}</th>
+        <th class="header">&{'Finished'}</th>
         <th class="header">&{'views.Payments.show.From'}</th>
         <th class="header">&{'views.Payments.show.To'}</th>
         <th class="header">&{'views.Payments.show.Amount'}</th>
@@ -102,3 +102,10 @@
      #{/list}
      </tbody>
   </table>
+  
+  <script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			// Init tooltips
+			$('.paymentId').tipsy();
+		});
+  </script>

@@ -7,17 +7,17 @@
 #{/if}
 #{list items:_payments, as:'payment'}
     <li>
-    #{if payment.paid && _showDate}
-    	${payment.paid.format('yyyy-MM-dd')}<br>
-    #{/if}
     %{
     	if(_outgoing) user = payment.receiver
     	else user = payment.payer
     }%
 	<a href="@{Users.show(user.username)}">${user.fullname} (${user.username})</a> : ${payment.amount.format('0.00')} SEK 
 	#{if payment.identifier}
-		- <strong>${payment.identifier}</strong>
+		- <strong class="paymentId" original-title="Suggested reference for bank transfer">${payment.identifier}</strong>
 	#{/if}
+	#{if payment.paid && _showDate}
+    	<br/> <span> (Paid on ${payment.paid.format('yyyy-MM-dd')}) </span>
+    #{/if}
 	#{if payment.receipts}
 		<ul>
 		#{list items:payment.receipts, as:'receipt'}
@@ -30,13 +30,13 @@
 		#{if _action == 'pay'}
 			#{form @Payments.pay()}
 				<input type="hidden" name="id" value="${payment.id}"/>
-				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.send'}"/>
+				<input type="submit" class="btn btn-mini success" value="&{'Paid'}"/>
 			#{/form}
 		#{/if}
 		#{if _action == 'accept'}
 			#{form @Payments.accept()}
 				<input type="hidden" name="id" value="${payment.id}"/>
-				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.accept'}"/>
+				<input type="submit" class="btn btn-mini success" value="&{'Accept'}"/>
 			#{/form}
 		#{/if}
 	#{/if}

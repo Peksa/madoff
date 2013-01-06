@@ -62,8 +62,10 @@ public class Payment extends Model
 	private String generateId()
 	{
 		int paymentCounter = Payment.find("payer = ? AND receiver = ? AND deprecated = false", payer, receiver).fetch().size() % 9999 + 1;
-		return payer.username.substring(0,Math.min(6,payer.username.length())) 
-				+ Integer.toString(paymentCounter);
+		int counterLen = String.valueOf(paymentCounter).length();
+		// Ensure id is at most 10 chars long
+		String nameTrimmed = payer.username.substring(0,Math.min(10 - counterLen,payer.username.length()));
+		return nameTrimmed + paymentCounter;
 	}
 	
 	public double getAmount()
