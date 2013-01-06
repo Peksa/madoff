@@ -29,7 +29,7 @@
 			<div class="payers">
 				<h3>
 					${_receipt.owners.size() ?: 'no'} 
-			        ${_receipt.owners.size().pluralize(messages.get('payer'), messages.get('payers'))}
+			        ${_receipt.owners.size().pluralize("creditor", "creditors")}
 				</h3>
 			    #{list items:_receipt.owners, as:'ownerInfo'}
 		            <li class="member">
@@ -70,8 +70,7 @@
 		</h3>
 	    #{list items:_receipt.members, as:'member'}
             <li class="member">
-            	#{if member.username.equals(_connectedUser.username)} <span style="font-weight: bold"> #{/if}
-				#{else} <span> #{/else}
+            	#{if member.username.equals(_connectedUser.username)} <strong> #{/if}
             
                 ${member.fullname} (${_receipt.getTotal(member).format('0.00')} SEK)
                 
@@ -97,34 +96,44 @@
                  	<span>&nbsp;(settled against debts, waiting for reverse payment) </span> 
                  	#{/if}
                 #{/if}
-                </span>
+                #{if member.username.equals(_connectedUser.username)} </strong> #{/if}
             </li>
 	    #{/list}
 	</div>
 	
-	<div class="rounds">
-		<h3>&{'Receipt'}</h3>
-		<table class="receipt" cellspacing="0">
-			<tr>
-				<th>&{'Item'}</th><th>&{'Total'}</th><th>&{'Users'}</th>
-			</tr>
-			#{list items:_receipt.subpots, as:'round'}
+	<h3>&{'Receipt'}</h3>
+	#{if _receipt.subpots.size() > 0}
+		<div class="rounds">
+			<table class="receipt" cellspacing="0">
 				<tr>
-					<td>${round.description}</td>
-					<td>${round.total.format('0.00')} SEK #{if round.calculation} [${round.calculation}] #{/if} </td>
-					<td>
-						#{list items:round.members, as:'user'}
-							${user.fullname}
-							<br/>
-						#{/list}
-					</td>
+					<th>&{'Item'}</th><th>&{'Total'}</th><th>&{'Members'}</th><th>&{'Each'}</th>
 				</tr>
-			#{/list}
-		</table>
+				#{list items:_receipt.subpots, as:'round'}
+					<tr>
+						<td>${round.description}</td>
+						<td>${round.total.format('0.00')} SEK #{if round.calculation} [${round.calculation}] #{/if} </td>
+						<td>
+							#{list items:round.members, as:'user'}
+								${user.fullname}
+								<br/>
+							#{/list}
+						</td>
+						<td>
+							#{if round.members.size() > 0}
+								${(round.total / round.members.size()).format('0.00') }
+							#{/if}
+						</td>
+					</tr>
+				#{/list}
+			</table>
+		</div>
+	#{/if}	
+	
+	#{if _receipt.tip > 0}
 		<div class="tip">&{'Tip'}: ${_receipt.tip.format('0.00')} SEK</div>
-		<span class="total">&{'Total'}: ${_receipt.total.format('0.00')} SEK</span>
-	</div>
-		
+	#{/if}
+	<span class="total">&{'Total'}: ${_receipt.total.format('0.00')} SEK</span>
+	
 	<div id="comments" class="comments">
 	    <h3>
 	        &{'Comments'}:

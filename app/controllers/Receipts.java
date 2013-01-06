@@ -53,6 +53,20 @@ public class Receipts extends Controller
 
 			error(Messages.get("controllers.Payments.validate.unauthorized"));
 		}
+		
+		// Add a helping subround for remainder when we have subrounds
+		if(receipt.subpots.size() > 0) {
+			double remaining = receipt.getTotal();
+			for(Subpot pot : receipt.subpots) {
+				remaining -= pot.total;
+			}
+			if(remaining > 1e-8) {
+				Subpot helper = new Subpot(remaining);
+				helper.members.addAll(receipt.members);
+				helper.description = "Remaining";
+				receipt.subpots.add(helper);
+			}
+		}
 
 		render(receipt, user);
 	}
