@@ -365,7 +365,7 @@ public class Receipts extends Controller
 		if(title == null || title.length() == 0) errorStr = "Title requred";
 		else if(members.size() == 0) errorStr = "Members requred";
 		else if(total == null || total <= 1e-8 || total.isInfinite() || total.isNaN()) errorStr = "Total requred (and must be positive)";
-		else if(tip == null || tip <= 1e-8 || tip.isInfinite() || tip.isNaN()) errorStr = "Tip requred (and must be positive)";
+		else if(tip == null || tip <= -1e-8 || tip.isInfinite() || tip.isNaN()) errorStr = "Tip requred (and must be non-negative)";
 		else if(!creatorIsMember) errorStr = "Creator must also be a member";
 		else
 		{
