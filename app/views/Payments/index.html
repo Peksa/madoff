@@ -26,7 +26,7 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message #{if liabilities}error#{/if}">
 	    	<div>
-			    <h2>&{'views.Payments.show.liabilities'}</h2>
+			    <h2>&{'views.Payments.show.liabilities'} (${liabilitiesTotal.format('0.00')})</h2>
 			    #{displayPayment payments:liabilities, action:'pay', outgoing:true, showDate:false /}
 			</div>
 		</div>
@@ -34,7 +34,7 @@
     <div class="span8 columns">
 	    <div class="alert-message block-message #{if securities}error#{/if}">
 	    	<div>
-			    <h2>&{'views.Payments.show.securities'}</h2>
+			    <h2>&{'views.Payments.show.securities'}  (${securitiesTotal.format('0.00')})</h2>
 			    #{displayPayment payments:securities, action:'none', outgoing:false, showDate:false /}
 			</div>
 		</div>
