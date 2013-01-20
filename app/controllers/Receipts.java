@@ -186,7 +186,6 @@ public class Receipts extends Controller
 			
 			ReceiptData data = new ReceiptData(receipt.id, 
 					receipt.title, 
-					receipt.tip, 
 					members, 
 					receipt.description, 
 					receipt.getTotal(), 
@@ -200,13 +199,12 @@ public class Receipts extends Controller
 	
 	// All data for a receipt, to send back to edit or retry on register error
 	public static class ReceiptData {
-		public ReceiptData(Long id, String title, Double tip,
+		public ReceiptData(Long id, String title,
 				List<Long> members, String description, Double total,
 				String paid, List<SubroundInput> subrounds, Map<Long,Double> payment) {
 			super();
 			this.id = id;
 			this.title = title;
-			this.tip = tip;
 			this.members = members;
 			this.description = description;
 			this.total = total;
@@ -324,7 +322,7 @@ public class Receipts extends Controller
 		}
 	}
 
-	public static void add(Long receiptId, String title, Double tip, List<Long> members, String description, Double total, List<SubroundInput> subrounds, String paid, Map<Long,Double> payment)
+	public static void add(Long receiptId, String title, List<Long> members, String description, Double total, List<SubroundInput> subrounds, String paid, Map<Long,Double> payment)
 	{
 		// Scrub away any empty subrounds
 		if(subrounds == null) subrounds = new ArrayList<SubroundInput>();
@@ -338,12 +336,11 @@ public class Receipts extends Controller
 		}
 		
 		// Save the data in a handy object to be able to pass it back to render() on failure
-		ReceiptData data = new ReceiptData(receiptId, title, tip, members, description, total, paid, subrounds, payment);
+		ReceiptData data = new ReceiptData(receiptId, title, members, description, total, paid, subrounds, payment);
 		
 		// Init with some default values
 		if(members == null) members = new ArrayList<Long>();
 		if(payment == null) payment = new HashMap<Long, Double>();
-		if(tip == null) tip = 0.0;
 		if(total == null) total = 0.0;
 		
 		User creator = Security.connectedUser();
@@ -379,7 +376,6 @@ public class Receipts extends Controller
 		if(title == null || title.length() == 0) errorStr = "Title requred";
 		else if(members.size() == 0) errorStr = "Members requred";
 		else if(total == null || total <= 1e-8 || total.isInfinite() || total.isNaN()) errorStr = "Total requred (and must be positive)";
-		else if(tip == null || tip <= -1e-8 || tip.isInfinite() || tip.isNaN()) errorStr = "Tip requred (and must be non-negative)";
 		else if(!creatorIsMember) errorStr = "Creator must also be a member";
 		else
 		{
@@ -392,7 +388,7 @@ public class Receipts extends Controller
 				errorStr = subround.validate(members);
 				if(errorStr != null) break; // break on first error
 			}
-			if(subTotal + tip > total + 1e-8) errorStr = "Subround + tip > total";
+			if(subTotal > total + 1e-8) errorStr = "Subrounds > total";
 			
 			if(paid.equals("custom")) {
 				double paysplitTotal = 0;
@@ -433,7 +429,6 @@ public class Receipts extends Controller
 			receipt.owners.clear();
 		}
 		
-		receipt.tip = tip;
 		receipt.members.addAll(membersSet);
 
 		if(paid.equals("split"))
