@@ -28,15 +28,24 @@
 		#{/list}
 		</ul>
 		#{if _action == 'pay'}
-			#{form @Payments.pay()}
-				<input type="hidden" name="id" value="${payment.id}"/>
-				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.send'}"/>
+			#{form @Payments.pay(payment.id)}
+				<input type="submit" class="btn success small" value="&{'Paid'}"/>
+			#{/form}
+			#{form @Payments.reject(payment.id)}
+				<input type="submit" class="btn error small" value="&{'Reject'}"/>
 			#{/form}
 		#{/if}
 		#{if _action == 'accept'}
-			#{form @Payments.accept()}
-				<input type="hidden" name="id" value="${payment.id}"/>
-				<input type="submit" class="btn error small" value="&{'views.tags.displayPayment.accept'}"/>
+			#{form @Payments.accept(payment.id)}
+				<input type="submit" class="btn success small" value="&{'views.tags.displayPayment.accept'}"/>
+			#{/form}
+			#{form @Payments.reject(payment.id)}
+				<input type="submit" class="btn error small" value="&{'Reject'}"/>
+			#{/form}
+		#{/if}
+		#{if _action == 'release'}
+			#{form @Payments.release(payment.id)}
+				<input type="submit" class="btn error small" value="&{'Release'}"/>
 			#{/form}
 		#{/if}
 	#{/if}

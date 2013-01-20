@@ -82,6 +82,14 @@ public class Payments extends Controller
 
 		index();
 	}
+	
+	public static void reject(long paymentId) {
+		
+	}
+	
+	public static void release(long paymentId) {
+		
+	}
 
 	/**
 	 * Verify that user ID is same as authorized ID and input has no errors

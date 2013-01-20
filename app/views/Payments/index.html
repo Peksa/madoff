@@ -35,7 +35,7 @@
 	    <div class="alert-message block-message #{if securities}error#{/if}">
 	    	<div>
 			    <h2>&{'views.Payments.show.securities'}  (${securitiesTotal.format('0.00')})</h2>
-			    #{displayPayment payments:securities, action:'none', outgoing:false, showDate:false /}
+			    #{displayPayment payments:securities, action:'release', outgoing:false, showDate:false /}
 			</div>
 		</div>
     </div><!-- /col -->
