@@ -30,6 +30,12 @@ var graphEvents =
 		#{if firstDate == false },#{/if} %{ firstDate = false }% {"time":${event.time},"id":${event.receiptId},"name":"${event.name}"}
 	#{/list}
 	 ];
+	 
+var nodeData = {};
+
+#{list items:users, as:'u'}
+	nodeData["${u.username}"] = {color: #{if u.equals(user)}"#C23412"#{/if}#{else}"#123456"#{/else}}
+#{/list}
 
 var graphIndex = graphEvents.length - 1;
 
@@ -268,8 +274,16 @@ var graphIndex = graphEvents.length - 1;
 		var debt = graphDebts[i];
 	  	if(debt.start > currentTime) continue;
 	  	if(debt.end != -1 && debt.end <= currentTime) continue;
+	  	if(graphSys.getNode(debt.from) === undefined) graphSys.addNode(debt.from, nodeData[debt.from]);
+		if(graphSys.getNode(debt.to) === undefined) graphSys.addNode(debt.to, nodeData[debt.to]);
 	  	graphSys.addEdge(debt.from, debt.to, {debt:debt.amount});
 	  }
+	  
+	  graphSys.eachNode(function(node, pt){
+		  if(graphSys.getEdgesFrom(node).length == 0 && graphSys.getEdgesTo(node).length == 0) {
+			  graphSys.pruneNode(node);
+		  }
+	  });
 	}
   
   $('#graphView').bind('mousewheel', function(event, delta) {
@@ -282,10 +296,6 @@ var graphIndex = graphEvents.length - 1;
     sys.parameters({gravity:true}) // use center-gravity to make the graph settle nicely (ymmv)
     sys.renderer = Renderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
     graphSys = sys;
-    		
-    #{list items:users, as:'u'}
-    	sys.addNode("${u.username}", {color: #{if u.equals(user)}"#C23412"#{/if}#{else}"#123456"#{/else}})
-    #{/list}
     	
     updateGraph(0);
     
