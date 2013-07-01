@@ -3,7 +3,6 @@
 require:
     - play
     - secure
-    - crud
     - provided -> ocpsoft-pretty-time 1.0.7
 
     

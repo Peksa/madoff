@@ -35,7 +35,11 @@ public class Payments extends Controller
 			List<Payment> accept = Payment.find("deprecated = false AND receiver = ? AND paid != null AND accepted = null", user).fetch();
 			List<Payment> securities = Payment.find("deprecated = false AND receiver = ? AND paid = null", user).fetch();
 			
-			render(liabilities, pending, securities, accept, settled, user);
+			double liabilitiesTotal = 0.0, securitiesTotal = 0.0;
+			for(Payment p : liabilities) liabilitiesTotal += p.getAmount();
+			for(Payment p : securities) securitiesTotal += p.getAmount();
+			
+			render(liabilities, pending, securities, accept, settled, user, liabilitiesTotal, securitiesTotal);
 		}
 		else Security.reportToSanta();
 	}

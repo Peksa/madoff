@@ -17,7 +17,8 @@ public class Receipt extends Model
 	public boolean deleted = false;
 
 	//public double total; // deprecated, use sum of owner amount
-	public double tip;
+	@Deprecated
+	public double tip; // deprecated but used in some old receipts
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	public User creator;

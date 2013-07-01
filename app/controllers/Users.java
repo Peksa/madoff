@@ -87,7 +87,7 @@ public class Users extends Controller
 			if (!password.equals(repeatPassword)) return "Passwords does not match";
 		}
 		if (fullname == null || fullname.length() < 3) return "Full name required";
-		if (bankName == null || bankName.length() < 4) return "Bank name required";
+		if (bankName == null || bankName.length() < 3) return "Bank name required";
 		if (accountNo == null || accountNo.length() < 4) return "Account no (numeric) required";
 		if (clearingNo == null || clearingNo.length() < 4) return "Clearing no (numeric) required";
 		
