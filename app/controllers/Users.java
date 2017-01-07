@@ -33,7 +33,7 @@ public class Users extends Controller
 		render(register, title, destination);
 	}
 	
-	public static void add(String email, String username, String password, String repeatPassword, String fullname, String bankName, String accountNo, String clearingNo, int idiotTest) throws Throwable
+	public static void add(String email, String username, String password, String repeatPassword, String fullname, String bankName, String accountNo, String clearingNo, int idiotTest, String fish) throws Throwable
 	{
 		// Quick fix
 		if(fullname == null || fullname.length() == 0) fullname = username;
@@ -53,7 +53,7 @@ public class Users extends Controller
 		else if (User.count("email = ?", email) > 0) error = Messages.get("errors.TakenEmail");
 		else if (idiotTest != 4711) error = Messages.get("errors.idiot");
 		else if (password == null) error = Messages.get("errors.shortPass");
-		else error = commonValidation(email, password, repeatPassword, fullname, bankName, accountNo, clearingNo);
+		else error = commonValidation(email, password, repeatPassword, fullname, bankName, accountNo, clearingNo, fish);
 	
 		if(error != null) {
 			flash.error(error);
@@ -69,6 +69,7 @@ public class Users extends Controller
 			user.bankName = bankName;
 			user.accountNo = accountNo;
 			user.clearingNo = clearingNo;
+			user.fish = formatFish(fish);
 			user.save();
 			
 			flash.keep("url"); // TODO(peksa): wat?
@@ -78,8 +79,20 @@ public class Users extends Controller
 		
 		
 	}
+	private static String formatFish(String fish) {
+		if (fish != null) {
+			if (fish.startsWith("+")) {
+				fish = fish.substring(1);
+			}
+			if (fish.startsWith("0")) {
+				fish = "46" + fish.substring(1);
+			}
+			return fish;
+		}
+		return null;
+	}
 	
-	private static String commonValidation(String email, String password, String repeatPassword, String fullname, String bankName, String accountNo, String clearingNo) {
+	private static String commonValidation(String email, String password, String repeatPassword, String fullname, String bankName, String accountNo, String clearingNo, String fish) {
 		if(validation.hasErrors()) return Messages.get("errors.Parameters");
 		
 		if(password != null) { // Do not validate a null password, may be a update without changing password
@@ -90,7 +103,17 @@ public class Users extends Controller
 		if (bankName == null || bankName.length() < 3) return "Bank name required";
 		if (accountNo == null || accountNo.length() < 4) return "Account no (numeric) required";
 		if (clearingNo == null || clearingNo.length() < 4) return "Clearing no (numeric) required";
-		
+		if (fish != null) {
+			fish = formatFish(fish);
+			try {
+				long number = Long.parseLong(fish);
+				if (number <= 0) {
+					return "Invalid fish phone number";
+				}
+			} catch (Exception e) {
+				return "Invalid fish phone number";
+			}
+		}
 		try {
 			InternetAddress emailAddr = new InternetAddress(email);
 			emailAddr.validate();
@@ -132,6 +155,7 @@ public class Users extends Controller
 		flash.put("bankName", user.bankName);
 		flash.put("accountNo", user.accountNo);
 		flash.put("clearingNo", user.clearingNo);
+		flash.put("fish", user.fish);
 		
 		renderEdit(user);
 	}
@@ -146,7 +170,7 @@ public class Users extends Controller
 		render("Users/register.html", register, title, destination);
 	}
 	
-	public static void update(String username, String ownPassword, String email, String password, String repeatPassword, String fullname, String bankName, String accountNo, String clearingNo, int idiotTest) {
+	public static void update(String username, String ownPassword, String email, String password, String repeatPassword, String fullname, String bankName, String accountNo, String clearingNo, int idiotTest, String fish) {
 		User currentUser = Security.connectedUser();
 		User user = User.find("username = ?", username).first();
 		if(!user.id.equals(currentUser.id) && !currentUser.admin) Security.reportToSanta();
@@ -158,7 +182,7 @@ public class Users extends Controller
 		String error = null;
 		if(!Security.authenticate(currentUser.username, ownPassword)) error = "Current password did not match";
 		else {
-			error = commonValidation(email, password, repeatPassword, fullname, bankName, accountNo, clearingNo);
+			error = commonValidation(email, password, repeatPassword, fullname, bankName, accountNo, clearingNo, fish);
 		}
 			
 		if(error != null) {
@@ -177,6 +201,7 @@ public class Users extends Controller
 			user.bankName = bankName;
 			user.accountNo = accountNo;
 			user.clearingNo = clearingNo;
+			user.fish = formatFish(fish);
 			user.save();
 			show(username);
 		}

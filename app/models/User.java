@@ -23,7 +23,9 @@ public class User extends Model implements Comparable<User>
 	public String bankName;
 	public String accountNo;
 	public String clearingNo;
-	
+
+	public String fish;
+
 	public boolean admin = false;
 	
 	@OneToOne

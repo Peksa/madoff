@@ -31,6 +31,14 @@
 			#{form @Payments.pay()}
 				<input type="hidden" name="id" value="${payment.id}"/>
 				<input type="submit" class="btn btn-mini success" value="&{'Paid'}"/>
+				#{if payment.receiver.fish}
+					<button class="fish-webpay btn btn-mini error"
+						data-phone="${payment.receiver.fish}"
+						data-message="Madoff ${payment.identifier}"
+						data-amount="${payment.amount.format('0.00')}"
+						data-currency="SEK"
+						data-autosubmit-form="true">Pay with Fish</button>
+				#{/if}
 			#{/form}
 		#{/if}
 		#{if _action == 'accept'}
